@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/b_image"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:showIn="@layout/main_menu_activity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <include layout="@layout/header"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_training"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:drawableLeft="@android:drawable/ic_menu_info_details"
+            android:background="@drawable/button"
+            android:padding="12dp"
+            android:text="@string/training_mode"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_simulation"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:drawableLeft="@android:drawable/ic_btn_speak_now"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:background="@drawable/button"
+            android:padding="12dp"
+            android:text="@string/simulation_mode"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_quizzes"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:drawableLeft="@android:drawable/checkbox_on_background"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:background="@drawable/button"
+            android:padding="12dp"
+            android:text="@string/quizzes"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_scoreboard"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:drawableLeft="@drawable/ic_dashboard_black_24dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:background="@drawable/button"
+            android:padding="12dp"
+            android:text="@string/scoreboard"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_help"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button"
+            android:layout_marginBottom="24dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:drawableLeft="@android:drawable/ic_menu_help"
+            android:text="@string/help"/>
+
+        <include layout="@layout/footer"/>
+    </LinearLayout>
+</LinearLayout>

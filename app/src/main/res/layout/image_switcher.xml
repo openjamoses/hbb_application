@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/b_image"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="15dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageDisplay"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/album3"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="timer"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:id="@+id/textView3"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button"
+                android:id="@+id/exit_button"
+                android:layout_gravity="center"
+                android:textColor="@color/background"
+                android:text="@string/extit_end"/>
+            <include layout="@layout/footer"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

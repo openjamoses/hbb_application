@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "761141974458",
+    "firebase_url": "https://hbb-app-49324.firebaseio.com",
+    "project_id": "hbb-app-49324",
+    "storage_bucket": "hbb-app-49324.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761141974458:android:c227d60a7004bb22",
+        "android_client_info": {
+          "package_name": "com.example.john.hbb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761141974458-n5o80k7ihjjqu0tjnve7asup261pcmf8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMx7-shlyDG6qz0i5YBU1aFde8Avg7WQY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
