@@ -456,12 +456,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
     ///// TODO: 10/13/17   permission requests...
     private  boolean checkAndRequestPermissions() {
        

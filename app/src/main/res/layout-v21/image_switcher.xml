@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/progressBar"
                 android:indeterminate="false"
-                android:layout_below="@id/imageDisplay"
-                style="@android:style/Widget.ProgressBar.Horizontal"/>
+                
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"/>
         </RelativeLayout>
 
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/b_image"
     android:fitsSystemWindows="true">
 
@@ -83,11 +83,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/input_contact"
+            <net.rimoto.intlphoneinput.IntlPhoneInput
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:hint="@string/contact" />
+                app:textSize="14sp"
+                app:textColor="#000000"
+                app:flagPaddingBottom="4dp"
+                app:flagPaddingEnd="4dp"
+                app:flagPaddingStart="4dp"
+                app:flagPaddingTop="4dp"
+                android:id="@+id/my_phone_input" />
         </android.support.design.widget.TextInputLayout>
 
         <!-- Health facility Label -->

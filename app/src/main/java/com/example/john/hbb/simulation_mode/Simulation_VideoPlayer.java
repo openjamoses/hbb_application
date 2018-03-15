@@ -22,6 +22,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -52,6 +54,7 @@ public class Simulation_VideoPlayer  extends AppCompatActivity implements Surfac
     private int count = 0;
 
     private AppCompatButton exit_button;
+
 
 
     /** Called when the activity is first created. */
@@ -139,16 +142,38 @@ public class Simulation_VideoPlayer  extends AppCompatActivity implements Surfac
         // this is set the view from XML inside AlertDialog
         alert.setView(alertLayout);
         // disallow cancel of AlertDialog on click of back button and outside touch
-        alert.setCancelable(false);
-        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+        final RadioGroup dry_group = (RadioGroup) alertLayout.findViewById(R.id.dry_group);
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+
+
+
+        alert.setCancelable(false);
         AlertDialog dialog = alert.create();
         dialog.show();
+
+        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                RadioButton dry_radio;
+
+                if(dry_group.getCheckedRadioButtonId() == -1)
+                {
+                    Toast.makeText(getApplicationContext(), "Please select all!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    // get selected radio button from radioGroup
+                    int selectedId = dry_group.getCheckedRadioButtonId();
+                    // find the radiobutton by returned id
+                    dry_radio = (RadioButton)findViewById(selectedId);
+                    Toast.makeText(getApplicationContext(), dry_radio.getText().toString()+" is selected", Toast.LENGTH_SHORT).show();
+                    //finish();
+                }
+            }
+        });
 
 
     }

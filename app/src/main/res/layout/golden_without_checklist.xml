@@ -34,7 +34,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:id="@+id/dries_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -76,6 +76,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/remove_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -87,13 +88,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/nd"
-                        android:id="@+id/remove_dont"
+                        android:id="@+id/remove_notdone"
                         />
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/dr"
-                        android:id="@+id/remove_notdone"
+                        android:id="@+id/remove_dont"
                         />
                 </RadioGroup>
             </LinearLayout>
@@ -114,6 +115,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/recognise_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -152,6 +154,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/simulate_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -190,6 +193,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/not_breathing_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -229,6 +233,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/cuts_cord_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -267,6 +272,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/ventilation_with_bag_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -306,6 +312,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/calls_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"
@@ -344,6 +351,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/continues_group"
                     android:orientation="horizontal">
                     <android.support.v7.widget.AppCompatRadioButton
                         android:layout_width="wrap_content"

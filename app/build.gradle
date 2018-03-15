@@ -44,6 +44,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     //syncing
     compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'net.rimoto:intlphoneinput:1.0.1'
     //compile 'cn.pedant.sweetalert:library:1.3'
     //compile 'com.google.android.gms:play-services-auth:11.0.1'
     testCompile 'junit:junit:4.12'

@@ -30,16 +30,19 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import net.rimoto.intlphoneinput.IntlPhoneInput;
+
 import static com.example.john.hbb.configuration.Constants.config.SECRET_KEY;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    private EditText _fnameText,_lnameText,_contactText,_hfacilityText,_emailText,_passwordText;
+    private EditText _fnameText,_lnameText,_hfacilityText,_emailText,_passwordText;
     private RadioGroup _genderText;
     private Context context = this;
     private FirebaseAuth auth;
     private Button _signupButton;
+    IntlPhoneInput phoneInputView;
     private TextView _loginLink;
     private AppCompatRadioButton input_female,input_male;
     
@@ -50,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
 
         _fnameText = (EditText) findViewById(R.id.input_fname);
         _lnameText = (EditText) findViewById(R.id.input_lname);
-        _contactText = (EditText) findViewById(R.id.input_contact);
+        phoneInputView = (IntlPhoneInput) findViewById(R.id.my_phone_input);
         _hfacilityText = (EditText) findViewById(R.id.input_hfacility);
         _emailText = (EditText) findViewById(R.id.input_email);
         _passwordText = (EditText) findViewById(R.id.input_password);
@@ -103,7 +106,7 @@ public class SignupActivity extends AppCompatActivity {
                 R.style.Theme_AppCompat_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
+
 
         final String fname = _fnameText.getText().toString();
         final String lname = _lnameText.getText().toString();
@@ -113,28 +116,36 @@ public class SignupActivity extends AppCompatActivity {
         }else {
             gender = input_male.getText().toString();
         }
-        final String contact = _contactText.getText().toString();
-        final String facility = _hfacilityText.getText().toString();
-        final String email = _emailText.getText().toString();
-        final String password = _passwordText.getText().toString();
-        final String gend = gender;
+        String num_mob = phoneInputView.getNumber();
+        //Toast.makeText(context,num_mob,Toast.LENGTH_LONG).show();
 
-        String password_encrypt = password;
-        try{
-            //password_encrypt = Encrypt_Decrypt.cipher(SECRET_KEY,password);
-        }catch (Exception e){
-            e.printStackTrace();
+        if(phoneInputView.isValid()) {
+            progressDialog.show();
+            final String contact = num_mob;
+            final String facility = _hfacilityText.getText().toString();
+            final String email = _emailText.getText().toString();
+            final String password = _passwordText.getText().toString();
+            final String gend = gender;
+
+            String password_encrypt = password;
+            try {
+                //password_encrypt = Encrypt_Decrypt.cipher(SECRET_KEY,password);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            new SessionManager(context).createTemp(fname, lname, contact, gend, email, password_encrypt, facility);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(context, Signup_Next.class);
+                            startActivity(intent);
+                        }
+                    }, 1000);
+        }else {
+            Toast.makeText(context, " Invalid Phone Number!",Toast.LENGTH_SHORT).show();
         }
-
-        new SessionManager(context).createTemp(fname,lname,contact,gend,email,password_encrypt,facility);
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        progressDialog.dismiss();
-                        Intent intent = new Intent(context,Signup_Next.class);
-                        startActivity(intent);
-                    }
-                }, 1000);
     }
 
     @Override
@@ -167,7 +178,6 @@ public class SignupActivity extends AppCompatActivity {
         }else {
             gender = input_male.getText().toString();
         }
-        String contact = _contactText.getText().toString();
         String facility = _hfacilityText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
@@ -192,12 +202,6 @@ public class SignupActivity extends AppCompatActivity {
             _hfacilityText.setError(null);
         }
 
-        if (contact.isEmpty() || !Patterns.PHONE.matcher(contact).matches()) {
-            _contactText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _contactText.setError(null);
-        }
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError("enter a valid email address");
             valid = false;

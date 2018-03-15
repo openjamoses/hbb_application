@@ -183,7 +183,7 @@ public class User {
                             view.setBackgroundResource(R.drawable.round_conor);
                             TextView text = (TextView) view.findViewById(android.R.id.message);
                         /*Here you can do anything with above textview like text.setTextColor(Color.parseColor("#000000"));*/
-                            toast.show();
+                            //toast.show();
                         }catch (Exception e){
                             e.printStackTrace();
                         }

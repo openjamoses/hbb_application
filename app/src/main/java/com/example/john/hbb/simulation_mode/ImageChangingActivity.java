@@ -20,7 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.john.hbb.R;
 
@@ -48,6 +52,7 @@ public class ImageChangingActivity extends AppCompatActivity {
     private String[] golden_without_checklist = null;
     private Context context = this;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,7 @@ public class ImageChangingActivity extends AppCompatActivity {
         imageView.setVisibility(View.GONE);
         textView3 = (TextView) findViewById(R.id.textView3);
         exit_button = (AppCompatButton) findViewById(R.id.exit_button);
+
 
 
         header = getIntent().getStringExtra("header");
@@ -94,9 +100,10 @@ public class ImageChangingActivity extends AppCompatActivity {
     }
     private void coutDown(){
         final int[] c = {0};
-        int total = title.length * 2;
+        final int total = title.length * 2;
         new CountDownTimer(total*10000, 1000){
             public void onTick(long millisUntilFinished){
+
 
                 if(file.equals("images1")){
                     images = new Integer[]{R.drawable.pics1, R.drawable.pics2, R.drawable.pics3,  R.drawable.pics4, R.drawable.pics5};
@@ -209,21 +216,46 @@ public class ImageChangingActivity extends AppCompatActivity {
         alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
 
         LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
+        final View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
         // this is set the view from XML inside AlertDialog
         alert.setView(alertLayout);
+        final RadioGroup dry_group = (RadioGroup) alertLayout.findViewById(R.id.dry_group);
+
         // disallow cancel of AlertDialog on click of back button and outside touch
         alert.setCancelable(false);
-        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-
+        alert.setPositiveButton(getResources().getString(R.string.submit), new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
+            public void onClick(DialogInterface dialogInterface, int i) {
+
             }
         });
-        AlertDialog dialog = alert.create();
+        final AlertDialog dialog = alert.create();
         dialog.show();
 
+        //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                RadioButton dry_radio;
+
+                if(dry_group.getCheckedRadioButtonId() == -1)
+                {
+                    Toast.makeText(getApplicationContext(), "Please select all!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    // get selected radio button from radioGroup
+                    int selectedId = dry_group.getCheckedRadioButtonId();
+                    // find the radiobutton by returned id
+                    dry_radio = (RadioButton)alertLayout.findViewById(selectedId);
+                    Toast.makeText(getApplicationContext(), dry_radio.getText().toString()+" is selected", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    finish();
+                }
+            }
+        });
 
     }
 
@@ -233,22 +265,82 @@ public class ImageChangingActivity extends AppCompatActivity {
         alert.setTitle(getResources().getString(R.string.check_list));
 
         LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.golden_without_checklist, null);
+        final View alertLayout = inflater.inflate(R.layout.golden_without_checklist, null);
         // this is set the view from XML inside AlertDialog
         alert.setView(alertLayout);
         // disallow cancel of AlertDialog on click of back button and outside touch
+
+        final RadioGroup dries_group = (RadioGroup)alertLayout.findViewById(R.id.dries_group);
+        final RadioGroup remove_group = (RadioGroup)alertLayout.findViewById(R.id.remove_group);
+        final RadioGroup recognise_group = (RadioGroup)alertLayout.findViewById(R.id.recognise_group);
+        final RadioGroup simulate_group = (RadioGroup)alertLayout.findViewById(R.id.simulate_group);
+        final RadioGroup not_breathing_group = (RadioGroup)alertLayout.findViewById(R.id.not_breathing_group);
+        final RadioGroup cuts_cord_group = (RadioGroup)alertLayout.findViewById(R.id.cuts_cord_group);
+        final RadioGroup ventilation_with_bag_group = (RadioGroup)alertLayout.findViewById(R.id.cuts_cord_group);
+        final RadioGroup calls_group = (RadioGroup)alertLayout.findViewById(R.id.calls_group);
+        final RadioGroup continues_group = (RadioGroup)alertLayout.findViewById(R.id.continues_group);
+
         //alert.setCancelable(false);
-        alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getString(R.string.submit), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //finish();
-                String dries = null;
-                finish();
+
             }
         });
-        AlertDialog dialog = alert.create();
+        final AlertDialog dialog = alert.create();
         dialog.show();
+
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String dries_val, remove_val,recognise_val,
+                        simulate_val, not_breathing_val, cuts_cord_val,
+                        ventilation_with_bag_val,calls_val,continues_val;
+
+                if(dries_group.getCheckedRadioButtonId() != -1 && remove_group.getCheckedRadioButtonId() != -1 &&
+                        recognise_group.getCheckedRadioButtonId() != -1 && simulate_group.getCheckedRadioButtonId() != -1 &&
+                        not_breathing_group.getCheckedRadioButtonId() != -1 && cuts_cord_group.getCheckedRadioButtonId() != -1 &&
+                        ventilation_with_bag_group.getCheckedRadioButtonId() != -1 && calls_group.getCheckedRadioButtonId() != -1 &&
+                        continues_group.getCheckedRadioButtonId() != -1)
+                {
+                    int driesId = dries_group.getCheckedRadioButtonId();
+                    int removeId = remove_group.getCheckedRadioButtonId();
+                    int recogniseId = recognise_group.getCheckedRadioButtonId();
+                    int simulateId = simulate_group.getCheckedRadioButtonId();
+                    int not_breathingId = not_breathing_group.getCheckedRadioButtonId();
+                    int cuts_cordId = cuts_cord_group.getCheckedRadioButtonId();
+                    int ventilation_with_bagId = ventilation_with_bag_group.getCheckedRadioButtonId();
+                    int callsId = calls_group.getCheckedRadioButtonId();
+                    int continuesId = continues_group.getCheckedRadioButtonId();
+                    // find the radiobutton by returned id
+                    dries_val = ((RadioButton)alertLayout.findViewById(driesId)).getText().toString();
+                    remove_val = ((RadioButton)alertLayout.findViewById(removeId)).getText().toString();
+                    recognise_val = ((RadioButton)alertLayout.findViewById(recogniseId)).getText().toString();
+                    simulate_val = ((RadioButton)alertLayout.findViewById(simulateId)).getText().toString();
+                    not_breathing_val = ((RadioButton)alertLayout.findViewById(not_breathingId)).getText().toString();
+                    cuts_cord_val = ((RadioButton)alertLayout.findViewById(cuts_cordId)).getText().toString();
+                    ventilation_with_bag_val = ((RadioButton)alertLayout.findViewById(ventilation_with_bagId)).getText().toString();
+                    calls_val = ((RadioButton)alertLayout.findViewById(callsId)).getText().toString();
+                    continues_val = ((RadioButton)alertLayout.findViewById(continuesId)).getText().toString();
+
+                    dialog.dismiss();
+                    finish();
+                }
+                else
+                {
+                    // get selected radio button from radioGroup
+                    Toast.makeText(getApplicationContext(), "Please select all!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+
 
 
     }

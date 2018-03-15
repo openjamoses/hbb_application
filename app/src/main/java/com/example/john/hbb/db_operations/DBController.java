@@ -195,7 +195,7 @@ public class DBController {
                             View view = toast.getView();
                             view.setBackgroundResource(R.drawable.round_conor);
                             TextView text = (TextView) view.findViewById(android.R.id.message);
-                            toast.show();
+                            //toast.show();
                             //Log.e(TAG, volleyError.getMessage());
                         }catch (Exception e){
                             e.printStackTrace();
