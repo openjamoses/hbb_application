@@ -1,9 +1,9 @@
-package com.example.john.hbb;
+package com.example.john.hbb.activities.home;
 
 /**
  * Created by john on 7/5/17.
  */
-import android.*;
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,8 +13,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -37,18 +35,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.john.hbb.R;
 import com.example.john.hbb.configuration.Constants;
 import com.example.john.hbb.configuration.DBHelper;
 import com.example.john.hbb.configuration.Server_Service;
 import com.example.john.hbb.configuration.SessionManager;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.db_operations.User;
-import com.example.john.hbb.encryptions.Encrypt_Decrypt;
 import com.example.john.hbb.firebase.ResetPasswordActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -59,15 +53,9 @@ import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.GET_ACCOUNTS;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.VIBRATE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.example.john.hbb.configuration.Constants.config.OPERATION_DISTRICT;
 import static com.example.john.hbb.configuration.Constants.config.OPERATION_USER;
-import static com.example.john.hbb.configuration.Constants.config.URL_GET_DISTRICT;
 import static com.example.john.hbb.configuration.Constants.config.URL_GET_USER;
 
 public class LoginActivity extends AppCompatActivity {
@@ -95,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(com.example.john.hbb.R.layout.login_activity);
 
         _emailText = (EditText) findViewById(R.id.input_email) ;
         _passwordText = (EditText) findViewById(R.id.input_password) ;
@@ -121,58 +109,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //// TODO: 10/23/17  Checking permsions...!! 
         checkAndRequestPermissions();
-        try {
-            //FirebaseApp.initializeApp(this);
-            auth = FirebaseAuth.getInstance();
-            final FirebaseUser user = auth.getCurrentUser();
-            if (user != null) {
-                if (user.isEmailVerified()) {
-                    //Toast.makeText(LoginActivity.this,"You are in =)",Toast.LENGTH_LONG).show();
-                    String email = user.getEmail();
-                    if (email != null){
-                        new User(context).updateUserStatus(email,1);
-                    }
-                }else {
-
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                    dialog.setCancelable(false);
-                    dialog.setTitle("Signup Message Dialog");
-                    dialog.setMessage("Confirmation Message has been sent to \n your email address\n Please login to your email to confirm !" );
-                    dialog.setPositiveButton("Resend", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            //Action for "Delete".
-                            user.sendEmailVerification();
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-
-                    final AlertDialog alert = dialog.create();
-                    alert.show();
-
-                    //Toast.makeText(LoginActivity.this,"Check your email first...",Toast.LENGTH_LONG).show();
-
-                }
-            }else {
-                //Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                //startActivityForResult(intent, REQUEST_SIGNUP);
-                //finish();
-            }
-
-            if (auth.getCurrentUser() != null) {
-                //startActivity(new Intent(context, MainActivity.class));
-                //finish();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
 
         h = new Handler();
         pd = new TransparentProgressDialog(this, R.drawable.dialog_image);
@@ -187,7 +123,6 @@ public class LoginActivity extends AppCompatActivity {
                         //String password_encrypt = Encrypt_Decrypt.decrypt(password);
 
                     try {
-
                             int useID = 0;
                             int verified = 0;
                             String message = null,fname = null,lname = null,email = null,contact = null,facility = null;
@@ -289,7 +224,6 @@ public class LoginActivity extends AppCompatActivity {
         session.checkLogin();
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
-
         String fname = user.get(SessionManager.KEY_FNAME);
         String lname = user.get(SessionManager.KEY_LNAME);
         String contact = user.get(SessionManager.KEY_CONTACT);
@@ -304,7 +238,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
     public void select(String email){
         DBController.fetch(context,email,URL_GET_USER,OPERATION_USER);
     }
@@ -407,20 +340,11 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void onLoginSuccess(String message, int useID, String fname, String lname, String email, String contact,String facility) {
         _loginButton.setEnabled(true);
-        //finish();
-        //Intent intent = new Intent(getApplicationContext(),Menu_Dashboard.class);
-        //startActivity(intent);
-        // Creating user login session
-        // For testing i am stroing name, email as follow
-        // Use user real data
         if(message.equals("Login Successfully!")) {
             session.createLoginSession(useID, fname, lname, contact, email, facility);
             // Staring MainActivity
             Intent i = new Intent(getApplicationContext(), Menu_Dashboard.class);
             startActivity(i);
-            //if (stopService(new Intent(getBaseContext(), Server_Service.class)) == true) {
-               // startService(new Intent(getBaseContext(), Server_Service.class));
-           // }
             /// ***************************************************************************
             finish();
         }else {
@@ -443,42 +367,41 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             _emailText.setError(null);
         }
-
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             _passwordText.setError("between 4 and 10 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
         }
-
         return valid;
     }
-
-
-
     ///// TODO: 10/13/17   permission requests...
     private  boolean checkAndRequestPermissions() {
-       
         int writepermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int readpermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionNetworkstate = ContextCompat.checkSelfPermission(this, ACCESS_NETWORK_STATE);
         int permissionLocation = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION);
-        
+        int permissionInternet = ContextCompat.checkSelfPermission(this, INTERNET);
+        int permissionPhone = ContextCompat.checkSelfPermission(this, READ_PHONE_STATE);
         List<String> listPermissionsNeeded = new ArrayList<>();
-        
         if (writepermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
         if (permissionNetworkstate != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(ACCESS_NETWORK_STATE);
         }
+        if (permissionLocation != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
         if (readpermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
         }
-        if (readpermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionInternet != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.INTERNET);
         }
-        
+        if (permissionPhone != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
             return false;
@@ -497,6 +420,8 @@ public class LoginActivity extends AppCompatActivity {
                 perms.put(android.Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
                 perms.put(ACCESS_NETWORK_STATE, PackageManager.PERMISSION_GRANTED);
                 perms.put(android.Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.INTERNET, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_PHONE_STATE, PackageManager.PERMISSION_GRANTED);
                 
                 // Fill with actual results from user
                 if (grantResults.length > 0) {
@@ -506,7 +431,9 @@ public class LoginActivity extends AppCompatActivity {
                     if ( perms.get(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                             && perms.get(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                             && perms.get(ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED
-                            && perms.get(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+                            && perms.get(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                         Log.d(TAG, "All permissions services permission granted");
                         // process the normal flow
                         //Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
@@ -521,7 +448,9 @@ public class LoginActivity extends AppCompatActivity {
                         if ( ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 || ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                                 || ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_NETWORK_STATE)
-                                || ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
                             showDialogOK("Service Permissions are required for this app",
                                     new DialogInterface.OnClickListener() {
                                         @Override
@@ -548,7 +477,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
 
     private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {

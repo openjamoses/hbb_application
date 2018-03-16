@@ -1,4 +1,4 @@
-package com.example.john.hbb.simulation_mode;
+package com.example.john.hbb.activities.simulation_mode;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import com.example.john.hbb.R;
 
 import java.util.HashMap;
 
+import com.example.john.hbb.activities.simulation_mode.alone.Alone_Home;
+import com.example.john.hbb.activities.simulation_mode.rator.Rator_Home;
 import com.example.john.hbb.configuration.SessionManager;
 
 /**
@@ -41,7 +43,7 @@ public class Start_Simulation extends AppCompatActivity {
         alone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Simulation_Home.class);
+                Intent intent = new Intent(getApplicationContext(), Alone_Home.class);
                 startActivity(intent);
             }
         });

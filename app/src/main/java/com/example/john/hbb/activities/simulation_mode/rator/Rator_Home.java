@@ -1,4 +1,4 @@
-package com.example.john.hbb.simulation_mode;
+package com.example.john.hbb.activities.simulation_mode.rator;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.john.hbb.LoginActivity;
+import com.example.john.hbb.activities.home.LoginActivity;
 import com.example.john.hbb.R;
+import com.example.john.hbb.activities.simulation_mode.Simulation_VideoPlayer;
 import com.example.john.hbb.configuration.Server_Service;
 import com.example.john.hbb.configuration.SessionManager;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;

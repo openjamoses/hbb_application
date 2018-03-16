@@ -1,4 +1,4 @@
-package com.example.john.hbb.simulation_mode;
+package com.example.john.hbb.activities.simulation_mode;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -74,7 +74,7 @@ public class Simulation_VideoPlayer  extends AppCompatActivity implements Surfac
         exit_button = (AppCompatButton) findViewById(R.id.exit_button);
 
         imageView.setVisibility(View.GONE);
-        ///// Getting the intent values from the Expandable_Activity activity....
+        ///// Getting the intent values from the TrainingHomeActivity activity....
         mode = getIntent().getStringExtra("mode");
         file = getIntent().getStringExtra("file");
         title = getIntent().getStringExtra("title");

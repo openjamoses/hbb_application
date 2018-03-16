@@ -1,4 +1,4 @@
-package com.example.john.hbb.training_mode;
+package com.example.john.hbb.gabage;
 
 /**
  * Created by john on 7/7/17.

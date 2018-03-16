@@ -8,10 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.john.hbb.LoginActivity;
-import com.example.john.hbb.encryptions.Encrypt_Decrypt;
-
-import static com.example.john.hbb.configuration.Constants.config.SECRET_KEY;
 import static com.example.john.hbb.configuration.CreateTable.config.CREATE_DISTRICT;
 import static com.example.john.hbb.configuration.CreateTable.config.CREATE_TRAINING_MODE;
 import static com.example.john.hbb.configuration.CreateTable.config.CREATE_USER;

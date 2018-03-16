@@ -8,11 +8,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/b_image"
         android:label="@string/app_name"
+        tools:node="replace"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -20,7 +22,7 @@
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.home.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -33,7 +35,7 @@
         </activity>
 
         <activity
-        android:name=".SignupActivity"
+        android:name=".activities.home.SignupActivity"
         android:label="@string/signup"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -45,7 +47,7 @@
         </intent-filter>
     </activity>
         <activity
-            android:name=".Menu_Dashboard"
+            android:name=".activities.home.Menu_Dashboard"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -57,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.home.MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -69,7 +71,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.training_mode.Expandable_Activity"
+            android:name="com.example.john.hbb.activities.training_mode.TrainingHomeActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -81,7 +83,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.training_mode.ExpandableMainActivity"
+            android:name="com.example.john.hbb.gabage.ExpandableMainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -94,7 +96,7 @@
         </activity>
 
         <activity
-            android:name="com.example.john.hbb.training_mode.Training_VideoPlayer"
+            android:name="com.example.john.hbb.activities.training_mode.Training_VideoPlayer"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="landscape"
@@ -107,7 +109,7 @@
         </activity>
 
         <activity
-            android:name="com.example.john.hbb.simulation_mode.Start_Simulation"
+            android:name="com.example.john.hbb.activities.simulation_mode.Start_Simulation"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -117,7 +119,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.simulation_mode.Simulation_Home"
+            android:name="com.example.john.hbb.activities.simulation_mode.alone.Alone_Home"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -127,7 +129,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.simulation_mode.Simulation_VideoPlayer"
+            android:name="com.example.john.hbb.activities.simulation_mode.Simulation_VideoPlayer"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -138,7 +140,7 @@
         </activity>
 
         <activity
-            android:name="com.example.john.hbb.Signup_Next"
+            android:name="com.example.john.hbb.activities.home.Signup_Next"
             android:label="@string/signup"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -162,7 +164,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.simulation_mode.ImageChangingActivity"
+            android:name="com.example.john.hbb.activities.simulation_mode.alone.ImageChangingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -173,7 +175,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.simulation_mode.Rator_Home"
+            android:name="com.example.john.hbb.activities.simulation_mode.rator.Rator_Home"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -185,7 +187,7 @@
         </activity>
 
         <activity
-            android:name="com.example.john.hbb.simulation_mode.Rator_ImageActivity"
+            android:name="com.example.john.hbb.activities.simulation_mode.rator.Rator_ImageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">

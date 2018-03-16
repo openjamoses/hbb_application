@@ -1,4 +1,4 @@
-package com.example.john.hbb.simulation_mode;
+package com.example.john.hbb.activities.simulation_mode.alone;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.john.hbb.LoginActivity;
+import com.example.john.hbb.activities.home.LoginActivity;
 import com.example.john.hbb.R;
+import com.example.john.hbb.activities.simulation_mode.Simulation_VideoPlayer;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import com.example.john.hbb.configuration.SessionManager;
  * Created by john on 7/11/17.
  */
 
-public class Simulation_Home extends AppCompatActivity {
+public class Alone_Home extends AppCompatActivity {
 
     ExpandableRelativeLayout expandableLayout1, expandableLayout2, expandableLayout3, expandableLayout4, expandableLayout5;
 

@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.john.hbb.LoginActivity;
+import com.example.john.hbb.activities.home.LoginActivity;
 import com.example.john.hbb.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

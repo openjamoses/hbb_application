@@ -1,28 +1,36 @@
-package com.example.john.hbb;
+package com.example.john.hbb.activities.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 
+import com.example.john.hbb.R;
 import com.example.john.hbb.configuration.Server_Service;
 import com.example.john.hbb.configuration.SessionManager;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.services.ProcessingService;
-import com.example.john.hbb.simulation_mode.Start_Simulation;
-import com.example.john.hbb.training_mode.Expandable_Activity;
+import com.example.john.hbb.activities.simulation_mode.Start_Simulation;
+import com.example.john.hbb.activities.training_mode.TrainingHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.example.john.hbb.configuration.Constants.config.OPERATION_DISTRICT;
 import static com.example.john.hbb.configuration.Constants.config.URL_GET_DISTRICT;
@@ -47,7 +55,7 @@ public class Menu_Dashboard extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         /// Setting the app icon
-        auth = FirebaseAuth.getInstance();
+//        auth = FirebaseAuth.getInstance();
         //final FirebaseUser user = auth.getCurrentUser();
 
         if (getSupportActionBar() != null){
@@ -61,7 +69,7 @@ public class Menu_Dashboard extends AppCompatActivity {
         btn_training.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Expandable_Activity.class);
+                Intent intent = new Intent(getApplicationContext(), TrainingHomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -72,8 +80,8 @@ public class Menu_Dashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         checkUserSessions();
+        openDialog();
     }
 
     @Override
@@ -83,6 +91,40 @@ public class Menu_Dashboard extends AppCompatActivity {
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         //startActivity(intent);
         finish();
+    }
+
+    private void openDialog(){
+        final AlertDialog dialog;
+        try{
+            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.accept_dialog, null);
+            // this is set the view from XML inside AlertDialog
+            alert.setView(view);
+            RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
+
+
+            // disallow cancel of AlertDialog on click of back button and outside touch
+            alert.setCancelable(false);
+
+            dialog = alert.create();
+            dialog.show();
+
+
+            if(radioGroup.getCheckedRadioButtonId() != -1 ) {
+                int radioID = radioGroup.getCheckedRadioButtonId();
+                String selected = ((RadioButton)view.findViewById(radioID)).getText().toString();
+                if (selected.equals(getResources().getString(R.string.alone))){
+                    //Toast.makeText(context,selected,Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(context,selected,Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void checkUserSessions() {
@@ -144,7 +186,7 @@ public class Menu_Dashboard extends AppCompatActivity {
                 if (stopService(new Intent(getBaseContext(), Server_Service.class)) == false) {
                     stopService(new Intent(getBaseContext(), Server_Service.class));
                 }
-                auth.signOut();
+                //auth.signOut();
 
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

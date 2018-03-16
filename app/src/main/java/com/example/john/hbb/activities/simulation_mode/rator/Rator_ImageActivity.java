@@ -1,4 +1,4 @@
-package com.example.john.hbb.simulation_mode;
+package com.example.john.hbb.activities.simulation_mode.rator;
 
 import android.app.Dialog;
 import android.content.Context;

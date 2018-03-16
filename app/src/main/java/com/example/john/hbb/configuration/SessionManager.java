@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.example.john.hbb.LoginActivity;
+import com.example.john.hbb.activities.home.LoginActivity;
 
 import static com.example.john.hbb.configuration.Constants.config.KEY_CONTACT_TEMP;
 import static com.example.john.hbb.configuration.Constants.config.KEY_EMAIL_TEMP;

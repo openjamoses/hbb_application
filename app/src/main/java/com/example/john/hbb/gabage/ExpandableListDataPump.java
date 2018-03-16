@@ -1,4 +1,4 @@
-package com.example.john.hbb.training_mode;
+package com.example.john.hbb.gabage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

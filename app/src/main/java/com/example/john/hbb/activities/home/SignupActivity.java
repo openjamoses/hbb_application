@@ -1,17 +1,13 @@
-package com.example.john.hbb;
+package com.example.john.hbb.activities.home;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,19 +16,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.john.hbb.configuration.DBHelper;
+import com.example.john.hbb.R;
 import com.example.john.hbb.configuration.SessionManager;
-import com.example.john.hbb.db_operations.User;
-import com.example.john.hbb.encryptions.Encrypt_Decrypt;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import net.rimoto.intlphoneinput.IntlPhoneInput;
-
-import static com.example.john.hbb.configuration.Constants.config.SECRET_KEY;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -64,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        auth = FirebaseAuth.getInstance();
+//        auth = FirebaseAuth.getInstance();
 
         _genderText = (RadioGroup)  findViewById(R.id.input_gender);
         input_female = (AppCompatRadioButton) findViewById(R.id.input_female);
@@ -84,6 +73,11 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+        try{
+            phoneInputView.setDefault();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         try{
             FirebaseApp.initializeApp(this);

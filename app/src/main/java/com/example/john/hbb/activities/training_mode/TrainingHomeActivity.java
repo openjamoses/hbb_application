@@ -1,4 +1,4 @@
-package com.example.john.hbb.training_mode;
+package com.example.john.hbb.activities.training_mode;
 
 /**
  * Created by john on 7/7/17.
@@ -11,9 +11,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.john.hbb.LoginActivity;
+import com.example.john.hbb.activities.home.LoginActivity;
 import com.example.john.hbb.R;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import java.util.HashMap;
@@ -21,14 +22,15 @@ import java.util.HashMap;
 import com.example.john.hbb.configuration.Server_Service;
 import com.example.john.hbb.configuration.SessionManager;
 
-public class Expandable_Activity extends AppCompatActivity {
+public class TrainingHomeActivity extends AppCompatActivity {
 
-    ExpandableRelativeLayout expandableLayout1, expandableLayout2, expandableLayout3, expandableLayout4, expandableLayout5;
+    ExpandableRelativeLayout expandableLayout1, expandableLayout2, expandableLayout3, expandableLayout4;
+    private Button expandableButton5, expandableButton6;
 
     Toolbar toolbar;
     private TextView hand_washing,testing_equipments,p_combine_video,
                      drying_thouroughly,clamping_and_cutting_card,r_combine_video,
-                     sunctioning,stimulation,without_combine_video
+                     sunctioning,stimulation,without_combine_video,bag_and_mask_ventilation_video,improving_ventilation_video
                      ;
 
     @Override
@@ -56,6 +58,8 @@ public class Expandable_Activity extends AppCompatActivity {
         p_combine_video = (TextView) findViewById(R.id.p_combine_video);
 
 
+        expandableButton5 = (Button) findViewById(R.id.expandableButton5) ;
+        expandableButton6 = (Button) findViewById(R.id.expandableButton6) ;
         /// Routine cares
         drying_thouroughly = (TextView) findViewById(R.id.drying_thouroughly);
         clamping_and_cutting_card = (TextView) findViewById(R.id.clamping_and_cutting_card);
@@ -64,6 +68,8 @@ public class Expandable_Activity extends AppCompatActivity {
         sunctioning = (TextView) findViewById(R.id.sunctioning);
         stimulation = (TextView) findViewById(R.id.stimulation);
         without_combine_video = (TextView) findViewById(R.id.without_combine_video);
+        bag_and_mask_ventilation_video = (TextView) findViewById(R.id.bag_and_mask_ventilation_video);
+        improving_ventilation_video = (TextView) findViewById(R.id.improving_ventilation_video);
 
         /// Preperation for birth
         hand_washing.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +176,53 @@ public class Expandable_Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        expandableButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Training_VideoPlayer.class);
+                intent.putExtra("mode","play");
+                intent.putExtra("header",getResources().getString(R.string.ventilation_with_slow_or_fast_heart_rate));
+                intent.putExtra("title",getResources().getString(R.string.ventilation_with_slow_or_fast_heart_rate));
+                intent.putExtra("file","video9");
+                startActivity(intent);
+            }
+        });
+
+        expandableButton6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Training_VideoPlayer.class);
+                intent.putExtra("mode","play");
+                intent.putExtra("header",getResources().getString(R.string.disinfecting_and_testing_equipment_after_every_use));
+                intent.putExtra("title",getResources().getString(R.string.disinfecting_and_testing_equipment_after_every_use));
+                intent.putExtra("file","video9");
+                startActivity(intent);
+            }
+        });
+
+        bag_and_mask_ventilation_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Training_VideoPlayer.class);
+                intent.putExtra("mode","play");
+                intent.putExtra("header",getResources().getString(R.string.golden_minutes_with_ventilation));
+                intent.putExtra("title",getResources().getString(R.string.bag_and_mask_ventilation));
+                intent.putExtra("file","video9");
+                startActivity(intent);
+            }
+        });
+
+        improving_ventilation_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Training_VideoPlayer.class);
+                intent.putExtra("mode","play");
+                intent.putExtra("header",getResources().getString(R.string.golden_minutes_with_ventilation));
+                intent.putExtra("title",getResources().getString(R.string.improving_ventilation));
+                intent.putExtra("file","video9");
+                startActivity(intent);
+            }
+        });
     }
 
     private void checkUserSessions() {
@@ -238,24 +291,108 @@ public class Expandable_Activity extends AppCompatActivity {
     public void expandableButton1(View view) {
         expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
         expandableLayout1.toggle(); // toggle expand and collapse
+        try {
+            if (expandableLayout2 != null) {
+                if (expandableLayout2.isExpanded()) {
+                    expandableLayout2.collapse();
+                }
+            }
+
+            if (expandableLayout3 != null) {
+                if (expandableLayout3.isExpanded()) {
+                    expandableLayout3.collapse();
+                }
+            }
+
+            if (expandableLayout4 != null) {
+                if (expandableLayout4.isExpanded()) {
+                    expandableLayout4.collapse();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void expandableButton2(View view) {
         expandableLayout2 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout2);
         expandableLayout2.toggle(); // toggle expand and collapse
+
+        try {
+            if (expandableLayout1 != null) {
+                if (expandableLayout1.isExpanded()) {
+                    expandableLayout1.collapse();
+                }
+            }
+
+            if (expandableLayout3 != null) {
+                if (expandableLayout3.isExpanded()) {
+                    expandableLayout3.collapse();
+                }
+            }
+
+            if (expandableLayout4 != null) {
+                if (expandableLayout4.isExpanded()) {
+                    expandableLayout4.collapse();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void expandableButton3(View view) {
         expandableLayout3 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout3);
         expandableLayout3.toggle(); // toggle expand and collapse
+
+        try {
+            if (expandableLayout1 != null) {
+                if (expandableLayout1.isExpanded()) {
+                    expandableLayout1.collapse();
+                }
+            }
+
+            if (expandableLayout2 != null) {
+                if (expandableLayout2.isExpanded()) {
+                    expandableLayout2.collapse();
+                }
+            }
+
+            if (expandableLayout4 != null) {
+                if (expandableLayout4.isExpanded()) {
+                    expandableLayout4.collapse();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void expandableButton4(View view) {
         expandableLayout4 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout4);
         expandableLayout4.toggle(); // toggle expand and collapse
-    }
-    public void expandableButton5(View view) {
-        expandableLayout5 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout5);
-        expandableLayout5.toggle(); // toggle expand and collapse
+
+        try {
+            if (expandableLayout2 != null) {
+                if (expandableLayout2.isExpanded()) {
+                    expandableLayout2.collapse();
+                }
+            }
+
+            if (expandableLayout3 != null) {
+                if (expandableLayout3.isExpanded()) {
+                    expandableLayout3.collapse();
+                }
+            }
+
+            if (expandableLayout1 != null) {
+                if (expandableLayout1.isExpanded()) {
+                    expandableLayout1.collapse();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

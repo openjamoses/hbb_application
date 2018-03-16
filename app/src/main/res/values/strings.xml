@@ -105,4 +105,9 @@
     <string name="dr">DR</string>
     <string name="dont_remember">Don\'t Remember</string>
     <string name="submit">Submit</string>
+    <string name="bag_and_mask_ventilation">1) Bag and Mark Ventilation</string>
+    <string name="improving_ventilation">2) Improving Ventilation.</string>
+    <string name="disinfecting_and_testing_equipment_after_every_use">Disinfecting and Testing equipment after every use.</string>
+    <string name="are_you">Are You..</string>
+    <string name="ateam">a Team</string>
 </resources>

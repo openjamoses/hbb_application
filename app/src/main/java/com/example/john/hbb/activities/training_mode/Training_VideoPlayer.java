@@ -1,4 +1,4 @@
-package com.example.john.hbb.training_mode;
+package com.example.john.hbb.activities.training_mode;
 
 /**
  * Created by john on 7/7/17.
@@ -65,7 +65,7 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
         ImageView imageView = (ImageView) findViewById(R.id.toolbar_image);
         imageView.setVisibility(View.GONE);
-        ///// Getting the intent values from the Expandable_Activity activity....
+        ///// Getting the intent values from the TrainingHomeActivity activity....
         mode = getIntent().getStringExtra("mode");
         file = getIntent().getStringExtra("file");
         title = getIntent().getStringExtra("title");
@@ -198,7 +198,7 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
         switch (item.getItemId()) {
             case android.R.id.home:
                 // todo: goto back activity from here
-                Intent intent = new Intent(getApplicationContext(), Expandable_Activity.class);
+                Intent intent = new Intent(getApplicationContext(), TrainingHomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();

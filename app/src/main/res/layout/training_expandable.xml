@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/b_image"
-    tools:context="com.example.john.hbb.MainActivity">
+    tools:context="com.example.john.hbb.activities.home.MainActivity">
 
     <include layout="@layout/toolbar_layout"
         android:layout_width="match_parent"
@@ -286,23 +286,28 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="100dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="@string/key_steps" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
-                        android:padding="5dp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/key_steps" />
-                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/bag_and_mask_ventilation_video"
+                            android:textStyle="bold"
+                            android:drawableRight="@android:drawable/presence_video_away"
+                            android:text="@string/bag_and_mask_ventilation" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textStyle="bold"
+                            android:drawableRight="@android:drawable/presence_video_away"
+                            android:id="@+id/improving_ventilation_video"
+                            android:text="@string/improving_ventilation" />
+                    </LinearLayout>
                 </ScrollView>
 
             </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
@@ -318,40 +323,26 @@
                 android:paddingTop="10dp"
                 android:textColor="@android:color/white"
                 android:drawableRight="@android:drawable/ic_lock_idle_alarm"
-                android:onClick="expandableButton5"
                 android:layout_marginTop="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/ventilation_with_slow_or_fast_heart_rate"
                 />
 
-            <com.github.aakira.expandablelayout.ExpandableRelativeLayout
-                android:id="@+id/expandableLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/expandableButton4"
-                android:background="@null"
-                android:padding="16dp"
-                app:ael_duration="600"
-                app:ael_expanded="false"
-                app:ael_interpolator="accelerate"
-                app:ael_orientation="vertical">
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Welcomes" />
-                </LinearLayout>
-                </ScrollView>
-            </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-
-
+            <Button
+                android:id="@+id/expandableButton6"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/expandableButton5"
+                android:background="@drawable/button"
+                android:gravity="fill_horizontal"
+                android:paddingLeft="30dp"
+                android:paddingTop="10dp"
+                android:textColor="@android:color/white"
+                android:drawableRight="@android:drawable/ic_lock_idle_alarm"
+                android:layout_marginTop="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/disinfecting_and_testing_equipment_after_every_use"
+                />
         </LinearLayout>
 
     </ScrollView>
