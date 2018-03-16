@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/square">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/horizonal_padding"
+        android:gravity="center"
+        android:background="@drawable/b_image"
+        android:orientation="vertical">
+        <include layout="@layout/header"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/header_text"
+            android:textStyle="bold"
+            android:text="Select Team Member"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:orientation="vertical"
+            android:id="@+id/layout">
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/register_text"
+            android:background="@drawable/square"
+            android:text="@string/register_new"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:layout_marginTop="20sp"
+            android:id="@+id/done_btn"
+            android:text="@string/done"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

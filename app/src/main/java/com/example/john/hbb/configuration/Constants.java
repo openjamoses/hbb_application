@@ -48,6 +48,11 @@ public class Constants {
         public static final String TABLE_DISTRICT = "district";
         public static final String DISTRICT_DATE_TIME = "date_time";
 
+        public static final String HEALTH_ID = "heath_id";
+        public static final String HEALTH_NAME = "health_name";
+        public static final String TABLE_HEALTH = "health_tb";
+        public static final String TABLE_STATUS = "health_id";
+        public static final String HEALTHID = "healthID";
         ///// TODO: 10/20/17  sign up user..
         public static final String KEY_FNAME_TEMP = "fname_temp";
         public static final String KEY_LNAME_TEMP = "lname_temp";
@@ -57,6 +62,8 @@ public class Constants {
         // Email address (make variable public to access from outside)
         public static final String KEY_EMAIL_TEMP = "email_temp";
         public static final String KEY_PASSWORD_TEMP = "password_temp";
+
+
 
         //// TODO: 10/23/17  URL
         public static final String SYNC_FOLDER = "sync_calls/";

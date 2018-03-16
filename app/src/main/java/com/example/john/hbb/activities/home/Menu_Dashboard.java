@@ -8,6 +8,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +26,14 @@ import java.util.HashMap;
 import com.example.john.hbb.R;
 import com.example.john.hbb.configuration.Server_Service;
 import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.configuration.UsersSession;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.services.ProcessingService;
 import com.example.john.hbb.activities.simulation_mode.Start_Simulation;
 import com.example.john.hbb.activities.training_mode.TrainingHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.w3c.dom.Text;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -46,6 +51,7 @@ public class Menu_Dashboard extends AppCompatActivity {
     private Context context = this;
     Toolbar toolbar;
     String email;
+    private TextView header_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +71,7 @@ public class Menu_Dashboard extends AppCompatActivity {
 
         btn_training = (AppCompatButton) findViewById(R.id.btn_training);
         btn_simulation = (AppCompatButton) findViewById(R.id.btn_simulation);
+
 
         btn_training.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,30 +108,77 @@ public class Menu_Dashboard extends AppCompatActivity {
             View view = inflater.inflate(R.layout.accept_dialog, null);
             // this is set the view from XML inside AlertDialog
             alert.setView(view);
-            RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
-
-
+            final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
+            Button button = (Button) view.findViewById(R.id.continue_btn);
+            final RadioButton alone_radio = (RadioButton) view.findViewById(R.id.alone_radio);
+            final RadioButton team_radio = (RadioButton) view.findViewById(R.id.team_radio);
+            header_text = (TextView) view. findViewById(R.id.header_text);
+            header_text.setText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
             // disallow cancel of AlertDialog on click of back button and outside touch
             alert.setCancelable(false);
+            alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
 
             dialog = alert.create();
             dialog.show();
 
 
-            if(radioGroup.getCheckedRadioButtonId() != -1 ) {
-                int radioID = radioGroup.getCheckedRadioButtonId();
-                String selected = ((RadioButton)view.findViewById(radioID)).getText().toString();
-                if (selected.equals(getResources().getString(R.string.alone))){
-                    //Toast.makeText(context,selected,Toast.LENGTH_SHORT).show();
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int val = 0;
+                    if (alone_radio.isChecked()){
+                        val = 0;
+                    }else if (team_radio.isChecked()){
+                        val = 1;
+                    }else {
+                        val = -1;
+                    }
+                    if (val != -1){
+                        dialog.dismiss();
+                       if (val == 1){
+                           openSelectDialog();
+                       }
+                    }else {
+                        Toast.makeText(context,">>>Please make a selected..!<<<",Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-                Toast.makeText(context,selected,Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+
+            });
+
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
+    }
+    private void openSelectDialog(){
+        final AlertDialog dialog;
+        try{
+            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.select_dialog, null);
+            TextView register_text = (TextView) view.findViewById(R.id.register_text);
+            Button done_btn = (Button) view.findViewById(R.id.done_btn);
+
+            // this is set the view from XML inside AlertDialog
+            alert.setView(view);
+             // disallow cancel of AlertDialog on click of back button and outside touch
+            alert.setCancelable(false);
+            alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+
+            dialog = alert.create();
+            dialog.show();
+            done_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void checkUserSessions() {
@@ -145,6 +199,8 @@ public class Menu_Dashboard extends AppCompatActivity {
         email = user.get(SessionManager.KEY_EMAIL);
         String health = user.get(SessionManager.KEY_FACILITY);
         //toolbar.setTitle();
+
+
 
         TextView textView = (TextView) findViewById(R.id.toolbar_title);
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
