@@ -1,4 +1,4 @@
-package com.example.john.hbb.configuration;
+package com.example.john.hbb.core;
 
 import android.app.Service;
 import android.content.Context;
@@ -92,7 +92,7 @@ public class Server_Service extends Service {
                                            cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID)),
                                            cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME)),
                                            cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.EMAIL)),
+                                           cursor.getString(cursor.getColumnIndex(Constants.config.USERNAME)),
                                            cursor.getString(cursor.getColumnIndex(Constants.config.CONTACT)),
                                            cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY)),
                                            cursor.getString(cursor.getColumnIndex(Constants.config.GENDER)),
@@ -273,7 +273,7 @@ public class Server_Service extends Service {
                                         jsonObject.put("user_id", cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID)));
                                         jsonObject.put("first_name", cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME)));
                                         jsonObject.put("last_name", cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME)));
-                                        jsonObject.put("email", cursor.getString(cursor.getColumnIndex(Constants.config.EMAIL)));
+                                        jsonObject.put("username", cursor.getString(cursor.getColumnIndex(Constants.config.USERNAME)));
                                         jsonObject.put("phone", cursor.getString(cursor.getColumnIndex(Constants.config.CONTACT)));
                                         jsonObject.put("gender", cursor.getString(cursor.getColumnIndex(Constants.config.GENDER)));
                                         jsonObject.put("health_facility", cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY)));

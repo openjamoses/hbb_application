@@ -25,13 +25,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.DateTime;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.DateTime;
+import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.utils.CompressBitmap;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
-import java.util.zip.Inflater;
 
 /**
  * Created by john on 12/5/17.
@@ -258,26 +257,9 @@ public class Rator_ImageActivity extends AppCompatActivity {
 
 
     private void checkUserSessions() {
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        // Session class instance
-        SessionManager session = new SessionManager(getApplicationContext());
-        session.checkLogin();
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
 
-        String userID = user.get(SessionManager.KEY_USERID);
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        String email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
-
-        String date = new DateTime().getCurrentDate();
-        String time = new DateTime().getCurrentTime();
+        String date = DateTime.getCurrentDate();
+        String time = DateTime.getCurrentTime();
         int frequency = 1;
         int status = 0;
 

@@ -17,8 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.Constants;
-import com.example.john.hbb.configuration.DBHelper;
+import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.DBHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,31 +27,17 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import static com.example.john.hbb.configuration.Constants.config.CONTACT;
-import static com.example.john.hbb.configuration.Constants.config.DISTRICT_NAME;
-import static com.example.john.hbb.configuration.Constants.config.EMAIL;
-import static com.example.john.hbb.configuration.Constants.config.FACILITY_OWNER;
-import static com.example.john.hbb.configuration.Constants.config.FACILITY_TYPE;
-import static com.example.john.hbb.configuration.Constants.config.FIRST_NAME;
-import static com.example.john.hbb.configuration.Constants.config.GENDER;
-import static com.example.john.hbb.configuration.Constants.config.HEALTH_CADRE;
-import static com.example.john.hbb.configuration.Constants.config.HEALTH_FACILITY;
-import static com.example.john.hbb.configuration.Constants.config.HOST_URL;
-import static com.example.john.hbb.configuration.Constants.config.LAST_NAME;
-import static com.example.john.hbb.configuration.Constants.config.PASSWORD;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_DATE;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_FREQUENCY;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_ID;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_KEY_SKILL;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_KEY_SUBSKILL;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_NAME;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_SYNC_STATUS;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_TIME;
-import static com.example.john.hbb.configuration.Constants.config.URL_SAVE_TRAINING;
-import static com.example.john.hbb.configuration.Constants.config.URL_SAVE_USER;
-import static com.example.john.hbb.configuration.Constants.config.USER_ID;
-import static com.example.john.hbb.configuration.Constants.config.USER_STATUS;
-import static com.example.john.hbb.configuration.Constants.config.VERIFIED_STATUS;
+import static com.example.john.hbb.core.Constants.config.HOST_URL;
+import static com.example.john.hbb.core.Constants.config.TRAINING_DATE;
+import static com.example.john.hbb.core.Constants.config.TRAINING_FREQUENCY;
+import static com.example.john.hbb.core.Constants.config.TRAINING_ID;
+import static com.example.john.hbb.core.Constants.config.TRAINING_KEY_SKILL;
+import static com.example.john.hbb.core.Constants.config.TRAINING_KEY_SUBSKILL;
+import static com.example.john.hbb.core.Constants.config.TRAINING_NAME;
+import static com.example.john.hbb.core.Constants.config.TRAINING_SYNC_STATUS;
+import static com.example.john.hbb.core.Constants.config.TRAINING_TIME;
+import static com.example.john.hbb.core.Constants.config.URL_SAVE_TRAINING;
+import static com.example.john.hbb.core.Constants.config.USER_ID;
 
 /**
  * Created by john on 10/20/17.

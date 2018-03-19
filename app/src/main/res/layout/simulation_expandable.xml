@@ -71,6 +71,22 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/expandableButton0"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="30dp"
+                    android:paddingTop="10dp"
+                    android:gravity="fill_horizontal"
+                    android:drawableRight="@android:drawable/ic_lock_idle_alarm"
+                    android:onClick="expandableButton0"
+                    android:paddingRight="10dp"
+                    android:text="@string/preparation_for_birth"
+                    />
+
+                <Button
                     android:id="@+id/expandableButton1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -78,6 +94,7 @@
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
                     android:paddingLeft="30dp"
+                    android:layout_marginTop="10dp"
                     android:paddingTop="10dp"
                     android:gravity="fill_horizontal"
                     android:drawableRight="@android:drawable/ic_lock_idle_alarm"
@@ -131,12 +148,76 @@
                     </ScrollView>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
+
+                <Button
+                    android:id="@+id/expandableButton3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:layout_below="@+id/expandableLayout1"
+                    android:background="@drawable/button"
+                    android:drawableRight="@android:drawable/ic_lock_idle_alarm"
+                    android:onClick="expandableButton3"
+                    android:layout_marginTop="10dp"
+                    android:gravity="fill_horizontal"
+                    android:paddingRight="10dp"
+                    android:text="@string/golden_minutes_with_ventilation"
+                    />
+
+                <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+                    android:id="@+id/expandableLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/expandableButton3"
+                    android:background="@null"
+                    android:padding="16dp"
+                    app:ael_duration="800"
+                    app:ael_expanded="false"
+                    app:ael_interpolator="accelerate"
+                    app:ael_orientation="vertical">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/sunctioning"
+                                android:textStyle="bold"
+                                android:text="" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:textStyle="bold"
+                                android:id="@+id/stimulation"
+                                android:text="" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:id="@+id/without_combine_video"
+                                android:textStyle="bold"
+                                android:text="" />
+                        </LinearLayout>
+                    </ScrollView>
+                </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
                 <Button
                     android:id="@+id/expandableButton2"
                     android:layout_marginTop="10dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/expandableLayout1"
+                    android:layout_below="@+id/expandableLayout3"
                     android:paddingLeft="30dp"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
@@ -193,67 +274,7 @@
                     </ScrollView>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
-                <Button
-                    android:id="@+id/expandableButton3"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:paddingTop="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:layout_below="@+id/expandableLayout2"
-                    android:background="@drawable/button"
-                    android:drawableRight="@android:drawable/ic_lock_idle_alarm"
-                    android:onClick="expandableButton3"
-                    android:layout_marginTop="10dp"
-                    android:gravity="fill_horizontal"
-                    android:paddingRight="10dp"
-                    android:text="@string/golden_minutes_with_ventilation"
-                    />
 
-                <com.github.aakira.expandablelayout.ExpandableRelativeLayout
-                    android:id="@+id/expandableLayout3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/expandableButton3"
-                    android:background="@null"
-                    android:padding="16dp"
-                    app:ael_duration="800"
-                    app:ael_expanded="false"
-                    app:ael_interpolator="accelerate"
-                    app:ael_orientation="vertical">
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/sunctioning"
-                                android:textStyle="bold"
-                                android:text="" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:textStyle="bold"
-                                android:id="@+id/stimulation"
-                                android:text="" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:id="@+id/without_combine_video"
-                                android:textStyle="bold"
-                                android:text="" />
-                        </LinearLayout>
-                    </ScrollView>
-                </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
                 <Button
                     android:id="@+id/expandableButton4"

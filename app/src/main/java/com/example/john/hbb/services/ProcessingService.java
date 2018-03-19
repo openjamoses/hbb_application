@@ -7,17 +7,18 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.john.hbb.core.Phone;
 import com.example.john.hbb.db_operations.DBController;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.example.john.hbb.configuration.Constants.config.OPERATION_DISTRICT;
-import static com.example.john.hbb.configuration.Constants.config.OPERATION_TRAINING;
-import static com.example.john.hbb.configuration.Constants.config.OPERATION_USER;
-import static com.example.john.hbb.configuration.Constants.config.URL_SYNC_DISTRICT;
-import static com.example.john.hbb.configuration.Constants.config.URL_SYNC_TRAINING;
-import static com.example.john.hbb.configuration.Constants.config.URL_SYNC_USER;
+import static com.example.john.hbb.core.Constants.config.OPERATION_HEALTH;
+import static com.example.john.hbb.core.Constants.config.OPERATION_USER;
+import static com.example.john.hbb.core.Constants.config.URL_GET_ALL_ENTRY;
+import static com.example.john.hbb.core.Constants.config.URL_GET_SINGLE_ENTRY;
+import static com.example.john.hbb.core.Constants.config.URL_SYNC_HEALTH;
+import static com.example.john.hbb.core.Constants.config.URL_SYNC_USER;
 
 /**
  * Created by john on 9/6/17.
@@ -57,10 +58,13 @@ public class ProcessingService extends Service {
     public void  sendRequest(){
         Log.e(TAG, "1 minutes has elapsed!");
         try {
+            String imei = Phone.getIMEI(context);
 
-            new DBController().syncCalls(URL_SYNC_DISTRICT,OPERATION_DISTRICT,"",context);
+            DBController.fetchAll(context,"user_tb","first_name", imei,URL_GET_ALL_ENTRY,OPERATION_USER);
+            DBController.fetchAll(context,"health_tb","health_name", imei,URL_GET_ALL_ENTRY,OPERATION_HEALTH);
             new DBController().syncCalls(URL_SYNC_USER,OPERATION_USER,"",context);
-            new DBController().syncCalls(URL_SYNC_TRAINING,OPERATION_TRAINING,"",context);
+            new DBController().syncCalls(URL_SYNC_HEALTH,OPERATION_HEALTH,"",context);
+           // new DBController().syncCalls(URL_SYNC_TRAINING,OPERATION_TRAINING,"",context);
         }catch (Exception e){
             e.printStackTrace();
         }

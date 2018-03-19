@@ -6,48 +6,27 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.Constants;
-import com.example.john.hbb.configuration.DBHelper;
-import com.example.john.hbb.configuration.DateTime;
+import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.DBHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import static com.example.john.hbb.configuration.Constants.config.CONTACT;
-import static com.example.john.hbb.configuration.Constants.config.DISTRICT_NAME;
-import static com.example.john.hbb.configuration.Constants.config.EMAIL;
-import static com.example.john.hbb.configuration.Constants.config.FACILITY_OWNER;
-import static com.example.john.hbb.configuration.Constants.config.FACILITY_TYPE;
-import static com.example.john.hbb.configuration.Constants.config.FIRST_NAME;
-import static com.example.john.hbb.configuration.Constants.config.GENDER;
-import static com.example.john.hbb.configuration.Constants.config.HEALTH_CADRE;
-import static com.example.john.hbb.configuration.Constants.config.HEALTH_FACILITY;
-import static com.example.john.hbb.configuration.Constants.config.HOST_URL;
-import static com.example.john.hbb.configuration.Constants.config.LAST_NAME;
-import static com.example.john.hbb.configuration.Constants.config.PASSWORD;
-import static com.example.john.hbb.configuration.Constants.config.URL_SAVE_USER;
-import static com.example.john.hbb.configuration.Constants.config.USER_ID;
-import static com.example.john.hbb.configuration.Constants.config.USER_STATUS;
-import static com.example.john.hbb.configuration.Constants.config.VERIFIED_STATUS;
+import static com.example.john.hbb.core.Constants.config.CONTACT;
+import static com.example.john.hbb.core.Constants.config.DISTRICT_NAME;
+import static com.example.john.hbb.core.Constants.config.FACILITY_OWNER;
+import static com.example.john.hbb.core.Constants.config.FIRST_NAME;
+import static com.example.john.hbb.core.Constants.config.GENDER;
+import static com.example.john.hbb.core.Constants.config.HEALTH_FACILITY;
+import static com.example.john.hbb.core.Constants.config.HEALTH_ID;
+import static com.example.john.hbb.core.Constants.config.HEALTH_NAME;
+import static com.example.john.hbb.core.Constants.config.LAST_NAME;
+import static com.example.john.hbb.core.Constants.config.PASSWORD;
+import static com.example.john.hbb.core.Constants.config.USERID;
+import static com.example.john.hbb.core.Constants.config.USERNAME;
+import static com.example.john.hbb.core.Constants.config.USER_STATUS;
 
 /**
  * Created by john on 10/20/17.
@@ -60,26 +39,26 @@ public class User {
         this.context = context;
     }
 
-    public String save(String fname, String lname, String email, String phone, String gender, String facility, String password){
-        SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
+    public String save(String fname, String lname, String username, String phone, String gender, String facility,int facililty_id, String password, int status){
+        SQLiteDatabase database = DBHelper.getHelper(context).getWritableDatabase();
         String message = null;
-        int status = 0;
         try{
             // database.beginTransaction();
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(Constants.config.FIRST_NAME,fname);
             contentValues.put(Constants.config.LAST_NAME,lname);
-            contentValues.put(EMAIL,email);
+            contentValues.put(Constants.config.USERNAME,username);
             contentValues.put(Constants.config.CONTACT,phone);
             contentValues.put(Constants.config.GENDER,gender);
             contentValues.put(Constants.config.HEALTH_FACILITY,facility);
             contentValues.put(Constants.config.PASSWORD,password);
+            contentValues.put(HEALTH_ID,facililty_id);
             contentValues.put(Constants.config.USER_STATUS,status);
-
             database.insert(Constants.config.TABLE_USERS, null, contentValues);
+
             //database.setTransactionSuccessful();
-            message = "Registration Details saved!";
+            message = "User Details saved!";
 
         }catch (Exception e){
             e.printStackTrace();
@@ -90,154 +69,6 @@ public class User {
 
         return message;
     }
-
-    public String saveAll(String fname, String lname, String contact, String gender, String email, String password, String health, String district2, String selected_type, String selected_ownership, String selected_cadre , int status) {
-        SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
-        int id = new District(context).select(district2);
-        if (id == 0){
-            String message = new District(context).save(district2, DateTime.getCurrentDate()+" "+DateTime.getCurrentTime(),0);
-        }
-        String message = null;
-        try{
-            // database.beginTransaction();
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(Constants.config.FIRST_NAME,fname);
-            contentValues.put(Constants.config.LAST_NAME,lname);
-            contentValues.put(EMAIL,email);
-            contentValues.put(Constants.config.CONTACT,contact);
-            contentValues.put(Constants.config.GENDER,gender);
-            contentValues.put(Constants.config.HEALTH_FACILITY,health);
-            contentValues.put(Constants.config.PASSWORD,password);
-            contentValues.put(Constants.config.USER_STATUS,status);
-            contentValues.put(Constants.config.FACILITY_TYPE,selected_type);
-            contentValues.put(Constants.config.FACILITY_OWNER,selected_ownership);
-            contentValues.put(Constants.config.HEALTH_CADRE,selected_cadre);
-            contentValues.put(Constants.config.DISTRICT_NAME,district2);
-            contentValues.put(VERIFIED_STATUS,status);
-            database.insert(Constants.config.TABLE_USERS, null, contentValues);
-            //database.setTransactionSuccessful();
-            message = "Registration Details saved!";
-
-        }catch (Exception e){
-            e.printStackTrace();
-            message = "Sorry, error: "+e;
-        }finally {
-            database.close();
-        }
-
-        return message;
-    }
-    public void updateUserStatus(String email, int status){
-        SQLiteDatabase database = null;
-        try {
-            database = new DBHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + VERIFIED_STATUS + " = '" + status + "' where " + EMAIL + "='" + email + "'  ";
-            Log.d("query", updateQuery);
-            database.execSQL(updateQuery);
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            try{
-                database.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void updateUserPassword(String email, String password) {
-        SQLiteDatabase database = null;
-        try {
-            database = new DBHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + PASSWORD + " = '" + password + "' where " + EMAIL + "='" + email + "'  ";
-            Log.d("query", updateQuery);
-            database.execSQL(updateQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                database.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    public void send(final String fname, final String lname, final String contact, final String gender, final String email, final String password,
-                     final String health, final String district, final String selected_type,
-                     final String selected_ownership, final String selected_cadre){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_USER,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try{
-
-                            int status = 0;
-                            if (response.equals("Success")){
-                                status = 1;
-                            }
-                            String message = saveAll(fname, lname,  contact,  gender,  email,  password,  health,  district,  selected_type, selected_ownership,selected_cadre,status);
-
-                            Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-                            View view = toast.getView();
-                            view.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) view.findViewById(android.R.id.message);
-                        /*Here you can do anything with above textview like text.setTextColor(Color.parseColor("#000000"));*/
-                            //toast.show();
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                        Log.e(TAG,response);
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        //Log.e(TAG, volleyError.getMessage());
-                        try {
-                            int status = 0;
-                            //String message = saves(hospital_name,s_name,s_number,email,imei,country,other,city,status,date);
-
-                            Toast toast = Toast.makeText(context, "Check our internet Connections", Toast.LENGTH_LONG);
-                            View view = toast.getView();
-                            view.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) view.findViewById(android.R.id.message);
-                            toast.show();
-                            //Log.e(TAG, volleyError.getMessage());
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new Hashtable<String, String>();
-                int status = 1;
-                //Adding parameters
-                params.put(FIRST_NAME, fname);
-                params.put(LAST_NAME, lname);
-                params.put(CONTACT, contact);
-                params.put(HEALTH_FACILITY, health);
-                params.put(GENDER, gender);
-                params.put(EMAIL, email);
-                params.put(PASSWORD, password);
-                params.put(USER_STATUS, String.valueOf(status));
-                params.put(FACILITY_TYPE,selected_type );
-                params.put(DISTRICT_NAME,district);
-                params.put(FACILITY_OWNER, selected_ownership);
-                params.put(HEALTH_CADRE, selected_cadre);
-                params.put(VERIFIED_STATUS, String.valueOf(status));
-
-                return params;
-            }
-        };
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
-    }
-
 
     //// TODO: 10/15/17  Syncing
     public ArrayList<HashMap<String, String>> getAllUsers() {
@@ -246,26 +77,21 @@ public class User {
         String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS ;
 
         int status = 1;
-        SQLiteDatabase database = new DBHelper(context).getReadableDatabase();
+        SQLiteDatabase database = DBHelper.getHelper(context).getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(USER_ID))));
+                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(USERID))));
 
-                params.put(FIRST_NAME, cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
-                params.put(LAST_NAME, cursor.getString(cursor.getColumnIndex(LAST_NAME)));
-                params.put(CONTACT, cursor.getString(cursor.getColumnIndex(CONTACT)));
-                params.put(HEALTH_FACILITY, cursor.getString(cursor.getColumnIndex(HEALTH_FACILITY)));
-                params.put(GENDER, cursor.getString(cursor.getColumnIndex(GENDER)));
-                params.put(EMAIL, cursor.getString(cursor.getColumnIndex(EMAIL)));
-                params.put(PASSWORD, cursor.getString(cursor.getColumnIndex(PASSWORD)));
-                params.put(USER_STATUS, String.valueOf(status));
-                params.put(FACILITY_TYPE,cursor.getString(cursor.getColumnIndex(FACILITY_TYPE)) );
-                params.put(DISTRICT_NAME,cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)) );
-                params.put(FACILITY_OWNER, cursor.getString(cursor.getColumnIndex(FACILITY_OWNER)));
-                params.put(HEALTH_CADRE, cursor.getString(cursor.getColumnIndex(HEALTH_CADRE)));
-                params.put(VERIFIED_STATUS, String.valueOf(cursor.getInt(cursor.getColumnIndex(VERIFIED_STATUS))));
+                params.put(FIRST_NAME,cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                params.put(LAST_NAME,cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                params.put(USERNAME,cursor.getString(cursor.getColumnIndex(USERNAME)));
+                params.put(CONTACT,cursor.getString(cursor.getColumnIndex(CONTACT)));
+                params.put(GENDER,cursor.getString(cursor.getColumnIndex(GENDER)));
+                params.put(HEALTH_FACILITY,cursor.getString(cursor.getColumnIndex(HEALTH_FACILITY)));
+                params.put(PASSWORD,cursor.getString(cursor.getColumnIndex(PASSWORD)));
+                params.put(HEALTH_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTH_ID))));
 
                 wordList.add(params);
             } while (cursor.moveToNext());
@@ -278,27 +104,22 @@ public class User {
         wordList = new ArrayList<HashMap<String, String>>();
         int status = 0;
         String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS + " WHERE " + USER_STATUS + " = '" + status + "' ";
-        SQLiteDatabase database = new DBHelper(context).getReadableDatabase();
+        SQLiteDatabase database = DBHelper.getHelper(context).getReadableDatabase();
 
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(USER_ID))));
+                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(USERID))));
 
-                params.put(FIRST_NAME, cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
-                params.put(LAST_NAME, cursor.getString(cursor.getColumnIndex(LAST_NAME)));
-                params.put(CONTACT, cursor.getString(cursor.getColumnIndex(CONTACT)));
-                params.put(HEALTH_FACILITY, cursor.getString(cursor.getColumnIndex(HEALTH_FACILITY)));
-                params.put(GENDER, cursor.getString(cursor.getColumnIndex(GENDER)));
-                params.put(EMAIL, cursor.getString(cursor.getColumnIndex(EMAIL)));
-                params.put(PASSWORD, cursor.getString(cursor.getColumnIndex(PASSWORD)));
-                params.put(USER_STATUS, String.valueOf(status));
-                params.put(FACILITY_TYPE,cursor.getString(cursor.getColumnIndex(FACILITY_TYPE)) );
-                params.put(DISTRICT_NAME,cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)) );
-                params.put(FACILITY_OWNER, cursor.getString(cursor.getColumnIndex(FACILITY_OWNER)));
-                params.put(HEALTH_CADRE, cursor.getString(cursor.getColumnIndex(HEALTH_CADRE)));
-                params.put(VERIFIED_STATUS, String.valueOf(cursor.getInt(cursor.getColumnIndex(VERIFIED_STATUS))));
+                params.put(FIRST_NAME,cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                params.put(LAST_NAME,cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                params.put(USERNAME,cursor.getString(cursor.getColumnIndex(USERNAME)));
+                params.put(CONTACT,cursor.getString(cursor.getColumnIndex(CONTACT)));
+                params.put(GENDER,cursor.getString(cursor.getColumnIndex(GENDER)));
+                params.put(HEALTH_FACILITY,cursor.getString(cursor.getColumnIndex(HEALTH_FACILITY)));
+                params.put(PASSWORD,cursor.getString(cursor.getColumnIndex(PASSWORD)));
+                params.put(HEALTH_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTH_ID))));
 
                 wordList.add(params);
             } while (cursor.moveToNext());
@@ -352,8 +173,8 @@ public class User {
     public void updateSyncStatus(int id, int status){
         SQLiteDatabase database = null;
         try {
-            database = new DBHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + USER_STATUS + " = '" + status + "' where " + USER_ID + "='" + id + "'  ";
+            database = DBHelper.getHelper(context).getWritableDatabase();
+            String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + USER_STATUS + " = '" + status + "' where " + USERID + "='" + id + "'  ";
             Log.d("query", updateQuery);
             database.execSQL(updateQuery);
         }catch (Exception e){
@@ -366,12 +187,10 @@ public class User {
             }
         }
     }
-
-
     ///// TODO: 10/23/17
 
-    public void insert(JSONArray jsonArray){
-        new InsertBackground(context).execute(jsonArray);
+    public void insert(JSONArray response){
+        new InsertBackground(context).execute(response);
     }
     public class InsertBackground extends AsyncTask<JSONArray,Void,String> {
 
@@ -389,18 +208,15 @@ public class User {
         }
 
         @Override
-        protected String doInBackground(JSONArray... jsonArrays) {
+        protected String doInBackground(JSONArray... params) {
             String message = null;
             int status = 1;
-            SQLiteDatabase db = new DBHelper(context).getWritableDB();
+            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
             try{
 
                 db.beginTransaction();
-                //String get_json = get
-                //JSONArray jsonArray = new JSONArray(results);
-                JSONArray jsonArray = jsonArrays[0];
-                db.execSQL("DELETE FROM " + Constants.config.TABLE_USERS+" WHERE "+USER_STATUS+" = '"+status+"' ");
 
+                JSONArray jsonArray = params[0];
                 int total = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ContentValues contentValues = new ContentValues();
@@ -408,23 +224,37 @@ public class User {
 
                     contentValues.put(Constants.config.FIRST_NAME,jsonObject.getString(Constants.config.FIRST_NAME));
                     contentValues.put(Constants.config.LAST_NAME,jsonObject.getString(Constants.config.LAST_NAME));
-                    contentValues.put(EMAIL,jsonObject.getString(Constants.config.EMAIL));
+                    contentValues.put(Constants.config.USERNAME,jsonObject.getString(Constants.config.USERNAME));
                     contentValues.put(Constants.config.CONTACT,jsonObject.getString(Constants.config.CONTACT));
                     contentValues.put(Constants.config.GENDER,jsonObject.getString(Constants.config.GENDER));
                     contentValues.put(Constants.config.HEALTH_FACILITY,jsonObject.getString(Constants.config.HEALTH_FACILITY));
                     contentValues.put(Constants.config.PASSWORD,jsonObject.getString(Constants.config.PASSWORD));
-                    contentValues.put(Constants.config.FACILITY_TYPE,jsonObject.getString(Constants.config.FACILITY_TYPE));
-                    contentValues.put(Constants.config.FACILITY_OWNER,jsonObject.getString(Constants.config.FACILITY_OWNER));
-                    contentValues.put(Constants.config.HEALTH_CADRE,jsonObject.getString(Constants.config.HEALTH_CADRE));
-                    contentValues.put(Constants.config.DISTRICT_NAME,jsonObject.getString(Constants.config.DISTRICT_NAME));
-                    contentValues.put(Constants.config.USER_STATUS,status);
-                    contentValues.put(VERIFIED_STATUS,status);
+                    contentValues.put(HEALTH_ID,jsonObject.getLong(HEALTH_ID));
+                    contentValues.put(Constants.config.USER_STATUS,1);
 
-                    db.insert(Constants.config.TABLE_USERS, null, contentValues);
+                    db = DBHelper.getHelper(context).getReadableDB();
+                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE "+PASSWORD+" = '"+jsonObject.getString(Constants.config.PASSWORD)+"'" +
+                            " AND  " + USERNAME + " = '" + jsonObject.getString(Constants.config.USERNAME) + "' ";
+                    db = new DBHelper(context).getReadableDatabase();
+                    Cursor cursor = db.rawQuery(selectQuery, null);
+                    if (cursor.moveToFirst()){
+                        do {
+                            int stat = cursor.getInt(cursor.getColumnIndex(Constants.config.USER_STATUS));
+                            int id = cursor.getInt(cursor.getColumnIndex(USERID));
+                            if (stat == 0){
+                                db = DBHelper.getHelper(context).getWritableDB();
+                                db.update(Constants.config.TABLE_USERS,contentValues,USERID+"="+id, null);
+                            }
+                        }while (cursor.moveToNext());
+                    }else {
+                        db = DBHelper.getHelper(context).getWritableDB();
+                        db.insert(Constants.config.TABLE_USERS, null, contentValues);
+
+                    }
                     total ++;
                 }
                 db.setTransactionSuccessful();
-                message = total+" records , Activation Table Updated successfully!";
+                message = total+" records ,User Table Updated successfully!";
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -444,6 +274,60 @@ public class User {
         }
     }
 
+
+    public String password(String username){
+        Cursor cursor = null;
+        String password = "";
+        SQLiteDatabase db = DBHelper.getHelper(context).getReadableDatabase();
+        try{
+            String query = "SELECT "+Constants.config.PASSWORD+", "+Constants.config.USER_ID+" FROM " + Constants.config.TABLE_USERS + " " +
+                    " WHERE  " +
+                    " " + Constants.config.USERNAME + " = '" + username + "' ORDER BY "+Constants.config.USER_ID+" DESC LIMIT 1 ";
+
+            cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()){
+                do {
+                    password = cursor.getString(cursor.getColumnIndex(Constants.config.PASSWORD));
+                }while (cursor.moveToNext());
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return password;
+    }
+
+
+    public Cursor userLogin(String username, String phone, String password) {
+        Log.e("####","-------------------------------------------------------------------");
+        Cursor res = null;
+        SQLiteDatabase db = DBHelper.getHelper(context).getReadableDatabase();
+        try {
+            String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE " +
+                    " ("+USERNAME+" = '"+username+"' OR "+CONTACT+" = '"+phone+"') AND  " + PASSWORD + " = '" + password + "' ORDER BY "+USERID+" DESC LIMIT 1 ";
+            res  = db.rawQuery(selectQuery, null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Log.e("####","-------------------------------------------------------------------");
+        return res;
+    }
+
+
+    public Cursor getAll(String health) {
+        //Log.e("####","-------------------------------------------------------------------");
+        Cursor res = null;
+        SQLiteDatabase db = DBHelper.getHelper(context).getReadableDatabase();
+        try {
+            String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE" +
+                    " "+Constants.config.HEALTH_FACILITY+" = '"+health+"' ORDER BY "+FIRST_NAME+", "+LAST_NAME+" ";
+            res  = db.rawQuery(selectQuery, null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+       // Log.e("####","-------------------------------------------------------------------");
+        return res;
+    }
 
 }
 

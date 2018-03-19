@@ -1,4 +1,4 @@
-package com.example.john.hbb.configuration;
+package com.example.john.hbb.core;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,14 +8,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Handler;
 import android.util.Log;
 
-import static com.example.john.hbb.configuration.CreateTable.config.CREATE_DISTRICT;
-import static com.example.john.hbb.configuration.CreateTable.config.CREATE_TRAINING_MODE;
-import static com.example.john.hbb.configuration.CreateTable.config.CREATE_USER;
+import static com.example.john.hbb.core.CreateTable.config.CREATE_HEALTH;
+import static com.example.john.hbb.core.CreateTable.config.CREATE_TRAINING_MODE;
+import static com.example.john.hbb.core.CreateTable.config.CREATE_USER;
 
 
 public class DBHelper extends SQLiteOpenHelper {
     private final Handler handler;
     // queries to create the table
+    private static DBHelper instance;
+    public static synchronized DBHelper getHelper(Context context)
+    {
+        if (instance == null)
+            instance = new DBHelper(context);
+        return instance;
+    }
     public DBHelper(Context context) {
         super(context, Constants.config.DATABASE_NAME, null, Constants.config.DATABASE_VERSION);
         handler = new Handler(context.getMainLooper());
@@ -25,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TRAINING_MODE);
         db.execSQL(CREATE_USER);
-        db.execSQL(CREATE_DISTRICT);
+        db.execSQL(CREATE_HEALTH);
         Log.e("DATABASE OPERATION","Data base created / open successfully");
 
     }
@@ -34,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_TRAINING_MODE);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_DISTRICT);
+        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_HEALTH);
         onCreate(db);
         Log.e("DATABASE OPERATION", "Table created / open successfully");
 
@@ -86,58 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return message;
     } //////
 
-    public String password(String email){
-        Cursor cursor = null;
-        String password = "";
-        SQLiteDatabase db = this.getReadableDatabase();
-        try{
-            String query = "SELECT "+Constants.config.PASSWORD+", "+Constants.config.USER_ID+" FROM " + Constants.config.TABLE_USERS + " " +
-                    " WHERE  " +
-                    " " + Constants.config.EMAIL + " = '" + email + "' ORDER BY "+Constants.config.USER_ID+" DESC LIMIT 1 ";
 
-            cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()){
-                do {
-                    password = cursor.getString(cursor.getColumnIndex(Constants.config.PASSWORD));
-                }while (cursor.moveToNext());
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return password;
-    }
-
-    public Cursor userLogin(String email, String password) {
-        Log.e("####","-------------------------------------------------------------------");
-        String password2 = password(email);
-
-
-        String d_password = "";
-        Log.e("DBHELPER","ENCRYPTED PASSWORD: "+password2);
-        try{
-            //d_password = Encrypt_Decrypt.decipher(SECRET_KEY,password2);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        Cursor res = null;
-        try {
-            SQLiteDatabase db = this.getReadableDatabase();
-            if (password2.equals(password)) {
-                String query = "SELECT * FROM " + Constants.config.TABLE_USERS + " " +
-                        " WHERE  " +
-                        " " + Constants.config.EMAIL + " = '" + email + "' ";
-                Log.e("Query: ", query);
-                res = db.rawQuery(query, null);
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        Log.e("####","-------------------------------------------------------------------");
-        return res;
-    }
 
     public Cursor fetchUsers(){
         SQLiteDatabase db = this.getReadableDatabase();

@@ -1,5 +1,6 @@
 package com.example.john.hbb.activities.simulation_mode.alone;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +14,13 @@ import android.widget.TextView;
 import com.example.john.hbb.activities.home.LoginActivity;
 import com.example.john.hbb.R;
 import com.example.john.hbb.activities.simulation_mode.Simulation_VideoPlayer;
+import com.example.john.hbb.core.UsersSession;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import java.util.HashMap;
 
-import com.example.john.hbb.configuration.Server_Service;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.Server_Service;
+import com.example.john.hbb.core.SessionManager;
 
 /**
  * Created by john on 7/11/17.
@@ -32,6 +34,7 @@ public class Alone_Home extends AppCompatActivity {
     private TextView baby_being_born, crying_and_breathing, breathing_baby,
             drying_thouroughly, clamping_and_cutting_card, r_combine_video,
             sunctioning, stimulation, without_combine_video;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,29 +75,10 @@ public class Alone_Home extends AppCompatActivity {
     }
 
     private void checkUserSessions() {
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        // Session class instance
-        SessionManager session = new SessionManager(getApplicationContext());
-        session.checkLogin();
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        String email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
-        //toolbar.setTitle();
-
-
         TextView textView = (TextView) findViewById(R.id.toolbar_title);
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
-        textView.setText( health );
-        textView2.setText("("+fname + " " + lname+")");
+        textView.setText( new UsersSession(context).health );
+        textView2.setText("("+new UsersSession(context).getFname() + " " +new UsersSession(context).getLname()+")");
 
     }
 

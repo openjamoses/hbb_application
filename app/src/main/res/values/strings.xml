@@ -111,4 +111,6 @@
     <string name="are_you">Are You..</string>
     <string name="ateam">a Team</string>
     <string name="register_new">Register new Member.</string>
+    <string name="health_facility_name">Health Facility name</string>
+    <string name="preparation_for_birth">Preparation for Birth</string>
 </resources>

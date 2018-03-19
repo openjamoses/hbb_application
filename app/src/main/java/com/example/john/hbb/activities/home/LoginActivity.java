@@ -36,15 +36,15 @@ import android.widget.Toast;
 
 
 import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.Constants;
-import com.example.john.hbb.configuration.DBHelper;
-import com.example.john.hbb.configuration.Server_Service;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.DBHelper;
+import com.example.john.hbb.core.Phone;
+import com.example.john.hbb.core.Server_Service;
+import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.db_operations.User;
 import com.example.john.hbb.firebase.ResetPasswordActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,15 +55,20 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.READ_PHONE_STATE;
-import static com.example.john.hbb.configuration.Constants.config.OPERATION_USER;
-import static com.example.john.hbb.configuration.Constants.config.URL_GET_USER;
+import static com.example.john.hbb.core.Constants.config.CONTACT;
+import static com.example.john.hbb.core.Constants.config.FIRST_NAME;
+import static com.example.john.hbb.core.Constants.config.HEALTH_FACILITY;
+import static com.example.john.hbb.core.Constants.config.LAST_NAME;
+import static com.example.john.hbb.core.Constants.config.OPERATION_USER;
+import static com.example.john.hbb.core.Constants.config.URL_GET_SINGLE_ENTRY;
+import static com.example.john.hbb.core.Constants.config.USERNAME;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     private Context context = this;
 
-    private EditText _emailText,_passwordText;
+    private EditText _usernameText,_passwordText;
     private Button _loginButton;
     private TextView _signupLink;
 
@@ -85,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(com.example.john.hbb.R.layout.login_activity);
 
-        _emailText = (EditText) findViewById(R.id.input_email) ;
+        _usernameText = (EditText) findViewById(R.id.input_username) ;
         _passwordText = (EditText) findViewById(R.id.input_password) ;
         _loginButton = (Button) findViewById(R.id.btn_login) ;
         _signupLink = (TextView) findViewById(R.id.link_signup) ;
@@ -118,18 +123,24 @@ public class LoginActivity extends AppCompatActivity {
                 if (pd.isShowing()) {
                     pd.dismiss();
 
-                       final String email_ = _emailText.getText().toString();
-                        final String password = _passwordText.getText().toString();
-                        //String password_encrypt = Encrypt_Decrypt.decrypt(password);
+                       final String username_ = _usernameText.getText().toString();
+                       final String password = _passwordText.getText().toString();
+                       String phone = username_;
+                       if (username_.length() >=10){
+                           phone = username_.substring(username_.length()-9,username_.length());
+                       }
+                       if (username_.substring(0,1).equals("+") || username_.substring(0,1).equals("0") )
+
 
                     try {
                             int useID = 0;
                             int verified = 0;
-                            String message = null,fname = null,lname = null,email = null,contact = null,facility = null;
+                            String message = null,fname = null,lname = null,username = null,contact = null,facility = null, gend = null, pass = null;
 
+                            int fac_id = 0;
                             //start the profile activity
                             DBHelper dbHelper = new DBHelper(context);
-                            Cursor cursor = dbHelper.userLogin(email_, password);
+                            Cursor cursor = new User(context).userLogin(username_, phone, password);
                         if (cursor != null) {
                             if (cursor.moveToFirst()) {
                                 do {
@@ -137,14 +148,16 @@ public class LoginActivity extends AppCompatActivity {
                                     useID = cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID));
                                     fname = cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME));
                                     lname = cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME));
-                                    email = cursor.getString(cursor.getColumnIndex(Constants.config.EMAIL));
+                                    username = cursor.getString(cursor.getColumnIndex(Constants.config.USERNAME));
                                     contact = cursor.getString(cursor.getColumnIndex(Constants.config.CONTACT));
                                     facility = cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY));
-                                    verified = cursor.getInt(cursor.getColumnIndex(Constants.config.VERIFIED_STATUS));
+                                    gend = cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY));
+                                    pass = cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY));
+                                    fac_id = cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTH_ID));
                                 } while (cursor.moveToNext());
 
                             } else {
-                                select(email_);
+                                select(username_);
 
                                 message = "Login Failed!";
                                 useID = 0;
@@ -153,10 +166,13 @@ public class LoginActivity extends AppCompatActivity {
                                 email = "email";
                                 contact = "contact";
                                 facility = "facility";
+                                gend = "facility";
+                                pass = "facility";
+
                             }
 
                         }else {
-                            select(email_);
+                            select(username_);
                             message = "Login Failed!";
                             useID = 0;
                             fname = "fname";
@@ -164,8 +180,10 @@ public class LoginActivity extends AppCompatActivity {
                             email = "email";
                             contact = "contact";
                             facility = "facility";
+                            gend = "gender";
+                            pass = "password";
                         }
-                            onLoginSuccess(message, useID, fname, lname, email, contact, facility);
+                            onLoginSuccess(message, useID, fname, lname, username, contact, facility,gend,pass,fac_id);
 
                         }catch (Exception e){
                             e.printStackTrace();
@@ -212,7 +230,6 @@ public class LoginActivity extends AppCompatActivity {
                 }},3000);
         }
     }
-
     private void checkUserSessions() {
         /**
          * Call this function whenever you want to check user login
@@ -224,22 +241,22 @@ public class LoginActivity extends AppCompatActivity {
         session.checkLogin();
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
+        String fname = user.get(FIRST_NAME);
+        String lname = user.get(LAST_NAME);
+        String contact = user.get(CONTACT);
+        String username = user.get(USERNAME);
+        String health = user.get(HEALTH_FACILITY);
         //toolbar.setTitle();
 
-        if (fname != null && lname != null && contact != null && email != null && health != null){
+        if (fname != null && lname != null && contact != null && username != null && health != null){
             Intent i = new Intent(getApplicationContext(), Menu_Dashboard.class);
             startActivity(i);
             finish();
         }
 
     }
-    public void select(String email){
-        DBController.fetch(context,email,URL_GET_USER,OPERATION_USER);
+    public void select(String username){
+        DBController.fetchSigle(context,"user_tb","imei", Phone.getIMEI(context),URL_GET_SINGLE_ENTRY,OPERATION_USER);
     }
 
     @Override
@@ -253,12 +270,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login() {
         Log.d(TAG, "Login");
-
-        if (!validate()) {
-            onLoginFailed();
-            return;
-        }
-
         _loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
@@ -338,10 +349,10 @@ public class LoginActivity extends AppCompatActivity {
         // disable going back to the MainActivity
         moveTaskToBack(true);
     }
-    public void onLoginSuccess(String message, int useID, String fname, String lname, String email, String contact,String facility) {
+    public void onLoginSuccess(String message, int useID, String fname, String lname, String username, String contact,String facility, String gender, String password, int fac_id) {
         _loginButton.setEnabled(true);
         if(message.equals("Login Successfully!")) {
-            session.createLoginSession(useID, fname, lname, contact, email, facility);
+            session.createLoginSession(useID, fname, lname, contact, username, facility, gender,password,fac_id);
             // Staring MainActivity
             Intent i = new Intent(getApplicationContext(), Menu_Dashboard.class);
             startActivity(i);
@@ -355,26 +366,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
     }
-    public boolean validate() {
-        boolean valid = true;
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _emailText.setError(null);
-        }
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
-            valid = false;
-        } else {
-            _passwordText.setError(null);
-        }
-        return valid;
-    }
     ///// TODO: 10/13/17   permission requests...
     private  boolean checkAndRequestPermissions() {
         int writepermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);

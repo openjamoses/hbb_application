@@ -1,5 +1,6 @@
 package com.example.john.hbb.activities.simulation_mode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,8 @@ import java.util.HashMap;
 
 import com.example.john.hbb.activities.simulation_mode.alone.Alone_Home;
 import com.example.john.hbb.activities.simulation_mode.rator.Rator_Home;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.SessionManager;
+import com.example.john.hbb.core.UsersSession;
 
 /**
  * Created by john on 7/11/17.
@@ -23,6 +25,7 @@ import com.example.john.hbb.configuration.SessionManager;
 public class Start_Simulation extends AppCompatActivity {
     Toolbar toolbar;
     private AppCompatRadioButton alone, rater;
+    private Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,28 +59,11 @@ public class Start_Simulation extends AppCompatActivity {
         });
     }
     private void checkUserSessions() {
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        // Session class instance
-        SessionManager session = new SessionManager(getApplicationContext());
-        session.checkLogin();
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        String email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
-        //toolbar.setTitle();
 
 
         TextView textView = (TextView) findViewById(R.id.toolbar_title);
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
-        textView.setText(health);
-        textView2.setText("(" + fname + " " + lname + ")");
+        textView.setText(new UsersSession(context).health);
+        textView2.setText("(" + new UsersSession(context).fname + " " + new UsersSession(context).lname + ")");
     }
 }

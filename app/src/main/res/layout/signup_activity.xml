@@ -96,29 +96,38 @@
         </android.support.design.widget.TextInputLayout>
 
         <!-- Health facility Label -->
-        <android.support.design.widget.TextInputLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/input_hfacility"
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <Spinner android:id="@+id/spinner_health"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="@string/health_facility" />
-        </android.support.design.widget.TextInputLayout>
+                android:id="@+id/add_btn"
+                android:text="New"
+                android:background="@drawable/square"
+                android:drawableLeft="@android:drawable/ic_input_add"/>
+        </LinearLayout>
 
         <!-- Email Label -->
+
+        <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/input_email"
+            <EditText android:id="@+id/input_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:inputType="textPassword"
+                android:hint="Username"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -138,14 +147,14 @@
         <!-- Signup Button -->
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_signup"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/round_conor"
             android:padding="12dp"
-            android:text="Next >>"/>
+            android:text="Sign up"/>
 
         <TextView android:id="@+id/link_login"
             android:layout_width="fill_parent"

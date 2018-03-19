@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -19,8 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.Constants;
-import com.example.john.hbb.configuration.DBHelper;
+import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.DBHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,32 +31,11 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import static com.example.john.hbb.configuration.Constants.config.CONTACT;
-import static com.example.john.hbb.configuration.Constants.config.DISTRICT_DATE_TIME;
-import static com.example.john.hbb.configuration.Constants.config.DISTRICT_ID;
-import static com.example.john.hbb.configuration.Constants.config.DISTRICT_NAME;
-import static com.example.john.hbb.configuration.Constants.config.EMAIL;
-import static com.example.john.hbb.configuration.Constants.config.FACILITY_OWNER;
-import static com.example.john.hbb.configuration.Constants.config.FACILITY_TYPE;
-import static com.example.john.hbb.configuration.Constants.config.FETCH_STATUS;
-import static com.example.john.hbb.configuration.Constants.config.FIRST_NAME;
-import static com.example.john.hbb.configuration.Constants.config.GENDER;
-import static com.example.john.hbb.configuration.Constants.config.HEALTH_CADRE;
-import static com.example.john.hbb.configuration.Constants.config.HEALTH_FACILITY;
-import static com.example.john.hbb.configuration.Constants.config.HOST_URL;
-import static com.example.john.hbb.configuration.Constants.config.LAST_NAME;
-import static com.example.john.hbb.configuration.Constants.config.PASSWORD;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_DATE;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_FREQUENCY;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_KEY_SKILL;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_KEY_SUBSKILL;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_NAME;
-import static com.example.john.hbb.configuration.Constants.config.TRAINING_TIME;
-import static com.example.john.hbb.configuration.Constants.config.URL_SAVE_DISTRICT;
-import static com.example.john.hbb.configuration.Constants.config.URL_SAVE_USER;
-import static com.example.john.hbb.configuration.Constants.config.USER_ID;
-import static com.example.john.hbb.configuration.Constants.config.USER_STATUS;
-import static com.example.john.hbb.configuration.Constants.config.VERIFIED_STATUS;
+import static com.example.john.hbb.core.Constants.config.DISTRICT_ID;
+import static com.example.john.hbb.core.Constants.config.DISTRICT_NAME;
+import static com.example.john.hbb.core.Constants.config.FETCH_STATUS;
+import static com.example.john.hbb.core.Constants.config.HOST_URL;
+import static com.example.john.hbb.core.Constants.config.URL_SAVE_DISTRICT;
 
 /**
  * Created by john on 10/18/17.
@@ -79,7 +57,7 @@ public class District {
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(DISTRICT_NAME,name);
-            contentValues.put(DISTRICT_DATE_TIME,date_time);
+            //contentValues.put(DISTRICT_DATE_TIME,date_time);
             contentValues.put(FETCH_STATUS,fetch_status);
             database.insert(Constants.config.TABLE_DISTRICT, null, contentValues);
             //database.setTransactionSuccessful();
@@ -96,13 +74,13 @@ public class District {
     }
 
     ///// TODO: 10/13/17  select here!
-    public Cursor selectAll(){
+    public Cursor selectDistrict(){
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
             db.beginTransaction();
             String query = "SELECT *  FROM" +
-                    " "+ Constants.config.TABLE_DISTRICT+"  ORDER BY "+Constants.config.DISTRICT_NAME+" ASC ";
+                    " "+ Constants.config.TABLE_HEALTH+"  ORDER BY "+Constants.config.DISTRICT_NAME+" ASC ";
             cursor = db.rawQuery(query,null);
             db.setTransactionSuccessful();
         }catch (Exception e){
@@ -207,7 +185,7 @@ public class District {
                 Map<String, String> params = new Hashtable<String, String>();
                 //Adding parameters
                 params.put(DISTRICT_NAME, name);
-                params.put(DISTRICT_DATE_TIME, date_time);
+               // params.put(DISTRICT_DATE_TIME, date_time);
 
                 return params;
             }
@@ -234,7 +212,7 @@ public class District {
                 params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(DISTRICT_ID))));
 
                 params.put(DISTRICT_NAME, cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)));
-                params.put(DISTRICT_DATE_TIME, cursor.getString(cursor.getColumnIndex(DISTRICT_DATE_TIME)));
+                //params.put(DISTRICT_DATE_TIME, cursor.getString(cursor.getColumnIndex(DISTRICT_DATE_TIME)));
 
                 wordList.add(params);
             } while (cursor.moveToNext());
@@ -256,7 +234,7 @@ public class District {
                 params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(DISTRICT_ID))));
 
                 params.put(DISTRICT_NAME, cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)));
-                params.put(DISTRICT_DATE_TIME, cursor.getString(cursor.getColumnIndex(DISTRICT_DATE_TIME)));
+               // params.put(DISTRICT_DATE_TIME, cursor.getString(cursor.getColumnIndex(DISTRICT_DATE_TIME)));
 
                 wordList.add(params);
             } while (cursor.moveToNext());
@@ -365,7 +343,7 @@ public class District {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     contentValues.put(Constants.config.DISTRICT_NAME,jsonObject.getString(Constants.config.DISTRICT_NAME));
-                    contentValues.put(Constants.config.DISTRICT_DATE_TIME,jsonObject.getString(Constants.config.DISTRICT_DATE_TIME));
+                    //contentValues.put(Constants.config.DISTRICT_DATE_TIME,jsonObject.getString(Constants.config.DISTRICT_DATE_TIME));
                       contentValues.put(FETCH_STATUS,status);
 
                     db.insert(Constants.config.TABLE_USERS, null, contentValues);

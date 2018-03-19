@@ -1,7 +1,6 @@
 package com.example.john.hbb.activities.simulation_mode;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -32,8 +31,8 @@ import com.example.john.hbb.R;
 
 import java.util.HashMap;
 
-import com.example.john.hbb.configuration.DateTime;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.DateTime;
+import com.example.john.hbb.core.SessionManager;
 
 /**
  * Created by john on 7/11/17.
@@ -358,14 +357,6 @@ public class Simulation_VideoPlayer  extends AppCompatActivity implements Surfac
         session.checkLogin();
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
-
-        String userID = user.get(SessionManager.KEY_USERID);
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        String email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
-
         String date = new DateTime().getCurrentDate();
         String time = new DateTime().getCurrentTime();
         int frequency = 1;

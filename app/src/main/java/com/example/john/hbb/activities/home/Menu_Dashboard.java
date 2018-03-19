@@ -3,42 +3,46 @@ package com.example.john.hbb.activities.home;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.Server_Service;
-import com.example.john.hbb.configuration.SessionManager;
-import com.example.john.hbb.configuration.UsersSession;
+import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.Phone;
+import com.example.john.hbb.core.Server_Service;
+import com.example.john.hbb.core.SessionManager;
+import com.example.john.hbb.core.UsersSession;
 import com.example.john.hbb.db_operations.DBController;
+import com.example.john.hbb.db_operations.User;
 import com.example.john.hbb.services.ProcessingService;
 import com.example.john.hbb.activities.simulation_mode.Start_Simulation;
 import com.example.john.hbb.activities.training_mode.TrainingHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.w3c.dom.Text;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
-import static com.example.john.hbb.configuration.Constants.config.OPERATION_DISTRICT;
-import static com.example.john.hbb.configuration.Constants.config.URL_GET_DISTRICT;
+import static com.example.john.hbb.core.Constants.config.OPERATION_DISTRICT;
+import static com.example.john.hbb.core.Constants.config.URL_GET_DISTRICT;
 
 /**
  * Created by john on 7/5/17.
@@ -52,6 +56,11 @@ public class Menu_Dashboard extends AppCompatActivity {
     Toolbar toolbar;
     String email;
     private TextView header_text;
+    List<String> checklist = new ArrayList<>();
+    List<Integer> checkid = new ArrayList<>();
+    private static final String TAG = "Menu_Dashboard";
+    String menu = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,15 +69,19 @@ public class Menu_Dashboard extends AppCompatActivity {
         toolbar = (Toolbar)findViewById(R.id.toolBar);
 
         setSupportActionBar(toolbar);
-        /// Setting the app icon
-//        auth = FirebaseAuth.getInstance();
-        //final FirebaseUser user = auth.getCurrentUser();
 
-        if (getSupportActionBar() != null){
-            //getSupportActionBar().setDisplayShowHomeEnabled(true);
-            //getSupportActionBar().setIcon(R.drawable.baby);
+        try{
+            if (getIntent().getStringExtra("menu") != null){
+                menu = getIntent().getStringExtra("menu");
+                if (menu.equals("start_menu")){
+                    openSelectDialog();
+                }
+            }else {
+                openDialog();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
         btn_training = (AppCompatButton) findViewById(R.id.btn_training);
         btn_simulation = (AppCompatButton) findViewById(R.id.btn_simulation);
 
@@ -88,7 +101,7 @@ public class Menu_Dashboard extends AppCompatActivity {
             }
         });
         checkUserSessions();
-        openDialog();
+
     }
 
     @Override
@@ -158,8 +171,13 @@ public class Menu_Dashboard extends AppCompatActivity {
             final AlertDialog.Builder alert = new AlertDialog.Builder(context);
             LayoutInflater inflater = LayoutInflater.from(context);
             View view = inflater.inflate(R.layout.select_dialog, null);
+            LinearLayout layout_check = (LinearLayout) view.findViewById(R.id.layout_check);
+            TextView no_text = (TextView) view.findViewById(R.id.no_text);
             TextView register_text = (TextView) view.findViewById(R.id.register_text);
             Button done_btn = (Button) view.findViewById(R.id.done_btn);
+            Button back_btn = (Button) view.findViewById(R.id.back_btn);
+
+            createCheckbox(layout_check,checklist,checkid,no_text);
 
             // this is set the view from XML inside AlertDialog
             alert.setView(view);
@@ -172,55 +190,113 @@ public class Menu_Dashboard extends AppCompatActivity {
             done_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (checklist.size()>0){
+                        dialog.dismiss();
+                    }else {
+                        Toast.makeText(context,"Select Or Register atleast 1 member..!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            back_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     dialog.dismiss();
+                    openDialog();
                 }
             });
 
+            register_text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    startActivity(new Intent(context,RegisterActivity.class));
+                    finish();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void createCheckbox(LinearLayout layout, final List<String> checkedlist, final List<Integer> checkedid, TextView textView){
+        final List<String> list = new ArrayList<>();
+        final List<Integer> id = new ArrayList<>();
+        try{
+            Cursor cursor = new User(context).getAll(new UsersSession(context).health);
+            int count = 0;
+            if (cursor .moveToFirst()){
+
+                do {
+                    if(cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME)).equals(new UsersSession(context).fname) &&
+                            cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME)).equals(new UsersSession(context).lname)){
+
+                    }else {
+                        count ++;
+                        list.add(cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME))+" "
+                                +cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME)));
+                        id.add(cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID)));
+                    }
+                }while (cursor.moveToNext());
+            }
+            textView.setText(count+" Users Found..!");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            final CheckBox[] cb = new CheckBox[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                cb[i] = new CheckBox(this);
+                cb[i].setText(list.get(i));
+                cb[i].setTextSize(27);
+                cb[i].setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                cb[i].setTypeface(Typeface.MONOSPACE);
+                //cb.setButtonDrawable(getResources().android.R.drawable.checkboxselector);
+                layout.addView(cb[i]);
+                final int finalI = i;
+                cb[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            if (cb[finalI].isChecked()) {
+                                checkedlist.add(cb[finalI].getText().toString().trim());
+                                String text = cb[finalI].getText().toString().trim();
+                                int id2 = 0;
+                                for (int j = 0; j < list.size(); j++) {
+                                    if (text.equals(list.get(j))) {
+                                        id2 = id.get(j);
+                                    }
+                                }
+                                checkedid.add(id2);
+
+                                Log.e(TAG,"Checkbox- Checkd");
+                            } else {
+                                if (checkedlist.contains(cb[finalI].getText().toString().trim())) {
+                                    checkedlist.remove(cb[finalI].getText().toString().trim());
+                                    checkedid.remove(checkedlist.indexOf(cb[finalI].getText().toString().trim()));
+                                }
+                                Log.e(TAG,"Checkbox- UNCheckd");
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     private void checkUserSessions() {
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        // Session class instance
-        SessionManager session = new SessionManager(getApplicationContext());
-        session.checkLogin();
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
-        //toolbar.setTitle();
-
-
-
         TextView textView = (TextView) findViewById(R.id.toolbar_title);
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
-        textView.setText( health );
-        textView2.setText("Welcome ("+fname + " " + lname+")");
-        // add back arrow to toolbar
-        if (getSupportActionBar() != null){
-            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setDisplayShowHomeEnabled(true);
-            //getSupportActionBar().setSubtitle("Welcome ("+fname + " " + lname+")");
-        }
-
-        select();
+        textView.setText( new UsersSession(context).getHealth() );
+        textView2.setText("Welcome ("+new UsersSession(context).fname + " " + new UsersSession(context).lname+")");
     }
 
-    public void select(){
-         DBController.fetch(context,email,URL_GET_DISTRICT,OPERATION_DISTRICT);
-        //// TODO: 10/23/17  
-        startService(new Intent(context, ProcessingService.class));
-    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);

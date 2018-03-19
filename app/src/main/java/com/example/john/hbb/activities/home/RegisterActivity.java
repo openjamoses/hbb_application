@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,18 +37,15 @@ import com.android.volley.toolbox.Volley;
 import com.example.john.hbb.R;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.Phone;
-import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.core.UsersSession;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.db_operations.District;
 import com.example.john.hbb.db_operations.Facility;
 import com.example.john.hbb.db_operations.User;
-import com.google.firebase.FirebaseApp;
 
 import net.rimoto.intlphoneinput.IntlPhoneInput;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +64,11 @@ import static com.example.john.hbb.core.Constants.config.URL_SYNC_HEALTH;
 import static com.example.john.hbb.core.Constants.config.URL_USER;
 import static com.example.john.hbb.core.Constants.config.USERNAME;
 
-public class SignupActivity extends AppCompatActivity {
+/**
+ * Created by john on 3/19/18.
+ */
+
+public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     private EditText _fnameText,_lnameText,_passwordText,_usernameText;
@@ -89,7 +89,7 @@ public class SignupActivity extends AppCompatActivity {
     private List<Integer> health_id = new ArrayList<>();
     private RadioGroup group_type,group_ownership,group_cadre;
 
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,13 +115,7 @@ public class SignupActivity extends AppCompatActivity {
         input_female = (AppCompatRadioButton) findViewById(R.id.input_female);
         input_male = (AppCompatRadioButton) findViewById(R.id.input_male);
         Button add_btn = (Button) findViewById(R.id.add_btn);
-        add_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialog();
-            }
-        });
-
+        add_btn.setVisibility(View.GONE);
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +160,7 @@ public class SignupActivity extends AppCompatActivity {
         }
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this,
                 R.style.Theme_AppCompat_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
@@ -223,9 +217,21 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(context, Menu_Dashboard.class);
+        intent.putExtra("menu", "start_menu");
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(context, Menu_Dashboard.class);
+            intent.putExtra("menu", "start_menu");
+            startActivity(intent);
             finish(); // close this activity and return to preview activity (if there is any)
         }
         return super.onOptionsItemSelected(item);
@@ -304,15 +310,20 @@ public class SignupActivity extends AppCompatActivity {
                         String[] splits = response.split("/");
                         int status = 0, id = 0;
 
-                        if (splits[0].equals("Success")){
-                            status = 1;
-                            id = Integer.parseInt(splits[1]);
+                        if (splits[0].equals("Already_Registered username and Phone Number")){
+                            Toast.makeText(context,splits[0],Toast.LENGTH_SHORT).show();
+                        }else {
+                            if (splits[0].equals("Success")){
+                                status = 1;
+                                id = Integer.parseInt(splits[1]);
+                            }
+
+                            String message = new User(context).save(fname,lname,username,phone,gender,health,id,password,status);
+                            if (message.equals("User Details saved!")){
+                                showDiag();
+                            }
                         }
 
-                        String message = new User(context).save(fname,lname,username,phone,gender,health,id,password,status);
-                        if (message.equals("User Details saved!")){
-                            showDiag(username,phone);
-                        }
                         try{
                             dialog.dismiss();
                         }catch (Exception e){
@@ -355,170 +366,12 @@ public class SignupActivity extends AppCompatActivity {
         //Adding request to the queue
         requestQueue.add(stringRequest);
     }
-
-    private void openDialog(){
-        final AlertDialog dialog;
-        try{
-            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View view = inflater.inflate(R.layout.health_dialog, null);
-            // this is set the view from XML inside AlertDialog
-
-            spinner = (Spinner) view. findViewById(R.id.district_spinner);
-            input_district = (EditText) view. findViewById(R.id.input_district);
-            spinnerValue(spinner);
-            group_type = (RadioGroup) view. findViewById(R.id.group_type);
-            group_ownership = (RadioGroup) view. findViewById(R.id.group_ownership);
-            group_cadre = (RadioGroup)view. findViewById(R.id.group_cadre);
-            final EditText input_facility = (EditText) view.findViewById(R.id.input_facility);
-            final TextInputLayout facility_layout = (TextInputLayout) view.findViewById(R.id.facility_layout);
-            ImageView cancel_btn = (ImageView) view.findViewById(R.id.cancel_btn);
-
-
-            AppCompatButton btn_signup = (AppCompatButton)view. findViewById(R.id.btn_signup);
-            spinner = (Spinner)view. findViewById(R.id.district_spinner);
-            input_district = (EditText)view. findViewById(R.id.input_district);
-
-            alert.setView(view);
-
-
-            // disallow cancel of AlertDialog on click of back button and outside touch
-            //alert.setCancelable(false);
-            alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
-
-            dialog = alert.create();
-            dialog.show();
-            cancel_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            btn_signup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String selected_type = "",selected_ownership = "",selected_cadre = "";
-
-                    try {
-                        int checkedRadioButtonId = group_type.getCheckedRadioButtonId();
-                        if (checkedRadioButtonId == -1) {
-                            // No item selected
-                            Toast toast = Toast.makeText(context, "No " + getResources().getString(R.string.type_of_facility) + " Selected !", Toast.LENGTH_SHORT);
-                            View views = toast.getView();
-                            views.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) views.findViewById(android.R.id.message);
-                            toast.show();
-                        } else {
-
-                            int radioButtonID = group_type.getCheckedRadioButtonId();
-                            RadioButton radioButton = (RadioButton) group_type.findViewById(radioButtonID);
-                            selected_type = (String) radioButton.getText();
-                        }
-                        int checkedRadioButtonId2 = group_ownership.getCheckedRadioButtonId();
-                        if (checkedRadioButtonId2 == -1) {
-                            // No item selected
-                            Toast toast = Toast.makeText(context, "No " + getResources().getString(R.string.facility_ownership) + " Selected !", Toast.LENGTH_SHORT);
-                            View views = toast.getView();
-                            views.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) views.findViewById(android.R.id.message);
-                            toast.show();
-                        } else {
-
-                            int radioButtonID = group_ownership.getCheckedRadioButtonId();
-                            RadioButton radioButton = (RadioButton) group_ownership.findViewById(radioButtonID);
-                            selected_ownership = (String) radioButton.getText();
-                        }
-
-                        int checkedRadioButtonId3 = group_cadre.getCheckedRadioButtonId();
-                        if (checkedRadioButtonId3 == -1) {
-                            // No item selected
-                            Toast toast = Toast.makeText(context, "No " + getResources().getString(R.string.health_cadre) + " Selected !", Toast.LENGTH_SHORT);
-                            View views = toast.getView();
-                            views.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) views.findViewById(android.R.id.message);
-                            toast.show();
-
-                        } else {
-                            int radioButtonID = group_cadre.getCheckedRadioButtonId();
-                            RadioButton radioButton = (RadioButton) group_cadre.findViewById(radioButtonID);
-                            selected_cadre = (String) radioButton.getText();
-                        }
-                        int id = 0;
-                        String district = spinner.getSelectedItem().toString().trim();
-                        if (!district.equals("-- SELECT DISTRICT --")){
-
-                        }else {
-                            district = input_district.getText().toString().trim();
-                        }
-
-                        //final String district2 = district;
-                       // HashMap<String, String> user = new SessionManager(context).getTemp();
-
-                        final String type = selected_type;
-                        final String owner = selected_ownership;
-                        final String cadre = selected_cadre;
-                        String name = input_facility.getText().toString().trim();
-                        if (!name.equals("")){
-                            if (!district.equals("") && !district.equals("-- SELECT DISTRICT --") && !district.equals("District not in the list?")) {
-                                ProgressDialog dialog1 = new ProgressDialog(context);
-
-
-                                dialog1.setMessage("Please wait..");
-                                new Facility(context).send(name,cadre,type,owner,district,dialog1, dialog);
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // new CallingNumber(c).clearCalls();
-                                        spinnerHealth();
-                                    }},3000);
-                            }else {
-                                Toast toast = Toast.makeText(context, "Please provide a valid district name!", Toast.LENGTH_SHORT);
-                                View views = toast.getView();
-                                views.setBackgroundResource(R.drawable.round_conor);
-                                TextView text = (TextView) views.findViewById(android.R.id.message);
-                                toast.show();
-                            }
-                        }else {
-                            Toast toast = Toast.makeText(context, "Please provide a valid facility name!", Toast.LENGTH_SHORT);
-                            View views = toast.getView();
-                            views.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) views.findViewById(android.R.id.message);
-                            toast.show();
-                        }
-
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-
-
-
-                }
-            });
-
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
     private void spinnerHealth() {
         health_list = new ArrayList<>();
         health_id = new ArrayList<>();
-        health_list.add("-- SELECT HEALTH FACILITY --");
-        health_id.add(0);
+        health_list.add(new UsersSession(context).health);
+        health_id.add(new UsersSession(context).getHealthID());
         try{
-            Cursor cursor = new District(context).selectDistrict();
-            if (cursor.moveToFirst()){
-                do {
-                    health_list.add(cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_NAME)));
-                    health_id.add(cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTH_ID)));
-                }while (cursor.moveToNext());
-            }
-
             ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, health_list);
             dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -528,50 +381,11 @@ public class SignupActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private void spinnerValue(Spinner spinner) {
-        list = new ArrayList<>();
-        list.add("-- SELECT DISTRICT --");
-
-        try{
-            Cursor cursor = new District(context).selectDistrict();
-            if (cursor.moveToFirst()){
-                do {
-                    list.add(cursor.getString(cursor.getColumnIndex(Constants.config.DISTRICT_NAME)));
-                }while (cursor.moveToNext());
-            }
-
-            ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, list);
-            dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(dataAdapter2);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public void showDiag(){
+        Intent intent = new Intent(context, Menu_Dashboard.class);
+        intent.putExtra("menu", "start_menu");
+        startActivity(intent);
+        finish();
     }
-    public void showDiag(final String username,final String phone){
 
-        // new User(context).saveAll(fname,lname,contact,gender,email,password,health,district2,selected_type,selected_ownership,selected_cadre,0);
-
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setCancelable(false);
-                dialog.setTitle("Signup Message Dialog");
-                dialog.setMessage("Thank you for signing to HBB \n please login with your Username: '"+username+"' OR Phone Number: --"+phone+" " );
-                dialog.setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Action for "Delete".
-                        startActivity(new Intent(context,LoginActivity.class));
-                        finish();
-                    }
-                });
-                final AlertDialog alert = dialog.create();
-                alert.show();
-            }
-        });
-
-    }
 }

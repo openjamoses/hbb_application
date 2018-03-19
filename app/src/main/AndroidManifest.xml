@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 
     <application
         android:allowBackup="true"
@@ -153,6 +155,19 @@
         </activity>
 
         <activity
+            android:name=".activities.home.RegisterActivity"
+            android:label="@string/signup"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.example.john.hbb.firebase.ResetPasswordActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
@@ -198,7 +213,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.example.john.hbb.configuration.Server_Service"/>
+        <service android:name="com.example.john.hbb.core.Server_Service"/>
 
         <!-- Firebase Notifications -->
         <service android:name="com.example.john.hbb.firebase.MyFirebaseInstanceIDService"

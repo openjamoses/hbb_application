@@ -21,8 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.john.hbb.R;
-import com.example.john.hbb.configuration.Constants;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.db_operations.District;
 import com.example.john.hbb.db_operations.User;
 import com.google.firebase.FirebaseApp;
@@ -33,13 +33,13 @@ import java.util.HashMap;
 import java.util.List;
 
 
-import static com.example.john.hbb.configuration.Constants.config.KEY_CONTACT_TEMP;
-import static com.example.john.hbb.configuration.Constants.config.KEY_EMAIL_TEMP;
-import static com.example.john.hbb.configuration.Constants.config.KEY_FACILITY_TEMP;
-import static com.example.john.hbb.configuration.Constants.config.KEY_FNAME_TEMP;
-import static com.example.john.hbb.configuration.Constants.config.KEY_GENDER_TEMP;
-import static com.example.john.hbb.configuration.Constants.config.KEY_LNAME_TEMP;
-import static com.example.john.hbb.configuration.Constants.config.KEY_PASSWORD_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_CONTACT_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_EMAIL_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_FACILITY_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_FNAME_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_GENDER_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_LNAME_TEMP;
+import static com.example.john.hbb.core.Constants.config.KEY_PASSWORD_TEMP;
 
 /**
  * Created by john on 10/20/17.
@@ -153,37 +153,6 @@ public class Signup_Next extends AppCompatActivity {
                         district = input_district.getText().toString().trim();
                     }
 
-                    final String district2 = district;
-                    HashMap<String, String> user = new SessionManager(context).getTemp();
-
-                    final String fname = user.get(KEY_FNAME_TEMP);
-                    final String lname = user.get(KEY_LNAME_TEMP);
-                    final String contact = user.get(KEY_CONTACT_TEMP);
-                    final String gender = user.get(KEY_GENDER_TEMP);
-                    final String email = user.get(KEY_EMAIL_TEMP);
-                    final String password = user.get(KEY_PASSWORD_TEMP);
-                    final String health = user.get(KEY_FACILITY_TEMP);
-
-                    final String type = selected_type;
-                    final String owner = selected_ownership;
-                    final String cadre = selected_cadre;
-
-                    if (!district.equals("") && !district.equals("-- SELECT DISTRICT --") && !district.equals("District not in the list?")) {
-                        showDiag(fname, lname, contact, gender, email, password, health, district2, type, owner, cadre);
-                    }else {
-                        Toast toast = Toast.makeText(context, "Please provide a valid district name!", Toast.LENGTH_SHORT);
-                        View views = toast.getView();
-                        views.setBackgroundResource(R.drawable.round_conor);
-                        TextView text = (TextView) views.findViewById(android.R.id.message);
-                        toast.show();
-
-                       /** new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("INPUT ERROR")
-                                .setContentText("Please provide a valid district name")
-                                .show();
-
-                        **/
-                    }
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -204,7 +173,7 @@ public class Signup_Next extends AppCompatActivity {
         list.add("-- SELECT DISTRICT --");
         list_id.add(0);
         try{
-            Cursor cursor = new District(context).selectAll();
+            Cursor cursor = new District(context).selectDistrict();
             if (cursor.moveToFirst()){
                 do {
                     list.add(cursor.getString(cursor.getColumnIndex(Constants.config.DISTRICT_NAME)));
@@ -224,7 +193,7 @@ public class Signup_Next extends AppCompatActivity {
 
     public void showDiag(final String fname, final String lname, final String contact, final String gender, final String email, final String password, final String health, final String district2, final String selected_type, final String selected_ownership, final String selected_cadre){
 
-        new User(context).saveAll(fname,lname,contact,gender,email,password,health,district2,selected_type,selected_ownership,selected_cadre,0);
+       // new User(context).saveAll(fname,lname,contact,gender,email,password,health,district2,selected_type,selected_ownership,selected_cadre,0);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setCancelable(false);

@@ -29,9 +29,10 @@ import com.example.john.hbb.R;
 
 import java.util.HashMap;
 
-import com.example.john.hbb.configuration.DBHelper;
-import com.example.john.hbb.configuration.DateTime;
-import com.example.john.hbb.configuration.SessionManager;
+import com.example.john.hbb.core.DBHelper;
+import com.example.john.hbb.core.DateTime;
+import com.example.john.hbb.core.SessionManager;
+import com.example.john.hbb.core.UsersSession;
 
 //Implement SurfaceHolder interface to Play video
 //Implement this interface to receive information about changes to the surface
@@ -222,12 +223,12 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
 
-        String userID = user.get(SessionManager.KEY_USERID);
-        String fname = user.get(SessionManager.KEY_FNAME);
-        String lname = user.get(SessionManager.KEY_LNAME);
-        String contact = user.get(SessionManager.KEY_CONTACT);
-        String email = user.get(SessionManager.KEY_EMAIL);
-        String health = user.get(SessionManager.KEY_FACILITY);
+        int userID = new UsersSession(context).getUserID();
+        String fname = new UsersSession(context).fname;
+        String lname = new UsersSession(context).lname;
+        String contact = new UsersSession(context).contact;
+        String email = new UsersSession(context).username;
+        String health = new UsersSession(context).health;
 
         String date = new DateTime().getCurrentDate();
         String time = new DateTime().getCurrentTime();
@@ -236,7 +237,7 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
 
         //if(count == 1) {
             DBHelper dbHelper = new DBHelper(context);
-            dbHelper.insertTraining(Integer.parseInt(userID), fname + " " + lname, date, time, frequency, header, title, status);
+            //dbHelper.insertTraining(userID, fname + " " + lname, date, time, frequency, header, title, status);
        // }
 
     }

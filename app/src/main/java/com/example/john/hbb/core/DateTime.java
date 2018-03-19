@@ -1,4 +1,4 @@
-package com.example.john.hbb.configuration;
+package com.example.john.hbb.core;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
