@@ -27,6 +27,14 @@ public class CreateTable {
                         " "+ Constants.config.FACILITY_OWNER+" TEXT,"+ Constants.config.FACILITY_TYPE+" TEXT,"+Constants.config.DISTRICT_NAME+" TEXT, " +
                         " "+ Constants.config.HEALTH_STATUS+" INTEGER);";
 
+        public  static  final String CREATE_LOGIN =
+                "CREATE TABLE "+ Constants.config.TABLE_LOG +" ("+ Constants.config.LOGID+" INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " "+ Constants.config.LOG_ID+" INTEGER,"+ Constants.config.LOG_DATE+" TEXT, "+ Constants.config.LOG_TIME+" TEXT," +
+                        " "+ Constants.config.LOG_TYPE+" INTEGER,"+ Constants.config.LOGOUT_TIME+" TEXT,"+Constants.config.GROUP_ID+" TEXT, " +
+                        " "+ Constants.config.LOG_STATUS+" INTEGER,"+Constants.config.LOG_NAMES+" TEXT,"+Constants.config.LOG_IMEI+" TEXT," +
+                        " "+Constants.config.USER_ID+" INTEGER);";
+
+
         public  static  final String CREATE_SIMULATION =
                 "CREATE TABLE "+ Constants.config.TABLE_SIMULATION +" ("+ Constants.config.SIMULATIONID+" INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " "+ Constants.config.SIMULATION_ID+" INTEGER,"+ Constants.config.SIMULATION_DATE+" TEXT, "+ Constants.config.SIMULATION_TIME+" TEXT," +

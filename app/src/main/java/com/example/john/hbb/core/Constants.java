@@ -9,9 +9,10 @@ public class Constants {
 
         public static final String URL_LOCALHOST = "http://127.0.0.1/hbb/";
         public static final String URL_PHONE = "http://192.168.43.18/hbb/";
-        public static final String URL_CAMTECH = "http://192.168.1.105/hbb/";
+        public static final String URL_CAMTECH = "http://192.168.1.114/hbb/";
+        public static final String URL_STUDENT = "http://10.11.1.129/hbb/";
         public static final String URL_SERVER = "http://173.255.219.164/hbb_dashboard/";
-        public static final String HOST_URL = URL_CAMTECH+"mobile_connections/";
+        public static final String HOST_URL = URL_SERVER+"mobile_connections/";
 
         public static final String DATABASE_NAME = "hbb_db";
         public static final int DATABASE_VERSION = 1;
@@ -152,7 +153,9 @@ public class Constants {
         public static final String LOG_TIME = "log_time";
         public static final String LOG_TYPE = "log_type";
         public static final String LOGOUT_TIME = "logout_time";
-        public static final String LOG_STATUS = "logout_time";
+        public static final String LOG_STATUS = "log_status";
+        public static final String LOG_NAMES = "log_names";
+        public static final String LOG_IMEI = "log_imei";
         public static final String GROUP_ID = "group_id";
         // Email address (make variable public to access from outside)
         public static final String KEY_EMAIL_TEMP = "email_temp";
@@ -174,6 +177,7 @@ public class Constants {
         public static final String SYNCING = "syncing/";
         public static final String URL_SAVE_HEALTH = SYNCING+"save_health.php";
         public static final String URL_USER = SYNCING+"save_users.php";
+        public static final String URL_SAVE_LOG = SYNCING+"save_log.php";
         public static final String URL_GET_SINGLE_ENTRY = SYNCING+"get_single_entry.php";
         public static final String URL_GET_ALL_ENTRY = SYNCING+"get_all_entry.php";
 

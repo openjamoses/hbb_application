@@ -30,11 +30,13 @@ import java.util.List;
 
 import com.example.john.hbb.R;
 import com.example.john.hbb.core.Constants;
+import com.example.john.hbb.core.DateTime;
 import com.example.john.hbb.core.Phone;
 import com.example.john.hbb.core.Server_Service;
 import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.core.UsersSession;
 import com.example.john.hbb.db_operations.DBController;
+import com.example.john.hbb.db_operations.LogDetails;
 import com.example.john.hbb.db_operations.User;
 import com.example.john.hbb.services.ProcessingService;
 import com.example.john.hbb.activities.simulation_mode.Start_Simulation;
@@ -101,9 +103,7 @@ public class Menu_Dashboard extends AppCompatActivity {
             }
         });
         checkUserSessions();
-
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -112,7 +112,6 @@ public class Menu_Dashboard extends AppCompatActivity {
         //startActivity(intent);
         finish();
     }
-
     private void openDialog(){
         final AlertDialog dialog;
         try{
@@ -130,11 +129,8 @@ public class Menu_Dashboard extends AppCompatActivity {
             // disallow cancel of AlertDialog on click of back button and outside touch
             alert.setCancelable(false);
             alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
-
             dialog = alert.create();
             dialog.show();
-
-
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -150,20 +146,20 @@ public class Menu_Dashboard extends AppCompatActivity {
                         dialog.dismiss();
                        if (val == 1){
                            openSelectDialog();
+                       }else if (val == 0){
+                           String imei = Phone.getIMEI(context);
+                           String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
+                           new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"");
                        }
                     }else {
                         Toast.makeText(context,">>>Please make a selected..!<<<",Toast.LENGTH_SHORT).show();
                     }
-
                 }
 
             });
-
-
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
     private void openSelectDialog(){
         final AlertDialog dialog;
@@ -191,6 +187,16 @@ public class Menu_Dashboard extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (checklist.size()>0){
+
+                        String names = "", ids = "";
+                        names = names.concat(new UsersSession(context).fname+" "+new UsersSession(context).lname+"/");
+                        ids = ids.concat(new UsersSession(context).getUserID()+"/");
+                        for (int i=0; i<checklist.size(); i++){
+                            names = names.concat(checklist.get(i)+"/");
+                            ids = ids.concat(checkid.get(i)+"/");
+                        }
+                        String imei = Phone.getIMEI(context);
+                        new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,1,names,ids);
                         dialog.dismiss();
                     }else {
                         Toast.makeText(context,"Select Or Register atleast 1 member..!",Toast.LENGTH_SHORT).show();
@@ -204,7 +210,6 @@ public class Menu_Dashboard extends AppCompatActivity {
                     openDialog();
                 }
             });
-
             register_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -225,11 +230,9 @@ public class Menu_Dashboard extends AppCompatActivity {
             Cursor cursor = new User(context).getAll(new UsersSession(context).health);
             int count = 0;
             if (cursor .moveToFirst()){
-
                 do {
                     if(cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME)).equals(new UsersSession(context).fname) &&
                             cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME)).equals(new UsersSession(context).lname)){
-
                     }else {
                         count ++;
                         list.add(cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME))+" "
@@ -242,13 +245,12 @@ public class Menu_Dashboard extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         try {
             final CheckBox[] cb = new CheckBox[list.size()];
             for (int i = 0; i < list.size(); i++) {
                 cb[i] = new CheckBox(this);
                 cb[i].setText(list.get(i));
-                cb[i].setTextSize(27);
+                cb[i].setTextSize(20);
                 cb[i].setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 cb[i].setTypeface(Typeface.MONOSPACE);
                 //cb.setButtonDrawable(getResources().android.R.drawable.checkboxselector);

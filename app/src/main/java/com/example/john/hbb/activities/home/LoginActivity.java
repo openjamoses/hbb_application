@@ -44,6 +44,7 @@ import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.db_operations.User;
 import com.example.john.hbb.firebase.ResetPasswordActivity;
+import com.example.john.hbb.services.ProcessingService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -115,6 +116,10 @@ public class LoginActivity extends AppCompatActivity {
         //// TODO: 10/23/17  Checking permsions...!! 
         checkAndRequestPermissions();
 
+        if (checkAndRequestPermissions() == true){
+            startService(new Intent(context, ProcessingService.class));
+            Log.e("Server", "Server started");
+        }
         h = new Handler();
         pd = new TransparentProgressDialog(this, R.drawable.dialog_image);
         r =new Runnable() {
@@ -158,7 +163,6 @@ public class LoginActivity extends AppCompatActivity {
 
                             } else {
                                 select(username_);
-
                                 message = "Login Failed!";
                                 useID = 0;
                                 fname = "fname";
@@ -168,9 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                                 facility = "facility";
                                 gend = "facility";
                                 pass = "facility";
-
                             }
-
                         }else {
                             select(username_);
                             message = "Login Failed!";
@@ -188,7 +190,6 @@ public class LoginActivity extends AppCompatActivity {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-
                 }
             }
         };
@@ -214,9 +215,7 @@ public class LoginActivity extends AppCompatActivity {
             if (pd != null){
                 pd.show();
             }
-            startService(new Intent(getBaseContext(), Server_Service.class));
-
-
+            //startService(new Intent(getBaseContext(), Server_Service.class));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -256,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     public void select(String username){
-        DBController.fetchSigle(context,"user_tb","imei", Phone.getIMEI(context),URL_GET_SINGLE_ENTRY,OPERATION_USER);
+        //DBController.fetchSigle(context,"user_tb","imei", Phone.getIMEI(context),URL_GET_SINGLE_ENTRY,OPERATION_USER);
     }
 
     @Override
@@ -270,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login() {
         Log.d(TAG, "Login");
-        _loginButton.setEnabled(false);
+        //_loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.Theme_AppCompat_Dialog_Alert);
@@ -282,7 +281,7 @@ public class LoginActivity extends AppCompatActivity {
         ///TODO: Start your service here..
         //Intent intent = new Intent(getBaseContext(),Server_Service.class);
         //intent.putExtra("progress",pd);
-        startService(new Intent(getBaseContext(), Server_Service.class));
+        //startService(new Intent(getBaseContext(), Server_Service.class));
 
 
         h.postDelayed(r,3000);

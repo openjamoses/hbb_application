@@ -118,6 +118,21 @@ public class Alone_Home extends AppCompatActivity {
 
     }
 
+    public void expandableButton0(View view) {
+        //expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
+        //expandableLayout1.toggle(); // toggle expand and collapse
+        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        String[] title = {getResources().getString(R.string.baby_being_born),
+                getResources().getString(R.string.crying_and_breathing),
+                getResources().getString(R.string.breathing_baby)};
+        intent.putExtra("mode","play");
+        intent.putExtra("header",getResources().getString(R.string.preparation_for_birth));;
+        intent.putExtra("title",title);
+        intent.putExtra("type","alone");
+        intent.putExtra("file","images0");
+        startActivity(intent);
+    }
+
 
     public void expandableButton1(View view) {
         //expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
@@ -132,6 +147,7 @@ public class Alone_Home extends AppCompatActivity {
         //intent.putExtra("title2",getResources().getString(R.string.crying_and_breathing));
         //intent.putExtra("title3",getResources().getString(R.string.breathing_baby));
         intent.putExtra("title",title);
+        intent.putExtra("type","alone");
         intent.putExtra("file","images1");
         startActivity(intent);
     }
@@ -149,6 +165,7 @@ public class Alone_Home extends AppCompatActivity {
         intent.putExtra("mode","play");
         intent.putExtra("header",getResources().getString(R.string.golden_minutes_without_ventilation));
         intent.putExtra("title",title);
+        intent.putExtra("type","alone");
         intent.putExtra("file","images2");
         startActivity(intent);
     }
@@ -169,13 +186,27 @@ public class Alone_Home extends AppCompatActivity {
         //intent.putExtra("title2",getResources().getString(R.string.baby_not_crying));
         //intent.putExtra("title3",getResources().getString(R.string.baby_not_breathing));
         intent.putExtra("title",title);
+        intent.putExtra("type","alone");
         intent.putExtra("file","images3");
         startActivity(intent);
     }
 
     public void expandableButton4(View view) {
-        expandableLayout4 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout4);
-        expandableLayout4.toggle(); // toggle expand and collapse
+        String[] title = {getResources().getString(R.string.baby_is_born),
+                getResources().getString(R.string.baby_not_crying),
+                getResources().getString(R.string.baby_not_breathing),
+        };
+
+        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        intent.putExtra("mode","play");
+        intent.putExtra("header",getResources().getString(R.string.continued_ventilation_with_normal_or_slow_heart_rate));
+        //intent.putExtra("title1",getResources().getString(R.string.baby_is_born));
+        //intent.putExtra("title2",getResources().getString(R.string.baby_not_crying));
+        //intent.putExtra("title3",getResources().getString(R.string.baby_not_breathing));
+        intent.putExtra("title",title);
+        intent.putExtra("type","alone");
+        intent.putExtra("file","images4");
+        startActivity(intent);
     }
 
 }

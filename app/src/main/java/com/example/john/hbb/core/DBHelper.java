@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import static com.example.john.hbb.core.CreateTable.config.CREATE_HEALTH;
+import static com.example.john.hbb.core.CreateTable.config.CREATE_LOGIN;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_TRAINING_MODE;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_USER;
 
@@ -33,6 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TRAINING_MODE);
         db.execSQL(CREATE_USER);
         db.execSQL(CREATE_HEALTH);
+        db.execSQL(CREATE_LOGIN);
         Log.e("DATABASE OPERATION","Data base created / open successfully");
 
     }
@@ -42,6 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_TRAINING_MODE);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_HEALTH);
+        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_LOG);
         onCreate(db);
         Log.e("DATABASE OPERATION", "Table created / open successfully");
 

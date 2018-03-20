@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.DBHelper;
+import com.example.john.hbb.core.Phone;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
@@ -22,6 +23,7 @@ import static com.example.john.hbb.core.Constants.config.GENDER;
 import static com.example.john.hbb.core.Constants.config.HEALTH_FACILITY;
 import static com.example.john.hbb.core.Constants.config.HEALTH_ID;
 import static com.example.john.hbb.core.Constants.config.HEALTH_NAME;
+import static com.example.john.hbb.core.Constants.config.IMEI;
 import static com.example.john.hbb.core.Constants.config.LAST_NAME;
 import static com.example.john.hbb.core.Constants.config.PASSWORD;
 import static com.example.john.hbb.core.Constants.config.USERID;
@@ -54,6 +56,7 @@ public class User {
             contentValues.put(Constants.config.HEALTH_FACILITY,facility);
             contentValues.put(Constants.config.PASSWORD,password);
             contentValues.put(HEALTH_ID,facililty_id);
+            //params.put(IMEI, Phone.getIMEI(context));
             contentValues.put(Constants.config.USER_STATUS,status);
             database.insert(Constants.config.TABLE_USERS, null, contentValues);
 
@@ -91,6 +94,7 @@ public class User {
                 params.put(GENDER,cursor.getString(cursor.getColumnIndex(GENDER)));
                 params.put(HEALTH_FACILITY,cursor.getString(cursor.getColumnIndex(HEALTH_FACILITY)));
                 params.put(PASSWORD,cursor.getString(cursor.getColumnIndex(PASSWORD)));
+                params.put(IMEI, Phone.getIMEI(context));
                 params.put(HEALTH_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTH_ID))));
 
                 wordList.add(params);
@@ -119,6 +123,7 @@ public class User {
                 params.put(GENDER,cursor.getString(cursor.getColumnIndex(GENDER)));
                 params.put(HEALTH_FACILITY,cursor.getString(cursor.getColumnIndex(HEALTH_FACILITY)));
                 params.put(PASSWORD,cursor.getString(cursor.getColumnIndex(PASSWORD)));
+                params.put(IMEI, Phone.getIMEI(context));
                 params.put(HEALTH_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTH_ID))));
 
                 wordList.add(params);

@@ -296,7 +296,6 @@ public class SignupActivity extends AppCompatActivity {
         }
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_USER,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         Log.e(TAG,"Results: "+response);
@@ -308,7 +307,6 @@ public class SignupActivity extends AppCompatActivity {
                             status = 1;
                             id = Integer.parseInt(splits[1]);
                         }
-
                         String message = new User(context).save(fname,lname,username,phone,gender,health,id,password,status);
                         if (message.equals("User Details saved!")){
                             showDiag(username,phone);
@@ -318,7 +316,6 @@ public class SignupActivity extends AppCompatActivity {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-
                         Log.e(TAG,response);
                     }
                 },

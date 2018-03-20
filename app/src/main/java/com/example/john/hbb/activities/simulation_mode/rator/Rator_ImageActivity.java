@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.john.hbb.R;
@@ -50,6 +52,8 @@ public class Rator_ImageActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private int progressStatus = 0;
     private Handler handler = new Handler();
+    private RelativeLayout image_layout;
+    Handler mainHandler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,7 @@ public class Rator_ImageActivity extends AppCompatActivity {
         textView3 = (TextView) findViewById(R.id.textView3);
         exit_button = (AppCompatButton) findViewById(R.id.exit_button);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        image_layout = (RelativeLayout) findViewById(R.id.image_layout);
 
 
         header = getIntent().getStringExtra("header");
@@ -97,13 +102,19 @@ public class Rator_ImageActivity extends AppCompatActivity {
         new CountDownTimer(total*10000, 1000){
             public void onTick(long millisUntilFinished){
                 progressBar.setProgress(total*10000);
-                if(file.equals("images1")){
+                if(file.equals("images0")){
                     images = new Integer[]{R.drawable.pics1, R.drawable.pics2, R.drawable.pics3,  R.drawable.pics4, R.drawable.pics5};
 
-                }else if(file.equals("images2")){
+                }else if(file.equals("images1")){
                     images = new Integer[]{ R.drawable.pics4, R.drawable.pics5,  R.drawable.pics3};
 
                 }else if(file.equals("images3")){
+                    images = new Integer[]{R.drawable.pics1, R.drawable.pics2, R.drawable.pics3,  R.drawable.pics4, R.drawable.pics5};
+
+                }else if(file.equals("images4")){
+                    images = new Integer[]{R.drawable.pics1, R.drawable.pics2, R.drawable.pics3,  R.drawable.pics4, R.drawable.pics5};
+
+                }else{
                     images = new Integer[]{R.drawable.pics1, R.drawable.pics2, R.drawable.pics3,  R.drawable.pics4, R.drawable.pics5};
 
                 }
@@ -134,12 +145,23 @@ public class Rator_ImageActivity extends AppCompatActivity {
             }
             public  void onFinish(){
                 // setCurrentImage(images[images.length-1]);
+
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            image_layout.setVisibility(View.GONE);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                mainHandler.post(myRunnable);
+
             }
         }.start();
     }
-
     private void setCurrentImage(Integer image) {
-
         final ImageView imageView = (ImageView) findViewById(R.id.imageDisplay);
         imageView.setImageResource(image);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -151,16 +173,17 @@ public class Rator_ImageActivity extends AppCompatActivity {
     }
     private void exitVideo() {
 
-        if(file.equals("images1")){
-            addLayout();
-        }else if(file.equals("images2")){
-            addLayoutWithout();
+        if(file.equals("images0")){
+            addLayout_prepare();
+        }else if(file.equals("images1")){
+            addLayout_routine();
         }else if(file.equals("images3")){
-            addLayoutWithout();
+            addLayout_gmv();
+        }else if(file.equals("images4")){
+            addLayout_vnh();
         }else {
-            addLayout();
+            addLayoutWithout();
         }
-
     }
 
     private void progress(final int counter){
@@ -239,18 +262,33 @@ public class Rator_ImageActivity extends AppCompatActivity {
         return bitmap;
     }
 
-
     private void addLayoutWithout(){
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
         View layout2 = LayoutInflater.from(this).inflate(R.layout.golden_without, layout, false);
         layout.removeAllViews();
         layout.addView(layout2);
     }
-
-    private void addLayout(){
-
+    private void addLayout_prepare(){
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
-        View layout2 = LayoutInflater.from(this).inflate(R.layout.routine_layout, layout, false);
+        View layout2 = LayoutInflater.from(this).inflate(R.layout.check_list_preparation, layout, false);
+        layout.removeAllViews();
+        layout.addView(layout2);
+    }
+    private void addLayout_routine(){
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        View layout2 = LayoutInflater.from(this).inflate(R.layout.check_list_routine, layout, false);
+        layout.removeAllViews();
+        layout.addView(layout2);
+    }
+    private void addLayout_gmv(){
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        View layout2 = LayoutInflater.from(this).inflate(R.layout.check_list_gwv, layout, false);
+        layout.removeAllViews();
+        layout.addView(layout2);
+    }
+    private void addLayout_vnh(){
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        View layout2 = LayoutInflater.from(this).inflate(R.layout.check_list_vnh, layout, false);
         layout.removeAllViews();
         layout.addView(layout2);
     }

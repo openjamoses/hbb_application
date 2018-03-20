@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/alone"
+                android:text="@string/rater"
                 android:gravity="center"
                 android:padding="10dp"
                 android:layout_gravity="center"
@@ -83,7 +83,7 @@
                     android:drawableRight="@android:drawable/ic_lock_idle_alarm"
                     android:onClick="expandableButton0"
                     android:paddingRight="10dp"
-                    android:text="@string/preparation_for_birth"
+                    android:text="@string/preparation_for_birth_simulation"
                     />
 
                 <Button
@@ -100,7 +100,7 @@
                     android:drawableRight="@android:drawable/ic_lock_idle_alarm"
                     android:onClick="expandableButton1"
                     android:paddingRight="10dp"
-                    android:text="@string/routine_care"
+                    android:text="@string/routine_care_simulation"
                     />
 
                 <com.github.aakira.expandablelayout.ExpandableRelativeLayout
@@ -164,7 +164,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="fill_horizontal"
                     android:paddingRight="10dp"
-                    android:text="@string/golden_minutes_with_ventilation"
+                    android:text="@string/golden_minutes_with_ventilation_simulation"
                     />
 
                 <com.github.aakira.expandablelayout.ExpandableRelativeLayout
@@ -212,6 +212,7 @@
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
 
+                <!--
                 <Button
                     android:id="@+id/expandableButton2"
                     android:layout_marginTop="10dp"
@@ -274,7 +275,7 @@
                     </ScrollView>
                 </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
-
+-->
 
                 <Button
                     android:id="@+id/expandableButton4"
@@ -291,7 +292,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="fill_horizontal"
                     android:paddingRight="10dp"
-                    android:text="@string/random_care"
+                    android:text="@string/continued_ventilation_with_normal_or_slow_heart_rate"
                     />
 
                 <com.github.aakira.expandablelayout.ExpandableRelativeLayout

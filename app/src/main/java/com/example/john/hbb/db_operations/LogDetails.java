@@ -33,13 +33,24 @@ import java.util.Map;
 import static com.example.john.hbb.core.Constants.config.DISTRICT_NAME;
 import static com.example.john.hbb.core.Constants.config.FACILITY_OWNER;
 import static com.example.john.hbb.core.Constants.config.FACILITY_TYPE;
+import static com.example.john.hbb.core.Constants.config.GROUP_ID;
 import static com.example.john.hbb.core.Constants.config.HEALTHID;
 import static com.example.john.hbb.core.Constants.config.HEALTH_CADRE;
 import static com.example.john.hbb.core.Constants.config.HEALTH_ID;
 import static com.example.john.hbb.core.Constants.config.HEALTH_NAME;
 import static com.example.john.hbb.core.Constants.config.HEALTH_STATUS;
 import static com.example.john.hbb.core.Constants.config.HOST_URL;
+import static com.example.john.hbb.core.Constants.config.LOGID;
+import static com.example.john.hbb.core.Constants.config.LOG_DATE;
+import static com.example.john.hbb.core.Constants.config.LOG_ID;
+import static com.example.john.hbb.core.Constants.config.LOG_IMEI;
+import static com.example.john.hbb.core.Constants.config.LOG_NAMES;
+import static com.example.john.hbb.core.Constants.config.LOG_STATUS;
+import static com.example.john.hbb.core.Constants.config.LOG_TIME;
+import static com.example.john.hbb.core.Constants.config.LOG_TYPE;
 import static com.example.john.hbb.core.Constants.config.URL_SAVE_HEALTH;
+import static com.example.john.hbb.core.Constants.config.URL_SAVE_LOG;
+import static com.example.john.hbb.core.Constants.config.USER_ID;
 
 /**
  * Created by john on 3/19/18.
@@ -52,34 +63,25 @@ public class LogDetails {
         this.context = context;
     }
 
-    public String save(String name,int facility_id, String cadre, String type, String owner, String district, int status){
+    public String save(int user_id,int id,String date, String time, String imei, int type, String names, String group_id, int status){
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
             // database.beginTransaction();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(Constants.config.HEALTH_NAME,name);
-            contentValues.put(Constants.config.DISTRICT_NAME,district);
-            contentValues.put(HEALTH_ID,facility_id);
-            contentValues.put(Constants.config.FACILITY_OWNER,owner);
-            contentValues.put(Constants.config.FACILITY_TYPE,type);
-            contentValues.put(Constants.config.HEALTH_CADRE,cadre);
-            contentValues.put(Constants.config.HEALTH_STATUS,status);
+            contentValues.put(USER_ID,user_id);
+            contentValues.put(LOG_ID,id);
+            contentValues.put(LOG_DATE,date);
+            contentValues.put(LOG_TIME,time);
+            contentValues.put(LOG_IMEI,imei);
+            contentValues.put(LOG_TYPE,type);
+            contentValues.put(LOG_NAMES,names);
+            contentValues.put(GROUP_ID,group_id);
+            contentValues.put(Constants.config.LOG_STATUS,status);
 
-            String query = "SELECT *  FROM" +
-                    " "+ Constants.config.TABLE_HEALTH+" WHERE "+Constants.config.HEALTH_NAME+" = '"+name+"' ";
-            Cursor cursor = database.rawQuery(query,null);
-            if (cursor.moveToFirst()){
-                //database.insert(Constants.config.TABLE_HEALTH, null, contentValues);
-                //database.setTransactionSuccessful();
-                message = "Health FAcility already registered!";
-            }else {
-                database.insert(Constants.config.TABLE_HEALTH, null, contentValues);
-                //database.setTransactionSuccessful();
-                message = "Health Details saved!";
-            }
-
-
+            database.insert(Constants.config.TABLE_LOG, null, contentValues);
+            //database.setTransactionSuccessful();
+            message = "Log Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
@@ -90,14 +92,10 @@ public class LogDetails {
         return message;
     }
 
-    public void send(final String name, final String cadre, final String type, final String owner, final String district, final ProgressDialog dialog, final AlertDialog alertDialog){
+    public void send(final int user_id, final String date, final String time, final String imei, final int type, final String names, final String group_id){
 
-        try{
-            dialog.show();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_HEALTH,
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_LOG,
                 new Response.Listener<String>() {
 
                     @Override
@@ -113,17 +111,12 @@ public class LogDetails {
                                 id = Integer.parseInt(splits[1]);
 
                             }
-                            String message = save(name,id,cadre,type,owner,district,status);
+                            String message = save(user_id,id,date,time,imei,type,names,group_id,status);
                             Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
 
-                            if (message.equals("Health Details saved!")){
-                                alertDialog.dismiss();
+                            if (message.equals("Log Details saved!")){
+                                //alertDialog.dismiss();
                             }
-
-                            if (dialog.isShowing()){
-                                dialog.dismiss();
-                            }
-
 
 
                         }catch (Exception e){
@@ -148,11 +141,14 @@ public class LogDetails {
                 int status = 1;
                 Map<String, String> params = new Hashtable<String, String>();
                 //Adding parameters
-                params.put(HEALTH_NAME, name);
-                params.put(FACILITY_TYPE, type);
-                params.put(FACILITY_OWNER, owner);
-                params.put(HEALTH_CADRE, cadre);
-                params.put(DISTRICT_NAME, district);
+                params.put(USER_ID, String.valueOf(user_id));
+                params.put(LOG_DATE, date);
+                params.put(LOG_TIME, time);
+                params.put(LOG_IMEI, imei);
+                params.put(LOG_TYPE, String.valueOf(type));
+                params.put(LOG_NAMES, names);
+                params.put(GROUP_ID, group_id);
+
                 //returning parameters
                 return params;
             }
@@ -168,7 +164,7 @@ public class LogDetails {
     public ArrayList<HashMap<String, String>> getAllUsers() {
         ArrayList<HashMap<String, String>> wordList;
         wordList = new ArrayList<HashMap<String, String>>();
-        String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_HEALTH ;
+        String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG ;
 
         int status = 1;
         SQLiteDatabase database = DBHelper.getHelper(context).getReadableDatabase();
@@ -176,14 +172,16 @@ public class LogDetails {
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTHID))));
-                params.put(HEALTH_NAME,cursor.getString(cursor.getColumnIndex(HEALTH_NAME)));
-                params.put(DISTRICT_NAME,cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)));
-                params.put(HEALTH_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTH_ID))));
-                params.put(FACILITY_OWNER,cursor.getString(cursor.getColumnIndex(FACILITY_OWNER)));
-                params.put(FACILITY_TYPE,cursor.getString(cursor.getColumnIndex(FACILITY_TYPE)));
-                params.put(HEALTH_CADRE,cursor.getString(cursor.getColumnIndex(HEALTH_CADRE)));
-                // params.put(HEALTH_STATUS,status);
+                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(LOGID))));
+
+                params.put(USER_ID,cursor.getString(cursor.getColumnIndex(USER_ID)));
+                params.put(LOG_ID,cursor.getString(cursor.getColumnIndex(LOG_ID)));
+                params.put(LOG_DATE,cursor.getString(cursor.getColumnIndex(LOG_DATE)));
+                params.put(LOG_TIME,cursor.getString(cursor.getColumnIndex(LOG_TIME)));
+                params.put(LOG_IMEI,cursor.getString(cursor.getColumnIndex(LOG_IMEI)));
+                params.put(LOG_TYPE,cursor.getString(cursor.getColumnIndex(LOG_TYPE)));
+                params.put(LOG_NAMES,cursor.getString(cursor.getColumnIndex(LOG_NAMES)));
+                params.put(GROUP_ID,cursor.getString(cursor.getColumnIndex(GROUP_ID)));
                 wordList.add(params);
             } while (cursor.moveToNext());
         }
@@ -194,7 +192,7 @@ public class LogDetails {
         ArrayList<HashMap<String, String>> wordList;
         wordList = new ArrayList<HashMap<String, String>>();
         int status = 0;
-        String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_HEALTH + " WHERE " + HEALTH_STATUS + " = '" + status + "' ";
+        String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG + " WHERE " + LOG_STATUS + " = '" + status + "' ";
         SQLiteDatabase database = DBHelper.getHelper(context).getReadableDatabase();
 
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -239,7 +237,7 @@ public class LogDetails {
         SQLiteDatabase database = null;
         try {
             int status = 0;
-            String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_HEALTH+ " WHERE " + HEALTH_STATUS + " = '" + status + "' ";
+            String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG+ " WHERE " + LOG_STATUS + " = '" + status + "' ";
             database = DBHelper.getHelper(context).getReadableDatabase();
             Cursor cursor = database.rawQuery(selectQuery, null);
             count = cursor.getCount();
@@ -263,7 +261,7 @@ public class LogDetails {
         SQLiteDatabase database = null;
         try {
             database = DBHelper.getHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_HEALTH + " SET " + HEALTH_STATUS + " = '" + status + "' where " + HEALTHID + "='" + id + "'  ";
+            String updateQuery = "UPDATE " + Constants.config.TABLE_LOG + " SET " + LOG_STATUS + " = '" + status + "' where " + LOGID + "='" + id + "'  ";
             Log.d("query", updateQuery);
             database.execSQL(updateQuery);
         }catch (Exception e){
@@ -310,37 +308,39 @@ public class LogDetails {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ContentValues contentValues = new ContentValues();
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    contentValues.put(Constants.config.HEALTH_NAME,jsonObject.getString(Constants.config.HEALTH_NAME));
-                    contentValues.put(Constants.config.DISTRICT_NAME,jsonObject.getString(Constants.config.DISTRICT_NAME));
-                    contentValues.put(HEALTH_ID,jsonObject.getLong(HEALTH_ID));
-                    contentValues.put(Constants.config.FACILITY_OWNER,jsonObject.getString(Constants.config.FACILITY_OWNER));
-                    contentValues.put(Constants.config.FACILITY_TYPE,jsonObject.getString(Constants.config.FACILITY_TYPE));
-                    contentValues.put(Constants.config.HEALTH_CADRE,jsonObject.getString(Constants.config.HEALTH_CADRE));
-                    contentValues.put(Constants.config.HEALTH_STATUS,status);
 
+                    contentValues.put(USER_ID,jsonObject.getLong(Constants.config.USER_ID));
+                    contentValues.put(LOG_ID,jsonObject.getLong(Constants.config.LOG_ID));
+                    contentValues.put(LOG_DATE,jsonObject.getString(Constants.config.LOG_DATE));
+                    contentValues.put(LOG_TIME,jsonObject.getString(Constants.config.LOG_TIME));
+                    contentValues.put(LOG_IMEI,jsonObject.getString(Constants.config.LOG_IMEI));
+                    contentValues.put(LOG_TYPE,jsonObject.getLong(Constants.config.LOG_TYPE));
+                    contentValues.put(LOG_NAMES,jsonObject.getString(Constants.config.LOG_NAMES));
+                    contentValues.put(GROUP_ID,jsonObject.getString(Constants.config.GROUP_ID));
+                    contentValues.put(Constants.config.LOG_STATUS,status);
                     db = DBHelper.getHelper(context).getReadableDB();
-                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_HEALTH+ " WHERE "+HEALTH_NAME+" = '"+jsonObject.getString(Constants.config.HEALTH_NAME)+"'" +
-                            " AND "+DISTRICT_NAME+" = '"+jsonObject.getString(Constants.config.DISTRICT_NAME)+"' AND  " + FACILITY_OWNER + " = '" + jsonObject.getString(Constants.config.FACILITY_OWNER) + "' ";
+                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG+ " WHERE "+USER_ID+" = '"+jsonObject.getLong(Constants.config.USER_ID)+"'" +
+                            " AND "+LOG_DATE+" = '"+jsonObject.getString(Constants.config.LOG_DATE)+"' AND  " + LOG_TIME + " = '" + jsonObject.getString(Constants.config.LOG_TIME) + "' ";
                     db = new DBHelper(context).getReadableDatabase();
                     Cursor cursor = db.rawQuery(selectQuery, null);
                     if (cursor.moveToFirst()){
                         do {
-                            int stat = cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTH_STATUS));
-                            int id = cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTHID));
+                            int stat = cursor.getInt(cursor.getColumnIndex(Constants.config.LOG_STATUS));
+                            int id = cursor.getInt(cursor.getColumnIndex(Constants.config.LOGID));
                             if (stat == 0){
                                 db = DBHelper.getHelper(context).getWritableDB();
-                                db.update(Constants.config.TABLE_HEALTH,contentValues,HEALTHID+"="+id, null);
+                                db.update(Constants.config.TABLE_LOG,contentValues,LOGID+"="+id, null);
                             }
                         }while (cursor.moveToNext());
                     }else {
                         db = DBHelper.getHelper(context).getWritableDB();
-                        db.insert(Constants.config.TABLE_HEALTH, null, contentValues);
+                        db.insert(Constants.config.TABLE_LOG, null, contentValues);
 
                     }
                     total ++;
                 }
                 db.setTransactionSuccessful();
-                message = total+" records , Health Table Updated successfully!";
+                message = total+" records , Log Table Updated successfully!";
 
             }catch (Exception e){
                 e.printStackTrace();
