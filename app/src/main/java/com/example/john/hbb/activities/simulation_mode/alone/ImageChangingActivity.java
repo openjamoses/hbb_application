@@ -33,7 +33,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 import com.example.john.hbb.core.DateTime;
+import com.example.john.hbb.core.Phone;
 import com.example.john.hbb.core.SessionManager;
+import com.example.john.hbb.db_operations.Preparation;
+import com.example.john.hbb.db_operations.Routine_Care;
 import com.example.john.hbb.utils.CompressBitmap;
 
 /**
@@ -54,6 +57,7 @@ public class ImageChangingActivity extends AppCompatActivity {
     private Context context = this;
     private boolean isComplete = false;
     private String type = "";
+    int type_id = 0;
 
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -77,6 +81,11 @@ public class ImageChangingActivity extends AppCompatActivity {
         title = getIntent().getStringArrayExtra("title");
         file = getIntent().getStringExtra("file");
         type = getIntent().getStringExtra("type");
+        if (type.equals("alone")){
+            type_id = 0;
+        }else {
+            type_id = 1;
+        }
         textView.setText(header);
 
         Log.e("Titles:", title.toString());
@@ -349,6 +358,71 @@ public class ImageChangingActivity extends AppCompatActivity {
                     test_the_ventilation_val = ((RadioButton)alertLayout.findViewById(test_the_ventilationId)).getText().toString();
                     prepare_a_uterotonic_val = ((RadioButton)alertLayout.findViewById(prepare_a_uterotonicId)).getText().toString();
 
+                    try{
+                        int identifies = 0,prepares_area = 0,washe_hands = 0,prepares_an = 0,assembles = 0,test = 0,prepare_a_uterotonic = 0;
+                        if (identifies_a_helper_val.equals("D")){
+                            identifies = 0;
+                        }else if (identifies_a_helper_val.equals("ND")){
+                            identifies = 1;
+                        }else {
+                            identifies = 2;
+                        }
+
+                        if (prepares_area_for_delivery_val.equals("D")){
+                            prepares_area = 0;
+                        }else if (prepares_area_for_delivery_val.equals("ND")){
+                            prepares_area = 1;
+                        }else {
+                            prepares_area = 2;
+                        }
+
+                        if (washe_hands_val.equals("D")){
+                            washe_hands = 0;
+                        }else if (washe_hands_val.equals("ND")){
+                            washe_hands = 1;
+                        }else {
+                            washe_hands = 2;
+                        }
+
+                        if (prepares_an_area_for_ventilation_val.equals("D")){
+                            prepares_an = 0;
+                        }else if (prepares_an_area_for_ventilation_val.equals("ND")){
+                            prepares_an = 1;
+                        }else {
+                            prepares_an = 2;
+                        }
+
+
+                        if (assembles_disinfected_val.equals("D")){
+                            assembles = 0;
+                        }else if (assembles_disinfected_val.equals("ND")){
+                            assembles = 1;
+                        }else {
+                            assembles = 2;
+                        }
+
+
+                        if (test_the_ventilation_val.equals("D")){
+                            test = 0;
+                        }else if (test_the_ventilation_val.equals("ND")){
+                            test = 1;
+                        }else {
+                            test = 2;
+                        }
+
+
+                        if (prepare_a_uterotonic_val.equals("D")){
+                            prepare_a_uterotonic = 0;
+                        }else if (prepare_a_uterotonic_val.equals("ND")){
+                            prepare_a_uterotonic = 1;
+                        }else {
+                            prepare_a_uterotonic = 2;
+                        }
+                        new Preparation(context).send(DateTime.getCurrentDate(),DateTime.getCurrentTime(),Phone.getIMEI(context),identifies,prepares_area+"",prepares_an+"",washe_hands+"",assembles+"",test+"",prepare_a_uterotonic+""
+                        );
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     dialog.dismiss();
                     finish();
                 }
@@ -427,6 +501,72 @@ public class ImageChangingActivity extends AppCompatActivity {
                     clamps_or_ties_val = ((RadioButton)alertLayout.findViewById(clamps_or_tiesId)).getText().toString();
                     position_on_mothers_val = ((RadioButton)alertLayout.findViewById(position_on_mothersId)).getText().toString();
                     continue_with_essential_val = ((RadioButton)alertLayout.findViewById(continue_with_essentialId)).getText().toString();
+
+                    try{
+                        int dries_val = 0,recognises = 0,keeps = 0,checks = 0,clamps = 0,position = 0,continue_ = 0;
+                        if (dries_throughly_val.equals("D")){
+                            dries_val = 0;
+                        }else if (dries_throughly_val.equals("ND")){
+                            dries_val = 1;
+                        }else {
+                            dries_val = 2;
+                        }
+
+                        if (recognises_crying_val.equals("D")){
+                            recognises = 0;
+                        }else if (recognises_crying_val.equals("ND")){
+                            recognises = 1;
+                        }else {
+                            recognises = 2;
+                        }
+
+
+                        if (keeps_warm_val.equals("D")){
+                            keeps = 0;
+                        }else if (keeps_warm_val.equals("ND")){
+                            keeps = 1;
+                        }else {
+                            keeps = 2;
+                        }
+
+                        if (checks_breathing_val.equals("D")){
+                            checks = 0;
+                        }else if (checks_breathing_val.equals("ND")){
+                            checks = 1;
+                        }else {
+                            checks = 2;
+                        }
+
+                        if (clamps_or_ties_val.equals("D")){
+                            clamps = 0;
+                        }else if (clamps_or_ties_val.equals("ND")){
+                            clamps = 1;
+                        }else {
+                            clamps = 2;
+                        }
+
+
+                        if (position_on_mothers_val.equals("D")){
+                            position = 0;
+                        }else if (position_on_mothers_val.equals("ND")){
+                            position = 1;
+                        }else {
+                            position = 2;
+                        }
+
+
+                        if (continue_with_essential_val.equals("D")){
+                            continue_ = 0;
+                        }else if (continue_with_essential_val.equals("ND")){
+                            continue_ = 1;
+                        }else {
+                            continue_ = 2;
+                        }
+                        new Routine_Care(context).send(dries_val+"",recognises+"",checks+"",type_id,clamps+"",position+"",continue_+"",DateTime.getCurrentTime(),DateTime.getCurrentDate(), Phone.getIMEI(context));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                     dialog.dismiss();
                     finish();
                 }

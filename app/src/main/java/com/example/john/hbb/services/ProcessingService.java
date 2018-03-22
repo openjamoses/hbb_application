@@ -14,10 +14,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.example.john.hbb.core.Constants.config.OPERATION_HEALTH;
+import static com.example.john.hbb.core.Constants.config.OPERATION_LOG;
+import static com.example.john.hbb.core.Constants.config.OPERATION_PREPARATION;
 import static com.example.john.hbb.core.Constants.config.OPERATION_USER;
 import static com.example.john.hbb.core.Constants.config.URL_GET_ALL_ENTRY;
 import static com.example.john.hbb.core.Constants.config.URL_GET_SINGLE_ENTRY;
 import static com.example.john.hbb.core.Constants.config.URL_SYNC_HEALTH;
+import static com.example.john.hbb.core.Constants.config.URL_SYNC_LOG;
+import static com.example.john.hbb.core.Constants.config.URL_SYNC_PREPARATION;
 import static com.example.john.hbb.core.Constants.config.URL_SYNC_USER;
 
 /**
@@ -60,10 +64,16 @@ public class ProcessingService extends Service {
         try {
             String imei = Phone.getIMEI(context);
 
-            DBController.fetchAll(context,"user_tb","first_name", imei,URL_GET_ALL_ENTRY,OPERATION_USER);
-            DBController.fetchAll(context,"health_tb","health_name", imei,URL_GET_ALL_ENTRY,OPERATION_HEALTH);
-            new DBController().syncCalls(URL_SYNC_USER,OPERATION_USER,"",context);
-            new DBController().syncCalls(URL_SYNC_HEALTH,OPERATION_HEALTH,"",context);
+           // DBController.fetchAll(context,"user_tb","first_name", imei,URL_GET_ALL_ENTRY,OPERATION_USER);
+            //DBController.fetchAll(context,"health_tb","health_name", imei,URL_GET_ALL_ENTRY,OPERATION_HEALTH);
+            //DBController.fetchAll(context,"health_tb","health_name", imei,URL_GET_ALL_ENTRY,OPERATION_HEALTH);
+            //DBController.fetchAll(context,"health_tb","health_name", imei,URL_GET_ALL_ENTRY,OPERATION_HEALTH);
+            //DBController.fetchAll(context,"health_tb","health_name", imei,URL_GET_ALL_ENTRY,OPERATION_HEALTH);
+
+            //new DBController().syncCalls(URL_SYNC_USER,OPERATION_USER,"",context);
+            //new DBController().syncCalls(URL_SYNC_HEALTH,OPERATION_HEALTH,"",context);
+            //new DBController().syncCalls(URL_SYNC_LOG,OPERATION_LOG,"",context);
+            //new DBController().syncCalls(URL_SYNC_PREPARATION,OPERATION_PREPARATION,"",context);
            // new DBController().syncCalls(URL_SYNC_TRAINING,OPERATION_TRAINING,"",context);
         }catch (Exception e){
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.example.john.hbb.activities.home;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -115,23 +116,33 @@ public class Menu_Dashboard extends AppCompatActivity {
     private void openDialog(){
         final AlertDialog dialog;
         try{
-            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View view = inflater.inflate(R.layout.accept_dialog, null);
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setIcon(getResources().getDrawable(android.R.drawable.stat_sys_warning));
+            alert.setTitle("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
+
+            LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.accept_dialog, null);
             // this is set the view from XML inside AlertDialog
             alert.setView(view);
+
             final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
-            Button button = (Button) view.findViewById(R.id.continue_btn);
             final RadioButton alone_radio = (RadioButton) view.findViewById(R.id.alone_radio);
             final RadioButton team_radio = (RadioButton) view.findViewById(R.id.team_radio);
-            header_text = (TextView) view. findViewById(R.id.header_text);
-            header_text.setText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
+            //header_text = (TextView) view. findViewById(R.id.header_text);
+           // header_text.setText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
             // disallow cancel of AlertDialog on click of back button and outside touch
             alert.setCancelable(false);
-            alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+            //alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+            alert.setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
             dialog = alert.create();
             dialog.show();
-            button.setOnClickListener(new View.OnClickListener() {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int val = 0;
@@ -144,19 +155,19 @@ public class Menu_Dashboard extends AppCompatActivity {
                     }
                     if (val != -1){
                         dialog.dismiss();
-                       if (val == 1){
-                           openSelectDialog();
-                       }else if (val == 0){
-                           String imei = Phone.getIMEI(context);
-                           String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
-                           new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"");
-                       }
+                        if (val == 1){
+                            openSelectDialog();
+                        }else if (val == 0){
+                            String imei = Phone.getIMEI(context);
+                            String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
+                            new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"");
+                        }
                     }else {
                         Toast.makeText(context,">>>Please make a selected..!<<<",Toast.LENGTH_SHORT).show();
                     }
                 }
-
             });
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -164,26 +175,48 @@ public class Menu_Dashboard extends AppCompatActivity {
     private void openSelectDialog(){
         final AlertDialog dialog;
         try{
-            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View view = inflater.inflate(R.layout.select_dialog, null);
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setIcon(getResources().getDrawable(android.R.drawable.stat_sys_warning));
+            alert.setTitle("YOU ARE IN A TEAM..!");
+
+            LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.select_dialog, null);
+            // this is set the view from XML inside AlertDialog
+            alert.setView(view);
             LinearLayout layout_check = (LinearLayout) view.findViewById(R.id.layout_check);
             TextView no_text = (TextView) view.findViewById(R.id.no_text);
             TextView register_text = (TextView) view.findViewById(R.id.register_text);
-            Button done_btn = (Button) view.findViewById(R.id.done_btn);
-            Button back_btn = (Button) view.findViewById(R.id.back_btn);
-
             createCheckbox(layout_check,checklist,checkid,no_text);
 
             // this is set the view from XML inside AlertDialog
             alert.setView(view);
              // disallow cancel of AlertDialog on click of back button and outside touch
             alert.setCancelable(false);
-            alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+            //alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
 
+            alert.setPositiveButton("DONE >>", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            alert.setNeutralButton("", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            alert.setNegativeButton("<< BACK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
             dialog = alert.create();
             dialog.show();
-            done_btn.setOnClickListener(new View.OnClickListener() {
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (checklist.size()>0){
@@ -203,13 +236,14 @@ public class Menu_Dashboard extends AppCompatActivity {
                     }
                 }
             });
-            back_btn.setOnClickListener(new View.OnClickListener() {
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
                     openDialog();
                 }
             });
+
             register_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -35,6 +35,8 @@ import static com.example.john.hbb.core.Constants.config.HOST_URL;
 import static com.example.john.hbb.core.Constants.config.IMEI;
 import static com.example.john.hbb.core.Constants.config.OPERATION_DISTRICT;
 import static com.example.john.hbb.core.Constants.config.OPERATION_HEALTH;
+import static com.example.john.hbb.core.Constants.config.OPERATION_LOG;
+import static com.example.john.hbb.core.Constants.config.OPERATION_PREPARATION;
 import static com.example.john.hbb.core.Constants.config.OPERATION_TRAINING;
 import static com.example.john.hbb.core.Constants.config.OPERATION_USER;
 import static com.example.john.hbb.core.Constants.config.POST_COLUMN;
@@ -95,6 +97,14 @@ public class DBController {
                             userList = new Training_Mode(context).getAllUsers();
                             db_count = new Training_Mode(context).dbSyncCount();
                             json_data = new Training_Mode(context).composeJSONfromSQLite();
+                        }else if (operations.equals(OPERATION_LOG)) {
+                            userList = new LogDetails(context).getAllUsers();
+                            db_count = new LogDetails(context).dbSyncCount();
+                            json_data = new LogDetails(context).composeJSONfromSQLite();
+                        }else if (operations.equals(OPERATION_PREPARATION)) {
+                            userList = new Preparation(context).getAllUsers();
+                            db_count = new Preparation(context).dbSyncCount();
+                            json_data = new Preparation(context).composeJSONfromSQLite();
                         }
                         if (userList.size() != 0) {
                             if (db_count != 0) {
@@ -117,11 +127,17 @@ public class DBController {
                                                     System.out.println(obj.get("id"));
 
                                                     if (operations.equals(OPERATION_USER)) {
-                                                        new User(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()), Integer.parseInt(obj.get("status").toString()));
+                                                        new User(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()),Integer.parseInt(obj.get("id2").toString()), Integer.parseInt(obj.get("status").toString()));
                                                     } else if (operations.equals(OPERATION_DISTRICT)) {
                                                         new District(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()), Integer.parseInt(obj.get("status").toString()));
                                                     }else if (operations.equals(OPERATION_TRAINING)) {
                                                         new Training_Mode(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()), Integer.parseInt(obj.get("status").toString()));
+                                                    }else if (operations.equals(OPERATION_LOG)) {
+                                                        new LogDetails(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()),Integer.parseInt(obj.get("id2").toString()), Integer.parseInt(obj.get("status").toString()));
+                                                    }else if (operations.equals(OPERATION_PREPARATION)) {
+                                                        new Preparation(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()),Integer.parseInt(obj.get("id2").toString()), Integer.parseInt(obj.get("status").toString()));
+                                                    }else if (operations.equals(OPERATION_HEALTH)) {
+                                                        new Facility(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()),Integer.parseInt(obj.get("id2").toString()), Integer.parseInt(obj.get("status").toString()));
                                                     }
                                                 }
                                                 //Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
@@ -228,6 +244,10 @@ public class DBController {
                                 new User(context).insert(jsonArray);
                             }else if (operation.equals(OPERATION_HEALTH)){
                                 new Facility(context).insert(jsonArray);
+                            }else if (operation.equals(OPERATION_LOG)){
+                                new LogDetails(context).insert(jsonArray);
+                            }else if (operation.equals(OPERATION_PREPARATION)){
+                                new Preparation(context).insert(jsonArray);
                             }
                         }catch (Exception e){
                             e.printStackTrace();

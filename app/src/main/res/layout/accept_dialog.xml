@@ -10,16 +10,7 @@
         android:gravity="center"
         android:background="@drawable/b_image"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/header_text"
-            android:textSize="@dimen/horizonal_padding"
-            android:textStyle="bold"
-            android:fontFamily="serif-monospace"
-            android:text="@string/are_you"/>
-        <include layout="@layout/item_divider"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,13 +43,6 @@
                 android:text="@string/ateam"/>
         </RadioGroup>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="continue"
-            android:layout_marginTop="20sp"
-            android:id="@+id/continue_btn"
-            android:background="@drawable/button"/>
 
     </LinearLayout>
 

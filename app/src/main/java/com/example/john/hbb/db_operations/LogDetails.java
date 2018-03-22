@@ -112,7 +112,7 @@ public class LogDetails {
 
                             }
                             String message = save(user_id,id,date,time,imei,type,names,group_id,status);
-                            Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
 
                             if (message.equals("Log Details saved!")){
                                 //alertDialog.dismiss();
@@ -199,7 +199,7 @@ public class LogDetails {
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTHID))));
+                params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(LOGID))));
 
                 params.put(HEALTH_NAME,cursor.getString(cursor.getColumnIndex(HEALTH_NAME)));
                 params.put(DISTRICT_NAME,cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)));
@@ -257,11 +257,11 @@ public class LogDetails {
      * @param id
      * @param status
      */
-    public void updateSyncStatus(int id, int status){
+    public void updateSyncStatus(int id, int log_id, int status){
         SQLiteDatabase database = null;
         try {
             database = DBHelper.getHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_LOG + " SET " + LOG_STATUS + " = '" + status + "' where " + LOGID + "='" + id + "'  ";
+            String updateQuery = "UPDATE " + Constants.config.TABLE_LOG + " SET " + LOG_STATUS + " = '" + status + "', "+LOG_ID+" = '"+log_id+"' where " + LOGID + "='" + id + "'  ";
             Log.d("query", updateQuery);
             database.execSQL(updateQuery);
         }catch (Exception e){
@@ -319,7 +319,7 @@ public class LogDetails {
                     contentValues.put(GROUP_ID,jsonObject.getString(Constants.config.GROUP_ID));
                     contentValues.put(Constants.config.LOG_STATUS,status);
                     db = DBHelper.getHelper(context).getReadableDB();
-                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG+ " WHERE "+USER_ID+" = '"+jsonObject.getLong(Constants.config.USER_ID)+"'" +
+                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG+ " WHERE "+LOG_IMEI+" = '"+jsonObject.getString(Constants.config.LOG_IMEI)+"'" +
                             " AND "+LOG_DATE+" = '"+jsonObject.getString(Constants.config.LOG_DATE)+"' AND  " + LOG_TIME + " = '" + jsonObject.getString(Constants.config.LOG_TIME) + "' ";
                     db = new DBHelper(context).getReadableDatabase();
                     Cursor cursor = db.rawQuery(selectQuery, null);
@@ -358,6 +358,4 @@ public class LogDetails {
 
         }
     }
-
-
 }

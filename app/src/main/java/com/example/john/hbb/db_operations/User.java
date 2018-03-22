@@ -28,6 +28,7 @@ import static com.example.john.hbb.core.Constants.config.LAST_NAME;
 import static com.example.john.hbb.core.Constants.config.PASSWORD;
 import static com.example.john.hbb.core.Constants.config.USERID;
 import static com.example.john.hbb.core.Constants.config.USERNAME;
+import static com.example.john.hbb.core.Constants.config.USER_ID;
 import static com.example.john.hbb.core.Constants.config.USER_STATUS;
 
 /**
@@ -55,6 +56,7 @@ public class User {
             contentValues.put(Constants.config.GENDER,gender);
             contentValues.put(Constants.config.HEALTH_FACILITY,facility);
             contentValues.put(Constants.config.PASSWORD,password);
+            contentValues.put(Constants.config.IMEI,Phone.getIMEI(context));
             contentValues.put(HEALTH_ID,facililty_id);
             //params.put(IMEI, Phone.getIMEI(context));
             contentValues.put(Constants.config.USER_STATUS,status);
@@ -175,11 +177,11 @@ public class User {
      * @param id
      * @param status
      */
-    public void updateSyncStatus(int id, int status){
+    public void updateSyncStatus(int id, int user_id, int status){
         SQLiteDatabase database = null;
         try {
             database = DBHelper.getHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + USER_STATUS + " = '" + status + "' where " + USERID + "='" + id + "'  ";
+            String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + USER_STATUS + " = '" + status + "', "+USER_ID+" = '"+user_id+"' where " + USERID + "='" + id + "'  ";
             Log.d("query", updateQuery);
             database.execSQL(updateQuery);
         }catch (Exception e){
@@ -232,6 +234,7 @@ public class User {
                     contentValues.put(Constants.config.USERNAME,jsonObject.getString(Constants.config.USERNAME));
                     contentValues.put(Constants.config.CONTACT,jsonObject.getString(Constants.config.CONTACT));
                     contentValues.put(Constants.config.GENDER,jsonObject.getString(Constants.config.GENDER));
+                    contentValues.put(Constants.config.IMEI,jsonObject.getString(Constants.config.IMEI));
                     contentValues.put(Constants.config.HEALTH_FACILITY,jsonObject.getString(Constants.config.HEALTH_FACILITY));
                     contentValues.put(Constants.config.PASSWORD,jsonObject.getString(Constants.config.PASSWORD));
                     contentValues.put(HEALTH_ID,jsonObject.getLong(HEALTH_ID));
@@ -239,7 +242,7 @@ public class User {
 
                     db = DBHelper.getHelper(context).getReadableDB();
                     String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE "+PASSWORD+" = '"+jsonObject.getString(Constants.config.PASSWORD)+"'" +
-                            " AND  " + USERNAME + " = '" + jsonObject.getString(Constants.config.USERNAME) + "' ";
+                            " AND  " + USERNAME + " = '" + jsonObject.getString(Constants.config.USERNAME) + "' AND "+IMEI+" = '"+jsonObject.getString(Constants.config.IMEI)+"' ";
                     db = new DBHelper(context).getReadableDatabase();
                     Cursor cursor = db.rawQuery(selectQuery, null);
                     if (cursor.moveToFirst()){
@@ -306,10 +309,11 @@ public class User {
     public Cursor userLogin(String username, String phone, String password) {
         Log.e("####","-------------------------------------------------------------------");
         Cursor res = null;
+        Log.e("Login","username: "+username+", Password: "+password);
         SQLiteDatabase db = DBHelper.getHelper(context).getReadableDatabase();
         try {
             String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE " +
-                    " ("+USERNAME+" = '"+username+"' OR "+CONTACT+" = '"+phone+"') AND  " + PASSWORD + " = '" + password + "' ORDER BY "+USERID+" DESC LIMIT 1 ";
+                    " " + USERNAME + " = '" + username + "' ORDER BY "+USERID+" DESC LIMIT 1 ";
             res  = db.rawQuery(selectQuery, null);
         }catch (Exception e){
             e.printStackTrace();

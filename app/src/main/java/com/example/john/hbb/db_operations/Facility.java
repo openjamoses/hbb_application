@@ -269,11 +269,11 @@ public class Facility {
      * @param id
      * @param status
      */
-    public void updateSyncStatus(int id, int status){
+    public void updateSyncStatus(int id,int health_id, int status){
         SQLiteDatabase database = null;
         try {
             database = DBHelper.getHelper(context).getWritableDatabase();
-            String updateQuery = "UPDATE " + Constants.config.TABLE_HEALTH + " SET " + HEALTH_STATUS + " = '" + status + "' where " + HEALTHID + "='" + id + "'  ";
+            String updateQuery = "UPDATE " + Constants.config.TABLE_HEALTH + " SET " + HEALTH_STATUS + " = '" + status + "', "+HEALTH_ID+" = '"+health_id+"' where " + HEALTHID + "='" + id + "'  ";
             Log.d("query", updateQuery);
             database.execSQL(updateQuery);
         }catch (Exception e){

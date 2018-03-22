@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
                        if (username_.length() >=10){
                            phone = username_.substring(username_.length()-9,username_.length());
                        }
-                       if (username_.substring(0,1).equals("+") || username_.substring(0,1).equals("0") )
+                      // if (username_.substring(0,1).equals("+") || username_.substring(0,1).equals("0") )
 
 
                     try {
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             int fac_id = 0;
                             //start the profile activity
-                            DBHelper dbHelper = new DBHelper(context);
+                            //DBHelper dbHelper = new DBHelper(context);
                             Cursor cursor = new User(context).userLogin(username_, phone, password);
                         if (cursor != null) {
                             if (cursor.moveToFirst()) {
@@ -160,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                                     pass = cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY));
                                     fac_id = cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTH_ID));
                                 } while (cursor.moveToNext());
+                                Log.e("Cursor","Cursor found");
 
                             } else {
                                 select(username_);
@@ -172,6 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                                 facility = "facility";
                                 gend = "facility";
                                 pass = "facility";
+                                Log.e("Cursor","Cursor Not null but empty");
                             }
                         }else {
                             select(username_);
@@ -184,6 +186,8 @@ public class LoginActivity extends AppCompatActivity {
                             facility = "facility";
                             gend = "gender";
                             pass = "password";
+
+                            Log.e("Cursor","Cursor Null");
                         }
                             onLoginSuccess(message, useID, fname, lname, username, contact, facility,gend,pass,fac_id);
 
@@ -346,10 +350,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // disable going back to the MainActivity
-        moveTaskToBack(true);
+        //moveTaskToBack(true);
     }
     public void onLoginSuccess(String message, int useID, String fname, String lname, String username, String contact,String facility, String gender, String password, int fac_id) {
-        _loginButton.setEnabled(true);
+        //_loginButton.setEnabled(true);
         if(message.equals("Login Successfully!")) {
             session.createLoginSession(useID, fname, lname, contact, username, facility, gender,password,fac_id);
             // Staring MainActivity
@@ -363,7 +367,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
+       // _loginButton.setEnabled(true);
     }
 
     ///// TODO: 10/13/17   permission requests...
