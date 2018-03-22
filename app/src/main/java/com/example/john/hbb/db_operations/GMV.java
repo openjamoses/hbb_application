@@ -346,7 +346,7 @@ public class GMV {
                     ContentValues contentValues = new ContentValues();
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    contentValues.put(GMV_ID,jsonObject.getString(Constants.config.GMV_ID));
+                    contentValues.put(GMV_ID,jsonObject.getLong(Constants.config.GMV_ID));
                     contentValues.put(GMV_DRIES_THOROUGHY,jsonObject.getString(Constants.config.GMV_DRIES_THOROUGHY));
                     contentValues.put(GMV_RECOGNISE_NOTCRYING,jsonObject.getString(Constants.config.GMV_RECOGNISE_NOTCRYING));
                     contentValues.put(GMV_KEEPS_WARM,jsonObject.getString(Constants.config.GMV_KEEPS_WARM));
