@@ -50,7 +50,7 @@ public class Training_Mode {
         this.context = context;
     }
 
-    public String save(int userID, String name, String date, String time, int frequency, String key_skills,String key_subSkill, int sync_status){
+    public String save(int id,int userID, String name, String date, String time, int frequency, String key_skills,String key_subSkill, int sync_status){
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
@@ -59,6 +59,7 @@ public class Training_Mode {
 
             contentValues.put(Constants.config.USER_ID,userID);
             contentValues.put(Constants.config.TRAINING_NAME,name);
+            contentValues.put(Constants.config.TRAINING_ID,id);
             contentValues.put(Constants.config.TRAINING_DATE,date);
             contentValues.put(Constants.config.TRAINING_TIME,time);
             contentValues.put(Constants.config.TRAINING_FREQUENCY,frequency);
@@ -97,11 +98,13 @@ public class Training_Mode {
                     public void onResponse(String response) {
                         try{
 
-                            int status = 0;
-                            if (response.equals("Success")){
+                            int status = 0,id = selectLast()+1;
+                            String[] splits = response.split("/");
+                            if (splits[0].equals("Success")){
                                 status = 1;
+                                id = Integer.parseInt(splits[1]);
                             }
-                            String message = save(userID, name, date, time, frequency, key_skills, key_subSkill,status);
+                            String message = save(id,userID, name, date, time, frequency, key_skills, key_subSkill,status);
                             Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
                             View view = toast.getView();
                             view.setBackgroundResource(R.drawable.round_conor);
@@ -156,6 +159,30 @@ public class Training_Mode {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         //Adding request to the queue
         requestQueue.add(stringRequest);
+    }
+
+
+    public  int selectLast(){
+        int last_id = 0;
+        SQLiteDatabase db = new DBHelper(context).getReadableDB();
+        Cursor cursor = null;
+        try{
+            db.beginTransaction();
+            String query = "SELECT "+Constants.config.TRAINING_ID+" FROM" +
+                    " "+ Constants.config.TABLE_TRAINING+"  ORDER BY "+Constants.config.TRAININGID+" DESC LIMIT 1 ";
+            cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    last_id = cursor.getInt(cursor.getColumnIndex(Constants.config.TRAINING_ID));
+                }while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return  last_id;
     }
 
 

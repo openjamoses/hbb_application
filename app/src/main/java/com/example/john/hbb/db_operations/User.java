@@ -194,6 +194,35 @@ public class User {
             }
         }
     }
+
+
+
+    public  int selectLast(){
+        int last_id = 0;
+        SQLiteDatabase db = new DBHelper(context).getReadableDB();
+        Cursor cursor = null;
+        try{
+            db.beginTransaction();
+            String query = "SELECT "+Constants.config.USER_ID+" FROM" +
+                    " "+ Constants.config.TABLE_USERS+"  ORDER BY "+Constants.config.USERID+" DESC LIMIT 1 ";
+            cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    last_id = cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID));
+                }while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return  last_id;
+    }
+
+
+
+
     ///// TODO: 10/23/17
 
     public void insert(JSONArray response){

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.DBHelper;
+import com.example.john.hbb.core.SessionManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -93,8 +94,6 @@ public class LogDetails {
     }
 
     public void send(final int user_id, final String date, final String time, final String imei, final int type, final String names, final String group_id){
-
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_LOG,
                 new Response.Listener<String>() {
 
@@ -104,18 +103,19 @@ public class LogDetails {
                             Log.e(TAG, "Results: " + response);
 
                             String[] splits = response.split("/");
-                            int status = 0, id = 0;
+                            int status = 0, id = selectLast()+1;
 
                             if (splits[0].equals("Success")) {
                                 status = 1;
                                 id = Integer.parseInt(splits[1]);
-
                             }
+
                             String message = save(user_id,id,date,time,imei,type,names,group_id,status);
                             //Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
 
                             if (message.equals("Log Details saved!")){
                                 //alertDialog.dismiss();
+                                new SessionManager(context).createLog(id,names);
                             }
 
 
@@ -157,6 +157,29 @@ public class LogDetails {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         //Adding request to the queue
         requestQueue.add(stringRequest);
+    }
+
+    public  int selectLast(){
+        int last_id = 0;
+        SQLiteDatabase db = new DBHelper(context).getReadableDB();
+        Cursor cursor = null;
+        try{
+            db.beginTransaction();
+            String query = "SELECT "+Constants.config.LOG_ID+" FROM" +
+                    " "+ Constants.config.TABLE_LOG+"  ORDER BY "+Constants.config.LOGID+" DESC LIMIT 1 ";
+            cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    last_id = cursor.getInt(cursor.getColumnIndex(Constants.config.LOG_ID));
+                }while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return  last_id;
     }
 
 

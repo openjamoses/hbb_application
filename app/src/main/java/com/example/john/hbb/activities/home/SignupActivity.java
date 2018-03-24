@@ -164,7 +164,7 @@ public class SignupActivity extends AppCompatActivity {
             onSignupFailed();
             return;
         }
-        _signupButton.setEnabled(false);
+       // _signupButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.Theme_AppCompat_Dialog);
@@ -231,13 +231,13 @@ public class SignupActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
+       // _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), "Signup failed", Toast.LENGTH_LONG).show();
-        _signupButton.setEnabled(true);
+        //_signupButton.setEnabled(true);
     }
 
     public boolean validate() {
@@ -301,7 +301,7 @@ public class SignupActivity extends AppCompatActivity {
                         Log.e(TAG,"Results: "+response);
 
                         String[] splits = response.split("/");
-                        int status = 0, id = 0;
+                        int status = 0, id = new User(context).selectLast()+1;
 
                         if (splits[0].equals("Success")){
                             status = 1;

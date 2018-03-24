@@ -17,8 +17,6 @@ import com.example.john.hbb.activities.simulation_mode.Simulation_VideoPlayer;
 import com.example.john.hbb.core.UsersSession;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
-import java.util.HashMap;
-
 import com.example.john.hbb.core.Server_Service;
 import com.example.john.hbb.core.SessionManager;
 
@@ -121,7 +119,7 @@ public class Alone_Home extends AppCompatActivity {
     public void expandableButton0(View view) {
         //expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
         //expandableLayout1.toggle(); // toggle expand and collapse
-        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Images_Simulations.class);
         String[] title = {getResources().getString(R.string.baby_being_born),
                 getResources().getString(R.string.crying_and_breathing),
                 getResources().getString(R.string.breathing_baby)};
@@ -137,7 +135,7 @@ public class Alone_Home extends AppCompatActivity {
     public void expandableButton1(View view) {
         //expandableLayout1 = (ExpandableRelativeLayout) findViewById(R.id.expandableLayout1);
         //expandableLayout1.toggle(); // toggle expand and collapse
-        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Images_Simulations.class);
         String[] title = {getResources().getString(R.string.baby_being_born),
                           getResources().getString(R.string.crying_and_breathing),
                           getResources().getString(R.string.breathing_baby)};
@@ -161,7 +159,7 @@ public class Alone_Home extends AppCompatActivity {
                 getResources().getString(R.string.breathing_baby)};
 
 
-        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Images_Simulations.class);
         intent.putExtra("mode","play");
         intent.putExtra("header",getResources().getString(R.string.golden_minutes_without_ventilation));
         intent.putExtra("title",title);
@@ -179,7 +177,7 @@ public class Alone_Home extends AppCompatActivity {
                 getResources().getString(R.string.baby_not_breathing),
                 };
 
-        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Images_Simulations.class);
         intent.putExtra("mode","play");
         intent.putExtra("header",getResources().getString(R.string.golden_minutes_with_ventilation));
         //intent.putExtra("title1",getResources().getString(R.string.baby_is_born));
@@ -197,7 +195,7 @@ public class Alone_Home extends AppCompatActivity {
                 getResources().getString(R.string.baby_not_breathing),
         };
 
-        Intent intent = new Intent(getApplicationContext(), ImageChangingActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Images_Simulations.class);
         intent.putExtra("mode","play");
         intent.putExtra("header",getResources().getString(R.string.continued_ventilation_with_normal_or_slow_heart_rate));
         //intent.putExtra("title1",getResources().getString(R.string.baby_is_born));

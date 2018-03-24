@@ -39,6 +39,7 @@ import static com.example.john.hbb.core.Constants.config.GMV_MONITOR_WITHMOTHER;
 import static com.example.john.hbb.core.Constants.config.GMV_MOVE_VENTILATION;
 import static com.example.john.hbb.core.Constants.config.GMV_RECOGNISE_BREATHINGWELL;
 import static com.example.john.hbb.core.Constants.config.GMV_RECOGNISE_CHESTMOVING;
+import static com.example.john.hbb.core.Constants.config.GMV_RECOGNISE_NOTBREATHING;
 import static com.example.john.hbb.core.Constants.config.GMV_RECOGNISE_NOTCRYING;
 import static com.example.john.hbb.core.Constants.config.GMV_STATUS;
 import static com.example.john.hbb.core.Constants.config.GMV_STIMULATES_BREATHING;
@@ -78,6 +79,7 @@ public class GMV {
             contentValues.put(GMV_FOLLOW_ROUTINE,gmv_follow_routine);
             contentValues.put(GMV_MOVE_VENTILATION,gmv_move_ventilation);
             contentValues.put(GMV_VENTILATE,gmv_ventilation);
+            contentValues.put(GMV_RECOGNISE_NOTBREATHING,gmv_recognise_notbreathing);
             contentValues.put(GMV_RECOGNISE_BREATHINGWELL,gmv_recognise_breathing);
             contentValues.put(GMV_RECOGNISE_CHESTMOVING,gmv_recognise_chestmoving);
             contentValues.put(GMV_MONITOR_WITHMOTHER,gmv_monitor_with_mother);
@@ -114,7 +116,7 @@ public class GMV {
                             Log.e(TAG, "Results: " + response);
 
                             String[] splits = response.split("/");
-                            int status = 0, id = 0;
+                            int status = 0, id = selectLast()+1;
                             if (splits[0].equals("Success")) {
                                 status = 1;
                                 id = Integer.parseInt(splits[1]);
@@ -156,6 +158,7 @@ public class GMV {
                 params.put(GMV_FOLLOW_ROUTINE,gmv_follow_routine);
                 params.put(GMV_MOVE_VENTILATION,gmv_move_ventilation);
                 params.put(GMV_VENTILATE,gmv_ventilation);
+                params.put(GMV_RECOGNISE_NOTBREATHING,gmv_recognise_notbreathing);
                 params.put(GMV_RECOGNISE_BREATHINGWELL,gmv_recognise_breathing);
                 params.put(GMV_RECOGNISE_CHESTMOVING,gmv_recognise_chestmoving);
                 params.put(GMV_MONITOR_WITHMOTHER,gmv_monitor_with_mother);
@@ -175,6 +178,33 @@ public class GMV {
         //Adding request to the queue
         requestQueue.add(stringRequest);
     }
+
+    public  int selectLast(){
+        int last_id = 0;
+        SQLiteDatabase db = new DBHelper(context).getReadableDB();
+        Cursor cursor = null;
+        try{
+            db.beginTransaction();
+            String query = "SELECT "+Constants.config.GMV_ID+" FROM" +
+                    " "+ Constants.config.TABLE_GMV+"  ORDER BY "+Constants.config.GMVID+" DESC LIMIT 1 ";
+            cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    last_id = cursor.getInt(cursor.getColumnIndex(Constants.config.GMV_ID));
+                }while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return  last_id;
+    }
+
+
+
+
     //// TODO: 10/15/17  Syncing
     public ArrayList<HashMap<String, String>> getAllUsers() {
         ArrayList<HashMap<String, String>> wordList;
@@ -197,6 +227,7 @@ public class GMV {
                 params.put(GMV_FOLLOW_ROUTINE,cursor.getString(cursor.getColumnIndex(GMV_FOLLOW_ROUTINE)));
                 params.put(GMV_MOVE_VENTILATION,cursor.getString(cursor.getColumnIndex(GMV_MOVE_VENTILATION)));
                 params.put(GMV_VENTILATE,cursor.getString(cursor.getColumnIndex(GMV_VENTILATE)));
+                params.put(GMV_RECOGNISE_NOTBREATHING,cursor.getString(cursor.getColumnIndex(GMV_RECOGNISE_NOTBREATHING)));
                 params.put(GMV_RECOGNISE_BREATHINGWELL,cursor.getString(cursor.getColumnIndex(GMV_RECOGNISE_BREATHINGWELL)));
                 params.put(GMV_RECOGNISE_CHESTMOVING,cursor.getString(cursor.getColumnIndex(GMV_RECOGNISE_CHESTMOVING)));
                 params.put(GMV_MONITOR_WITHMOTHER,cursor.getString(cursor.getColumnIndex(GMV_MONITOR_WITHMOTHER)));
@@ -234,6 +265,7 @@ public class GMV {
                 params.put(GMV_FOLLOW_ROUTINE,cursor.getString(cursor.getColumnIndex(GMV_FOLLOW_ROUTINE)));
                 params.put(GMV_MOVE_VENTILATION,cursor.getString(cursor.getColumnIndex(GMV_MOVE_VENTILATION)));
                 params.put(GMV_VENTILATE,cursor.getString(cursor.getColumnIndex(GMV_VENTILATE)));
+                params.put(GMV_RECOGNISE_NOTBREATHING,cursor.getString(cursor.getColumnIndex(GMV_RECOGNISE_NOTBREATHING)));
                 params.put(GMV_RECOGNISE_BREATHINGWELL,cursor.getString(cursor.getColumnIndex(GMV_RECOGNISE_BREATHINGWELL)));
                 params.put(GMV_RECOGNISE_CHESTMOVING,cursor.getString(cursor.getColumnIndex(GMV_RECOGNISE_CHESTMOVING)));
                 params.put(GMV_MONITOR_WITHMOTHER,cursor.getString(cursor.getColumnIndex(GMV_MONITOR_WITHMOTHER)));
@@ -354,6 +386,7 @@ public class GMV {
                     contentValues.put(GMV_FOLLOW_ROUTINE,jsonObject.getString(Constants.config.GMV_FOLLOW_ROUTINE));
                     contentValues.put(GMV_MOVE_VENTILATION,jsonObject.getString(Constants.config.GMV_MOVE_VENTILATION));
                     contentValues.put(GMV_VENTILATE,jsonObject.getString(Constants.config.GMV_VENTILATE));
+                    contentValues.put(GMV_RECOGNISE_NOTBREATHING,jsonObject.getString(Constants.config.GMV_RECOGNISE_NOTBREATHING));
                     contentValues.put(GMV_RECOGNISE_BREATHINGWELL,jsonObject.getString(Constants.config.GMV_RECOGNISE_BREATHINGWELL));
                     contentValues.put(GMV_RECOGNISE_CHESTMOVING,jsonObject.getString(Constants.config.GMV_RECOGNISE_CHESTMOVING));
                     contentValues.put(GMV_MONITOR_WITHMOTHER,jsonObject.getString(Constants.config.GMV_MONITOR_WITHMOTHER));

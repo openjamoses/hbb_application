@@ -47,7 +47,7 @@ public class CreateTable {
                         " "+ Constants.config.PREPARATION_ID+" INTEGER,"+ Constants.config.PREP_IDENTIFY_HELPER+" TEXT, "+ Constants.config.PREP_AREA_DELIVERY+" TEXT," +
                         " "+ Constants.config.PREP_WASHES_HANDS+" TEXT,"+ Constants.config.PREP_AREA_VENTILATION+" TEXT,"+Constants.config.PREP_TEST_VENTILATION+" TEXT, " +
                         " "+ Constants.config.PREP_ASSEMBLED+" TEXT,"+ Constants.config.PREP_UTEROTONIC+" TEXT," +
-                        ""+ Constants.config.PREP_TIME+" TEXT,"+ Constants.config.LOG_ID+" TEXT," +
+                        ""+ Constants.config.PREP_TIME+" TEXT,"+ Constants.config.LOG_ID+" INTEGER," +
                         " "+ Constants.config.PREP_STATUS+" INTEGER, "+Constants.config.PREP_DATE+" TEXT, "+Constants.config.PREP_IMEI+", "+Constants.config.PREP_TYPE+" INTEGER);";
 
 
@@ -56,7 +56,7 @@ public class CreateTable {
                         " "+ Constants.config.ROUTINE_ID+" INTEGER,"+ Constants.config.ROUTINE_DRIES_THOROUGHY+" TEXT, "+ Constants.config.ROUTINE_RECOGNISE_CRYING+" TEXT," +
                         " "+ Constants.config.ROUTINE_CHECKS_BREATHING+" TEXT,"+ Constants.config.ROUTINE_CLAMPS+" TEXT,"+ Constants.config.ROUTINE_POSITION+" TEXT," +
                         " "+ Constants.config.ROUTINE_CONTINUE+" TEXT,"+ Constants.config.ROUTINE_TIME+" TEXT,"+Constants.config.ROUTINE_STATUS+" INTEGER," +
-                        " "+Constants.config.ROUTINE_DATE+" TEXT, "+Constants.config.ROUTINE_IMEI+", "+Constants.config.ROUTINE_TYPE+" INTEGER);";
+                        " "+Constants.config.ROUTINE_DATE+" TEXT, "+Constants.config.ROUTINE_IMEI+", "+Constants.config.ROUTINE_TYPE+" INTEGER, "+Constants.config.LOG_ID+" INTEGER);";
 
 
         public  static  final String CREATE_GMV =

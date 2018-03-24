@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import static com.example.john.hbb.core.Constants.config.HOST_URL;
+import static com.example.john.hbb.core.Constants.config.LOG_ID;
 import static com.example.john.hbb.core.Constants.config.PREPARATIONID;
 import static com.example.john.hbb.core.Constants.config.PREPARATION_ID;
 import static com.example.john.hbb.core.Constants.config.PREP_AREA_DELIVERY;
@@ -52,8 +53,8 @@ public class Preparation {
         this.context = context;
     }
 
-    public String save(int preperation_id,String date, String time, String imei, int type, String prep_identify_helper, String prep_area_delivery,
-                        String prep_washes_hands, String prep_assembled,String prep_test_ventilation, String prep_uterotonic,int prep_status){
+    public String save(int preperation_id, String date, String time, String imei, int type, String prep_identify_helper, String prep_area_delivery,
+                       String prep_washes_hands, String prep_assembled, String prep_test_ventilation, String prep_uterotonic, int prep_status, int log_id){
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
@@ -71,6 +72,7 @@ public class Preparation {
             contentValues.put(PREP_TEST_VENTILATION,prep_test_ventilation);
             contentValues.put(PREP_UTEROTONIC,prep_uterotonic);
             contentValues.put(PREP_STATUS,prep_status);
+            contentValues.put(LOG_ID,log_id);
 
             database.insert(Constants.config.TABLE_PREPARATION, null, contentValues);
             //database.setTransactionSuccessful();
@@ -86,7 +88,7 @@ public class Preparation {
     }
 
     public void send(final String date, final String time, final String imei, final int type, final String prep_identify_helper, final String prep_area_delivery,
-                     final String prep_washes_hands, final String prep_assembled, final String prep_test_ventilation, final String prep_uterotonic){
+                     final String prep_washes_hands, final String prep_assembled, final String prep_test_ventilation, final String prep_uterotonic, final int log_id){
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_PREPARATION,
@@ -98,7 +100,7 @@ public class Preparation {
                             Log.e(TAG, "Results: " + response);
 
                             String[] splits = response.split("/");
-                            int status = 0, id = 0;
+                            int status = 0, id = selectLast()+1;
 
                             if (splits[0].equals("Success")) {
                                 status = 1;
@@ -106,7 +108,7 @@ public class Preparation {
 
                             }
                             String message = save(id,date,time,imei,type,prep_identify_helper,prep_area_delivery,prep_washes_hands,prep_assembled,
-                                    prep_test_ventilation,prep_uterotonic,status);
+                                    prep_test_ventilation,prep_uterotonic,status,log_id);
                             //Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
 
                             if (message.equals("Details saved!")){
@@ -139,6 +141,7 @@ public class Preparation {
                 params.put(PREP_TIME,time);
                 params.put(PREP_IMEI,imei);
                 params.put(PREP_TYPE, String.valueOf(type));
+                params.put(LOG_ID, String.valueOf(log_id));
                 params.put(PREP_IDENTIFY_HELPER,prep_identify_helper);
                 params.put(PREP_AREA_DELIVERY,prep_area_delivery);
                 params.put(PREP_WASHES_HANDS,prep_washes_hands);
@@ -184,6 +187,7 @@ public class Preparation {
                 params.put(PREP_TEST_VENTILATION,cursor.getString(cursor.getColumnIndex(PREP_TEST_VENTILATION)));
                 params.put(PREP_UTEROTONIC,cursor.getString(cursor.getColumnIndex(PREP_UTEROTONIC)));
                 params.put(PREP_STATUS,cursor.getString(cursor.getColumnIndex(PREP_STATUS)));
+                params.put(LOG_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(LOG_ID))));
                 wordList.add(params);
             } while (cursor.moveToNext());
         }
@@ -215,6 +219,7 @@ public class Preparation {
                 params.put(PREP_TEST_VENTILATION,cursor.getString(cursor.getColumnIndex(PREP_TEST_VENTILATION)));
                 params.put(PREP_UTEROTONIC,cursor.getString(cursor.getColumnIndex(PREP_UTEROTONIC)));
                 params.put(PREP_STATUS,cursor.getString(cursor.getColumnIndex(PREP_STATUS)));
+                params.put(LOG_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(LOG_ID))));
 
                 wordList.add(params);
             } while (cursor.moveToNext());
@@ -283,6 +288,30 @@ public class Preparation {
         }
     }
 
+    public  int selectLast(){
+        int last_id = 0;
+        SQLiteDatabase db = new DBHelper(context).getReadableDB();
+        Cursor cursor = null;
+        try{
+            db.beginTransaction();
+            String query = "SELECT "+Constants.config.PREPARATION_ID+" FROM" +
+                    " "+ Constants.config.TABLE_PREPARATION+"  ORDER BY "+Constants.config.PREPARATIONID+" DESC LIMIT 1 ";
+            cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    last_id = cursor.getInt(cursor.getColumnIndex(Constants.config.PREPARATION_ID));
+                }while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return  last_id;
+    }
+
+
 
     ///// TODO: 10/23/17
 
@@ -328,6 +357,7 @@ public class Preparation {
                     contentValues.put(PREP_ASSEMBLED,jsonObject.getString(Constants.config.PREP_ASSEMBLED));
                     contentValues.put(PREP_TEST_VENTILATION,jsonObject.getString(Constants.config.PREP_TEST_VENTILATION));
                     contentValues.put(PREP_UTEROTONIC,jsonObject.getString(Constants.config.PREP_UTEROTONIC));
+                    contentValues.put(LOG_ID,jsonObject.getLong(Constants.config.LOG_ID));
                     contentValues.put(PREP_STATUS,status);
 
 

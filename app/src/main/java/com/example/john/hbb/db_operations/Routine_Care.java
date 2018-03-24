@@ -28,6 +28,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import static com.example.john.hbb.core.Constants.config.HOST_URL;
+import static com.example.john.hbb.core.Constants.config.LOG_ID;
 import static com.example.john.hbb.core.Constants.config.PREPARATIONID;
 import static com.example.john.hbb.core.Constants.config.PREPARATION_ID;
 import static com.example.john.hbb.core.Constants.config.PREP_AREA_DELIVERY;
@@ -68,7 +69,7 @@ public class Routine_Care {
     }
 
     public String save(int routine_id,String routine_dries_thoroughy, String routine_recognise_crying, String routine_checks_breathing, int routine_type, String routine_clamps, String routine_position,
-                       String routine_continue, String routine_time,String routine_date, String routine_imei,int routine_status){
+                       String routine_continue, String routine_time,String routine_date, String routine_imei,int routine_status, int log_id){
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
@@ -86,6 +87,7 @@ public class Routine_Care {
             contentValues.put(ROUTINE_IMEI,routine_imei);
             contentValues.put(ROUTINE_STATUS,routine_status);
             contentValues.put(ROUTINE_CLAMPS,routine_clamps);
+            contentValues.put(LOG_ID,log_id);
 
             database.insert(Constants.config.TABLE_ROUTINE, null, contentValues);
             //database.setTransactionSuccessful();
@@ -100,7 +102,7 @@ public class Routine_Care {
     }
 
     public void send(final String routine_dries_thoroughy, final String routine_recognise_crying, final String routine_checks_breathing, final int routine_type, final String routine_clamps, final String routine_position,
-                     final String routine_continue, final String routine_time, final String routine_date, final String routine_imei){
+                     final String routine_continue, final String routine_time, final String routine_date, final String routine_imei, final int log_id){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_ROUTINE,
                 new Response.Listener<String>() {
 
@@ -109,12 +111,12 @@ public class Routine_Care {
                         try {
                             Log.e(TAG, "Results: " + response);
                             String[] splits = response.split("/");
-                            int status = 0, id = 0;
+                            int status = 0, id = selectLast()+1;
                             if (splits[0].equals("Success")) {
                                 status = 1;
                                 id = Integer.parseInt(splits[1]);
                             }
-                            String message = save(id,routine_dries_thoroughy,routine_recognise_crying,routine_checks_breathing,routine_type,routine_clamps,routine_position,routine_continue,routine_time,routine_date,routine_imei,status);
+                            String message = save(id,routine_dries_thoroughy,routine_recognise_crying,routine_checks_breathing,routine_type,routine_clamps,routine_position,routine_continue,routine_time,routine_date,routine_imei,status, log_id);
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -146,6 +148,7 @@ public class Routine_Care {
                 params.put(ROUTINE_DATE,routine_date);
                 params.put(ROUTINE_IMEI,routine_imei);
                 params.put(ROUTINE_CLAMPS,routine_clamps);
+                params.put(LOG_ID, String.valueOf(log_id));
                 //returning parameters
                 return params;
             }
@@ -181,6 +184,7 @@ public class Routine_Care {
                 params.put(ROUTINE_DATE,cursor.getString(cursor.getColumnIndex(ROUTINE_DATE)));
                 params.put(ROUTINE_IMEI,cursor.getString(cursor.getColumnIndex(ROUTINE_IMEI)));
                 params.put(ROUTINE_CLAMPS,cursor.getString(cursor.getColumnIndex(ROUTINE_CLAMPS)));
+                params.put(LOG_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(LOG_ID))));
                 wordList.add(params);
             } while (cursor.moveToNext());
         }
@@ -210,6 +214,7 @@ public class Routine_Care {
                 params.put(ROUTINE_DATE,cursor.getString(cursor.getColumnIndex(ROUTINE_DATE)));
                 params.put(ROUTINE_IMEI,cursor.getString(cursor.getColumnIndex(ROUTINE_IMEI)));
                 params.put(ROUTINE_CLAMPS,cursor.getString(cursor.getColumnIndex(ROUTINE_CLAMPS)));
+                params.put(LOG_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(LOG_ID))));
                 wordList.add(params);
             } while (cursor.moveToNext());
         }
@@ -276,6 +281,32 @@ public class Routine_Care {
             }
         }
     }
+
+    public  int selectLast(){
+        int last_id = 0;
+        SQLiteDatabase db = new DBHelper(context).getReadableDB();
+        Cursor cursor = null;
+        try{
+            db.beginTransaction();
+            String query = "SELECT "+Constants.config.ROUTINE_ID+" FROM" +
+                    " "+ Constants.config.TABLE_ROUTINE+"  ORDER BY "+Constants.config.ROUTINEID+" DESC LIMIT 1 ";
+            cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    last_id = cursor.getInt(cursor.getColumnIndex(Constants.config.ROUTINE_ID));
+                }while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        return  last_id;
+    }
+
+
+
     ///// TODO: 10/23/17
     public void insert(JSONArray jsonArray){
         new InsertBackground(context).execute(jsonArray);
@@ -315,6 +346,7 @@ public class Routine_Care {
                     contentValues.put(ROUTINE_TIME,jsonObject.getString(Constants.config.ROUTINE_TIME));
                     contentValues.put(ROUTINE_DATE,jsonObject.getString(Constants.config.ROUTINE_DATE));
                     contentValues.put(ROUTINE_IMEI,jsonObject.getString(Constants.config.ROUTINE_IMEI));
+                    contentValues.put(LOG_ID,jsonObject.getLong(Constants.config.LOG_ID));
                     contentValues.put(ROUTINE_STATUS,status);
                     contentValues.put(ROUTINE_CLAMPS,jsonObject.getString(Constants.config.ROUTINE_CLAMPS));
 

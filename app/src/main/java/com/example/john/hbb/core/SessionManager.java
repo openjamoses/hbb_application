@@ -26,6 +26,8 @@ import static com.example.john.hbb.core.Constants.config.KEY_GENDER_TEMP;
 import static com.example.john.hbb.core.Constants.config.KEY_LNAME_TEMP;
 import static com.example.john.hbb.core.Constants.config.KEY_PASSWORD_TEMP;
 import static com.example.john.hbb.core.Constants.config.LAST_NAME;
+import static com.example.john.hbb.core.Constants.config.LOG_ID;
+import static com.example.john.hbb.core.Constants.config.LOG_NAMES;
 import static com.example.john.hbb.core.Constants.config.PASSWORD;
 import static com.example.john.hbb.core.Constants.config.USERID;
 import static com.example.john.hbb.core.Constants.config.USERNAME;
@@ -70,10 +72,20 @@ public class SessionManager {
         editor.putString(GENDER, gender);
         editor.putString(PASSWORD, password);
         editor.putString(HEALTH_ID, String.valueOf(fac_id));
+        // commit changes
+        editor.commit();
+    }
+
+    public void createLog(int log_id, String log_name){
+        // Storing login value as TRUE
+         // Storing users Details  in pref
+        editor.putString(LOG_ID, String.valueOf(log_id));
+        editor.putString(LOG_NAMES, log_name);
 
         // commit changes
         editor.commit();
     }
+
     /**
      * Check login method wil check user login status
      * If false it will redirect user to login page
@@ -114,6 +126,15 @@ public class SessionManager {
         user.put(USERNAME, pref.getString(USERNAME, null));
         user.put(HEALTH_FACILITY, pref.getString(HEALTH_FACILITY, null));
 
+        // return user
+        return user;
+    }
+
+    public HashMap<String, String> getLog(){
+        HashMap<String, String> user = new HashMap<String, String>();
+        // user name
+        user.put(LOG_ID, pref.getString(LOG_ID, null));
+        user.put(LOG_NAMES, pref.getString(LOG_NAMES, null));
         // return user
         return user;
     }

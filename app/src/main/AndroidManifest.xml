@@ -179,7 +179,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.john.hbb.activities.simulation_mode.alone.ImageChangingActivity"
+            android:name="com.example.john.hbb.activities.simulation_mode.alone.Images_Simulations"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">

@@ -1,5 +1,9 @@
 package com.example.john.hbb.core;
 
+import android.content.Context;
+
+import static com.example.john.hbb.core.Constants.config.IMEI;
+
 /**
  * Created by john on 7/8/17.
  */
@@ -9,10 +13,10 @@ public class Constants {
 
         public static final String URL_LOCALHOST = "http://127.0.0.1/hbb/";
         public static final String URL_PHONE = "http://192.168.43.18/hbb/";
-        public static final String URL_CAMTECH = "http://192.168.1.114/hbb/";
+        public static final String URL_CAMTECH = "http://192.168.1.111/hbb/";
         public static final String URL_STUDENT = "http://10.11.1.129/hbb/";
         public static final String URL_SERVER = "http://173.255.219.164/hbb_dashboard/";
-        public static final String HOST_URL = URL_SERVER+"mobile_connections/";
+        public static final String HOST_URL = URL_CAMTECH+"mobile_connections/";
         public static final String DATABASE_NAME = "hbb_db";
         public static final int DATABASE_VERSION = 1;
 
@@ -198,5 +202,27 @@ public class Constants {
         public static final String POST_COLUMN = "column";
         //// TODO: 10/23/17
         public static final String SECRET_KEY = "super-secret-key-0123123451";
+    }
+
+    public static  String SQL_GET_CASES = "";
+    public static  String SQL_GET_INSTALLATION = "";
+    public static  String SQL_GET_ACTIVATION = "";
+    public static  String SQL_GET_MANAGEMENT = "";
+    public static  String SQL_GET_PAYMENT = "";
+    public static  String SQL_GET_PAYPAL = "";
+    public static  String SQL_GET_SUBSCRIPTION = "";
+    public static  String SQL_GET_SUBSCRIPTION_FEE = "";
+    public static  String SQL_GET_INSTALL = "";
+    public Constants(Context context){
+        //TODO??>>>>>> SQL QUERY.......
+        SQL_GET_CASES = "SELECT * FROM cases  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_INSTALLATION = "SELECT * FROM installations  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_ACTIVATION = "SELECT * FROM activations  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_MANAGEMENT = "SELECT * FROM management  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_PAYMENT = "SELECT * FROM payments  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_PAYPAL = "SELECT * FROM installations  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_SUBSCRIPTION = "SELECT * FROM subscription_details  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
+        SQL_GET_SUBSCRIPTION_FEE = " SELECT * FROM subscriptions ORDER BY Subscription_Id DESC LIMIT 1";
+        //SQL_GET_INSTALLATION = "SELECT * FROM subscription_details  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
     }
 }

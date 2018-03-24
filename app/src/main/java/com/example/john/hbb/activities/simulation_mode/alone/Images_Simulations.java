@@ -30,11 +30,16 @@ import android.widget.Toast;
 import com.example.john.hbb.R;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.example.john.hbb.core.DateTime;
+import com.example.john.hbb.core.LogSession;
 import com.example.john.hbb.core.Phone;
 import com.example.john.hbb.core.SessionManager;
+import com.example.john.hbb.db_operations.GMV;
+import com.example.john.hbb.db_operations.GMWV;
 import com.example.john.hbb.db_operations.Preparation;
 import com.example.john.hbb.db_operations.Routine_Care;
 import com.example.john.hbb.utils.CompressBitmap;
@@ -43,7 +48,7 @@ import com.example.john.hbb.utils.CompressBitmap;
  * Created by john on 7/12/17.
  */
 
-public class ImageChangingActivity extends AppCompatActivity {
+public class Images_Simulations extends AppCompatActivity {
 
     private Integer images[] = {R.drawable.pics1, R.drawable.pics2, R.drawable.pics3};
     private int currImage = 0;
@@ -419,7 +424,7 @@ public class ImageChangingActivity extends AppCompatActivity {
                             prepare_a_uterotonic = 2;
                         }
                         new Preparation(context).send(DateTime.getCurrentDate(),DateTime.getCurrentTime(),Phone.getIMEI(context),identifies,prepares_area+"",prepares_an+"",washe_hands+"",assembles+"",test+"",prepare_a_uterotonic+""
-                        );
+                        ,new LogSession(context).getID());
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -562,7 +567,7 @@ public class ImageChangingActivity extends AppCompatActivity {
                         }else {
                             continue_ = 2;
                         }
-                        new Routine_Care(context).send(dries_val+"",recognises+"",checks+"",type_id,clamps+"",position+"",continue_+"",DateTime.getCurrentTime(),DateTime.getCurrentDate(), Phone.getIMEI(context));
+                        new Routine_Care(context).send(dries_val+"",recognises+"",checks+"",type_id,clamps+"",position+"",continue_+"",DateTime.getCurrentTime(),DateTime.getCurrentDate(), Phone.getIMEI(context),new LogSession(context).getID());
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -660,6 +665,16 @@ public class ImageChangingActivity extends AppCompatActivity {
                     monitors_with_mother_val = ((RadioButton)alertLayout.findViewById(monitors_with_motherId)).getText().toString();
                     continues_with_essential_newborn_val = ((RadioButton)alertLayout.findViewById(continues_with_essential_newbornId)).getText().toString();
 
+                    List<String> list = new ArrayList<>();
+                    list.add("D");
+                    list.add("ND");
+                    list.add("DR");
+
+                    new GMV(context).send(list.indexOf(dries_throughly_val)+"",list.indexOf(recognises_not_crying_val)+"",list.indexOf(keep_warm_clears_val)+"",list.indexOf(stimulates_breathing_val)+"",list.indexOf(not_breathing_val)+""
+                            ,list.indexOf(follows_routine_val)+"",list.indexOf(move_to_area_for_ventilation_stand_val)+"",list.indexOf(ventilate_val)+"",list.indexOf(recognises_breathing_well_val)+""
+                    ,list.indexOf(monitors_with_mother_val)+"",list.indexOf(continues_with_essential_newborn_val)+""
+                    ,list.indexOf(continues_with_essential_newborn_val)+"",DateTime.getCurrentTime(),DateTime.getCurrentDate(),Phone.getIMEI(context),type_id,new LogSession(context).getID());
+
                     dialog.dismiss();
                     finish();
                 }
@@ -751,6 +766,15 @@ public class ImageChangingActivity extends AppCompatActivity {
                     continues_with_essential_val = ((RadioButton)alertLayout.findViewById(continues_with_essentialId)).getText().toString();
                     disinfect_equipment_val = ((RadioButton)alertLayout.findViewById(disinfect_equipmentId)).getText().toString();
 
+                    List<String> list = new ArrayList<>();
+                    list.add("D");
+                    list.add("ND");
+                    list.add("DR");
+
+                    new GMWV(context).send(list.indexOf(recognises_not_breathing_and_chest_val)+"",list.indexOf(calls_for_help_val)+"",list.indexOf(continues_and_improves_val)+"",list.indexOf(recognises_not_breathing_val)+""
+                    ,list.indexOf(recognises_normal_or_slow_heart_val)+"",list.indexOf(recognises_breathing_or_not_breathing_val)+"",list.indexOf(if_breathing_and_normal_heart_rate_val)+"",list.indexOf(if_not_breathing_or_slow_heart_rate_val)+""
+                    ,list.indexOf(communicates_with_mothers_val)+"",list.indexOf(continues_with_essential_val)+"",list.indexOf(disinfect_equipment_val)+""
+                    ,DateTime.getCurrentTime(),DateTime.getCurrentDate(),Phone.getIMEI(context),type_id,new LogSession(context).getID());
                     dialog.dismiss();
                     finish();
                 }
