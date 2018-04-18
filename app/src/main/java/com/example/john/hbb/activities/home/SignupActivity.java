@@ -106,8 +106,8 @@ public class SignupActivity extends AppCompatActivity {
         _loginLink = (TextView) findViewById(R.id.link_login);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
 //        auth = FirebaseAuth.getInstance();
 
@@ -115,6 +115,12 @@ public class SignupActivity extends AppCompatActivity {
         input_female = (AppCompatRadioButton) findViewById(R.id.input_female);
         input_male = (AppCompatRadioButton) findViewById(R.id.input_male);
         Button add_btn = (Button) findViewById(R.id.add_btn);
+
+        try{
+            phoneInputView.setNumber("+256750000000");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -307,7 +313,7 @@ public class SignupActivity extends AppCompatActivity {
                             status = 1;
                             id = Integer.parseInt(splits[1]);
                         }
-                        String message = new User(context).save(fname,lname,username,phone,gender,health,id,password,status);
+                        String message = new User(context).save(id,fname,lname,username,phone,gender,health,id,password,status);
                         if (message.equals("User Details saved!")){
                             showDiag(username,phone);
                         }

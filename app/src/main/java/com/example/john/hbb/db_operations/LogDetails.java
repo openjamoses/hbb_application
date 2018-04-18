@@ -17,8 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.john.hbb.core.BaseApplication;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.DBHelper;
+import com.example.john.hbb.core.DateTime;
 import com.example.john.hbb.core.SessionManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,6 +44,7 @@ import static com.example.john.hbb.core.Constants.config.HEALTH_NAME;
 import static com.example.john.hbb.core.Constants.config.HEALTH_STATUS;
 import static com.example.john.hbb.core.Constants.config.HOST_URL;
 import static com.example.john.hbb.core.Constants.config.LOGID;
+import static com.example.john.hbb.core.Constants.config.LOGOUT_TIME;
 import static com.example.john.hbb.core.Constants.config.LOG_DATE;
 import static com.example.john.hbb.core.Constants.config.LOG_ID;
 import static com.example.john.hbb.core.Constants.config.LOG_IMEI;
@@ -49,6 +52,8 @@ import static com.example.john.hbb.core.Constants.config.LOG_NAMES;
 import static com.example.john.hbb.core.Constants.config.LOG_STATUS;
 import static com.example.john.hbb.core.Constants.config.LOG_TIME;
 import static com.example.john.hbb.core.Constants.config.LOG_TYPE;
+import static com.example.john.hbb.core.Constants.config.OPERATION_LOGOUT;
+import static com.example.john.hbb.core.Constants.config.SQL_QUERY;
 import static com.example.john.hbb.core.Constants.config.URL_SAVE_HEALTH;
 import static com.example.john.hbb.core.Constants.config.URL_SAVE_LOG;
 import static com.example.john.hbb.core.Constants.config.USER_ID;
@@ -64,7 +69,7 @@ public class LogDetails {
         this.context = context;
     }
 
-    public String save(int user_id,int id,String date, String time, String imei, int type, String names, String group_id, int status){
+    public String save(int user_id,int id,String date, String time, String imei, int type, String names, String logout, String group_id, int status){
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
@@ -77,6 +82,7 @@ public class LogDetails {
             contentValues.put(LOG_IMEI,imei);
             contentValues.put(LOG_TYPE,type);
             contentValues.put(LOG_NAMES,names);
+            contentValues.put(LOGOUT_TIME,logout);
             contentValues.put(GROUP_ID,group_id);
             contentValues.put(Constants.config.LOG_STATUS,status);
 
@@ -93,7 +99,28 @@ public class LogDetails {
         return message;
     }
 
-    public void send(final int user_id, final String date, final String time, final String imei, final int type, final String names, final String group_id){
+    public String edit(int log_id,String time, int status){
+        SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
+        String message = null;
+        try{
+            // database.beginTransaction();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(LOGOUT_TIME,time);
+            contentValues.put(LOG_STATUS,status);
+            database.update(Constants.config.TABLE_LOG,  contentValues, LOG_ID+" = "+log_id,null);
+            //database.setTransactionSuccessful();
+            message = "Log Details saved!";
+        }catch (Exception e){
+            e.printStackTrace();
+            message = "Sorry, error: "+e;
+        }finally {
+            database.close();
+        }
+
+        return message;
+    }
+
+    public void send(final int user_id, final String date, final String time, final String imei, final int type, final String names, final String logout, final String group_id){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_LOG,
                 new Response.Listener<String>() {
 
@@ -110,12 +137,12 @@ public class LogDetails {
                                 id = Integer.parseInt(splits[1]);
                             }
 
-                            String message = save(user_id,id,date,time,imei,type,names,group_id,status);
+                            String message = save(user_id,id,date,time,imei,type,names,logout,group_id,status);
                             //Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
 
                             if (message.equals("Log Details saved!")){
                                 //alertDialog.dismiss();
-                                new SessionManager(context).createLog(id,names);
+                                new SessionManager(context).createLog(id,names,type);
                             }
 
 
@@ -147,6 +174,7 @@ public class LogDetails {
                 params.put(LOG_IMEI, imei);
                 params.put(LOG_TYPE, String.valueOf(type));
                 params.put(LOG_NAMES, names);
+                params.put(LOGOUT_TIME, logout);
                 params.put(GROUP_ID, group_id);
 
                 //returning parameters
@@ -204,6 +232,7 @@ public class LogDetails {
                 params.put(LOG_IMEI,cursor.getString(cursor.getColumnIndex(LOG_IMEI)));
                 params.put(LOG_TYPE,cursor.getString(cursor.getColumnIndex(LOG_TYPE)));
                 params.put(LOG_NAMES,cursor.getString(cursor.getColumnIndex(LOG_NAMES)));
+                params.put(LOGOUT_TIME,cursor.getString(cursor.getColumnIndex(LOGOUT_TIME)));
                 params.put(GROUP_ID,cursor.getString(cursor.getColumnIndex(GROUP_ID)));
                 wordList.add(params);
             } while (cursor.moveToNext());
@@ -224,13 +253,15 @@ public class LogDetails {
                 HashMap<String, String> params = new HashMap<String, String>();
                 params.put("id", String.valueOf(cursor.getInt(cursor.getColumnIndex(LOGID))));
 
-                params.put(HEALTH_NAME,cursor.getString(cursor.getColumnIndex(HEALTH_NAME)));
-                params.put(DISTRICT_NAME,cursor.getString(cursor.getColumnIndex(DISTRICT_NAME)));
-                params.put(HEALTH_ID, String.valueOf(cursor.getInt(cursor.getColumnIndex(HEALTH_ID))));
-                params.put(FACILITY_OWNER,cursor.getString(cursor.getColumnIndex(FACILITY_OWNER)));
-                params.put(FACILITY_TYPE,cursor.getString(cursor.getColumnIndex(FACILITY_TYPE)));
-                params.put(HEALTH_CADRE,cursor.getString(cursor.getColumnIndex(HEALTH_CADRE)));
-
+                params.put(USER_ID,cursor.getString(cursor.getColumnIndex(USER_ID)));
+                params.put(LOG_ID,cursor.getString(cursor.getColumnIndex(LOG_ID)));
+                params.put(LOG_DATE,cursor.getString(cursor.getColumnIndex(LOG_DATE)));
+                params.put(LOG_TIME,cursor.getString(cursor.getColumnIndex(LOG_TIME)));
+                params.put(LOG_IMEI,cursor.getString(cursor.getColumnIndex(LOG_IMEI)));
+                params.put(LOG_TYPE,cursor.getString(cursor.getColumnIndex(LOG_TYPE)));
+                params.put(LOG_NAMES,cursor.getString(cursor.getColumnIndex(LOG_NAMES)));
+                params.put(LOGOUT_TIME,cursor.getString(cursor.getColumnIndex(LOGOUT_TIME)));
+                params.put(GROUP_ID,cursor.getString(cursor.getColumnIndex(GROUP_ID)));
                 wordList.add(params);
             } while (cursor.moveToNext());
         }
@@ -319,19 +350,17 @@ public class LogDetails {
         protected String doInBackground(JSONArray... jsonArrays) {
             String message = null;
             int status = 1;
-            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
+            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDatabase();
             try{
                 db.beginTransaction();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];
-                //db.execSQL("DELETE FROM " + Constants.config.TABLE_HEALTH+" WHERE "+HEALTH_STATUS+" = '"+status+"' ");
-
+                db.execSQL("DELETE FROM " + Constants.config.TABLE_LOG+" WHERE "+LOG_STATUS+" = '"+status+"' ");
                 int total = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ContentValues contentValues = new ContentValues();
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-
                     contentValues.put(USER_ID,jsonObject.getLong(Constants.config.USER_ID));
                     contentValues.put(LOG_ID,jsonObject.getLong(Constants.config.LOG_ID));
                     contentValues.put(LOG_DATE,jsonObject.getString(Constants.config.LOG_DATE));
@@ -339,31 +368,14 @@ public class LogDetails {
                     contentValues.put(LOG_IMEI,jsonObject.getString(Constants.config.LOG_IMEI));
                     contentValues.put(LOG_TYPE,jsonObject.getLong(Constants.config.LOG_TYPE));
                     contentValues.put(LOG_NAMES,jsonObject.getString(Constants.config.LOG_NAMES));
+                    contentValues.put(LOGOUT_TIME,jsonObject.getString(Constants.config.LOGOUT_TIME));
                     contentValues.put(GROUP_ID,jsonObject.getString(Constants.config.GROUP_ID));
                     contentValues.put(Constants.config.LOG_STATUS,status);
-                    db = DBHelper.getHelper(context).getReadableDB();
-                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_LOG+ " WHERE "+LOG_IMEI+" = '"+jsonObject.getString(Constants.config.LOG_IMEI)+"'" +
-                            " AND "+LOG_DATE+" = '"+jsonObject.getString(Constants.config.LOG_DATE)+"' AND  " + LOG_TIME + " = '" + jsonObject.getString(Constants.config.LOG_TIME) + "' ";
-                    db = new DBHelper(context).getReadableDatabase();
-                    Cursor cursor = db.rawQuery(selectQuery, null);
-                    if (cursor.moveToFirst()){
-                        do {
-                            int stat = cursor.getInt(cursor.getColumnIndex(Constants.config.LOG_STATUS));
-                            int id = cursor.getInt(cursor.getColumnIndex(Constants.config.LOGID));
-                            if (stat == 0){
-                                db = DBHelper.getHelper(context).getWritableDB();
-                                db.update(Constants.config.TABLE_LOG,contentValues,LOGID+"="+id, null);
-                            }
-                        }while (cursor.moveToNext());
-                    }else {
-                        db = DBHelper.getHelper(context).getWritableDB();
-                        db.insert(Constants.config.TABLE_LOG, null, contentValues);
-
-                    }
+                    db.insert(Constants.config.TABLE_LOG, null, contentValues);
                     total ++;
                 }
                 db.setTransactionSuccessful();
-                message = total+" records , Log Table Updated successfully!";
+                message = total+" records , "+Constants.config.TABLE_LOG+" Updated successfully!";
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -381,4 +393,53 @@ public class LogDetails {
 
         }
     }
+
+
+    public void logout(final Context context, final String sql_query, String url, final int id, final String time, final String operation){
+        BaseApplication.deleteCache(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(TAG,response);
+                        try{
+                            int status = 0;
+                            if (response.equals("Succcess")){
+                                status = 1;
+                            }
+                            if (operation.equals(OPERATION_LOGOUT)){
+                                edit(id,time,status);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Log.e(TAG, volleyError.getMessage());
+                        try {
+                            ////Toast toast = Toast.makeText(context, "Connections ERROR!", Toast.LENGTH_LONG);
+                            //View view = toast.getView();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new Hashtable<String, String>();
+                params.put(SQL_QUERY, sql_query);
+                //Adding parameters
+                return params;
+            }
+        };
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.john.hbb.activities.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.john.hbb.R;
+import com.example.john.hbb.activities.scoreboard.ScoreTableActivity;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.DateTime;
 import com.example.john.hbb.core.Phone;
@@ -42,10 +44,6 @@ import com.example.john.hbb.db_operations.User;
 import com.example.john.hbb.services.ProcessingService;
 import com.example.john.hbb.activities.simulation_mode.Start_Simulation;
 import com.example.john.hbb.activities.training_mode.TrainingHomeActivity;
-import com.google.firebase.auth.FirebaseAuth;
-
-import static com.example.john.hbb.core.Constants.config.OPERATION_DISTRICT;
-import static com.example.john.hbb.core.Constants.config.URL_GET_DISTRICT;
 
 /**
  * Created by john on 7/5/17.
@@ -53,8 +51,7 @@ import static com.example.john.hbb.core.Constants.config.URL_GET_DISTRICT;
  */
 
 public class Menu_Dashboard extends AppCompatActivity {
-    private AppCompatButton btn_training,btn_simulation;
-    private FirebaseAuth auth;
+    private AppCompatButton btn_training,btn_simulation,btn_scoreboard;
     private Context context = this;
     Toolbar toolbar;
     String email;
@@ -68,25 +65,28 @@ public class Menu_Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu_activity);
-
         toolbar = (Toolbar)findViewById(R.id.toolBar);
-
         setSupportActionBar(toolbar);
 
         try{
-            if (getIntent().getStringExtra("menu") != null){
-                menu = getIntent().getStringExtra("menu");
-                if (menu.equals("start_menu")){
-                    openSelectDialog();
+            if (getIntent().getStringExtra("show_roles") == null) {
+                if (getIntent().getStringExtra("menu") != null) {
+                    menu = getIntent().getStringExtra("menu");
+                    if (menu.equals("start_menu")) {
+                        openSelectDialog();
+                    }
+                } else {
+                    openDialog();
                 }
             }else {
-                openDialog();
+                showDialog();
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         btn_training = (AppCompatButton) findViewById(R.id.btn_training);
         btn_simulation = (AppCompatButton) findViewById(R.id.btn_simulation);
+        btn_scoreboard = (AppCompatButton) findViewById(R.id.btn_scoreboard);
 
 
         btn_training.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +100,13 @@ public class Menu_Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Start_Simulation.class);
+                startActivity(intent);
+            }
+        });
+        btn_scoreboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ScoreTableActivity.class);
                 startActivity(intent);
             }
         });
@@ -117,32 +124,23 @@ public class Menu_Dashboard extends AppCompatActivity {
         final AlertDialog dialog;
         try{
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setIcon(getResources().getDrawable(android.R.drawable.stat_sys_warning));
-            alert.setTitle("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
-
-            LayoutInflater inflater = getLayoutInflater();
-            final View view = inflater.inflate(R.layout.accept_dialog, null);
+            final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            View view = inflater.inflate(R.layout.accept_dialog, null);
             // this is set the view from XML inside AlertDialog
+            TextView title_text = (TextView) view.findViewById(R.id.title_text);
+            title_text.setText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
             alert.setView(view);
-
             final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
             final RadioButton alone_radio = (RadioButton) view.findViewById(R.id.alone_radio);
             final RadioButton team_radio = (RadioButton) view.findViewById(R.id.team_radio);
+            Button continue_btn = (Button) view.findViewById(R.id.continue_btn);
             //header_text = (TextView) view. findViewById(R.id.header_text);
            // header_text.setText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
             // disallow cancel of AlertDialog on click of back button and outside touch
             alert.setCancelable(false);
-            //alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
-            alert.setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
             dialog = alert.create();
-            dialog.show();
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            continue_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int val = 0;
@@ -160,7 +158,7 @@ public class Menu_Dashboard extends AppCompatActivity {
                         }else if (val == 0){
                             String imei = Phone.getIMEI(context);
                             String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
-                            new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"");
+                            new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"",new UsersSession(context).getUserID()+"");
                         }
                     }else {
                         Toast.makeText(context,">>>Please make a selected..!<<<",Toast.LENGTH_SHORT).show();
@@ -168,6 +166,8 @@ public class Menu_Dashboard extends AppCompatActivity {
                 }
             });
 
+
+            dialog.show();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -177,9 +177,8 @@ public class Menu_Dashboard extends AppCompatActivity {
         try{
 
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setIcon(getResources().getDrawable(android.R.drawable.stat_sys_warning));
-            alert.setTitle("YOU ARE IN A TEAM..!");
-
+           // alert.setIcon(getResources().getDrawable(android.R.drawable.stat_sys_warning));
+            //alert.setTitle("YOU ARE IN A TEAM..!");
             LayoutInflater inflater = getLayoutInflater();
             final View view = inflater.inflate(R.layout.select_dialog, null);
             // this is set the view from XML inside AlertDialog
@@ -187,6 +186,9 @@ public class Menu_Dashboard extends AppCompatActivity {
             LinearLayout layout_check = (LinearLayout) view.findViewById(R.id.layout_check);
             TextView no_text = (TextView) view.findViewById(R.id.no_text);
             TextView register_text = (TextView) view.findViewById(R.id.register_text);
+
+            Button btn_back = (Button)view.findViewById(R.id.btn_back);
+            Button next_btn = (Button)view.findViewById(R.id.next_btn);
             createCheckbox(layout_check,checklist,checkid,no_text);
 
             // this is set the view from XML inside AlertDialog
@@ -194,29 +196,15 @@ public class Menu_Dashboard extends AppCompatActivity {
              // disallow cancel of AlertDialog on click of back button and outside touch
             alert.setCancelable(false);
             //alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
-
-            alert.setPositiveButton("DONE >>", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            alert.setNeutralButton("", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            alert.setNegativeButton("<< BACK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
             dialog = alert.create();
-            dialog.show();
-
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            btn_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    openDialog();
+                }
+            });
+            next_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (checklist.size()>0){
@@ -229,21 +217,13 @@ public class Menu_Dashboard extends AppCompatActivity {
                             ids = ids.concat(checkid.get(i)+"/");
                         }
                         String imei = Phone.getIMEI(context);
-                        new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,1,names,ids);
+                        new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,1,names,"",ids);
                         dialog.dismiss();
                     }else {
                         Toast.makeText(context,"Select Or Register atleast 1 member..!",Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    openDialog();
-                }
-            });
-
             register_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -252,6 +232,8 @@ public class Menu_Dashboard extends AppCompatActivity {
                     finish();
                 }
             });
+            dialog.show();
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -367,4 +349,42 @@ public class Menu_Dashboard extends AppCompatActivity {
         }
 
     }
+    private void showDialog(){
+        final AlertDialog dialog;
+        try{
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            final View alertLayout = inflater.inflate(R.layout.switch_dialog, null);
+            Button yes_btn = (Button) alertLayout.findViewById(R.id.yes_btn);
+            Button no_btn = (Button) alertLayout.findViewById(R.id.no_btn);
+            // this is set the view from XML inside AlertDialog
+            alert.setView(alertLayout);
+            // this is set the view from XML inside AlertDialog
+            //alert.setMessage("  Switch role?");
+            // disallow cancel of AlertDialog on click of back button and outside touch
+            alert.setCancelable(false);
+            //alert.setIcon(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+            dialog = alert.create();
+            no_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            yes_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    finish();
+                    new SessionManager(context).logoutUser();
+                    startActivity(new Intent(context,LoginActivity.class));
+                }
+            });
+            dialog.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

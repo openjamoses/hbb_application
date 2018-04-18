@@ -7,8 +7,18 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.john.hbb.core.DateTime;
 import com.example.john.hbb.core.Phone;
 import com.example.john.hbb.db_operations.DBController;
+import com.example.john.hbb.db_operations.Facility;
+import com.example.john.hbb.db_operations.GMV;
+import com.example.john.hbb.db_operations.GMWV;
+import com.example.john.hbb.db_operations.LogDetails;
+import com.example.john.hbb.db_operations.Preparation;
+import com.example.john.hbb.db_operations.Routine_Care;
+import com.example.john.hbb.db_operations.SyncStatus;
+import com.example.john.hbb.db_operations.TrainingDetails;
+import com.example.john.hbb.db_operations.User;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +43,6 @@ public class ProcessingService extends Service {
     private static final String TAG = "ProcessingService";
 
     private Context context = this;
-    private static final Uri STATUS_URI = Uri.parse("content://sms");
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -48,9 +57,9 @@ public class ProcessingService extends Service {
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    sendRequest();
+                    checkSatatus();
                 }
-            }, 0, 10000);//1 minutes
+            }, 0, 100000);//1 minutes
 
     }
     @Override
@@ -60,7 +69,7 @@ public class ProcessingService extends Service {
     }
 
     public void  sendRequest(){
-        Log.e(TAG, "1 minutes has elapsed!");
+        //Log.e(TAG, "1 minutes has elapsed!");
         try {
             String imei = Phone.getIMEI(context);
 
@@ -79,5 +88,25 @@ public class ProcessingService extends Service {
             e.printStackTrace();
         }
 
+    }
+    private void checkSatatus(){
+        try {
+            int training = new TrainingDetails(context).dbSyncCount();
+            int preparation = new Preparation(context).dbSyncCount();
+            int routine = new Routine_Care(context).dbSyncCount();
+            int gmw = new GMV(context).dbSyncCount();
+            int gmwh = new GMWV(context).dbSyncCount();
+            int log = new LogDetails(context).dbSyncCount();
+            int user_ = new User(context).dbSyncCount();
+            int facility = new Facility(context).dbSyncCount();
+            int total = training + preparation + routine + gmw + gmwh + log + user_ + facility;
+            int status = 0;
+            if (total == 0) {
+                status = 1;
+            }
+            SyncStatus.send(context, Phone.getIMEI(context), DateTime.getCurrentDate(), DateTime.getCurrentTime(), status);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

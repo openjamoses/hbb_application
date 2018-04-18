@@ -23,6 +23,7 @@ import static com.example.john.hbb.core.Constants.config.GENDER;
 import static com.example.john.hbb.core.Constants.config.HEALTH_FACILITY;
 import static com.example.john.hbb.core.Constants.config.HEALTH_ID;
 import static com.example.john.hbb.core.Constants.config.HEALTH_NAME;
+import static com.example.john.hbb.core.Constants.config.HEALTH_STATUS;
 import static com.example.john.hbb.core.Constants.config.IMEI;
 import static com.example.john.hbb.core.Constants.config.LAST_NAME;
 import static com.example.john.hbb.core.Constants.config.PASSWORD;
@@ -42,13 +43,14 @@ public class User {
         this.context = context;
     }
 
-    public String save(String fname, String lname, String username, String phone, String gender, String facility,int facililty_id, String password, int status){
+    public String save(int user_id,String fname, String lname, String username, String phone, String gender, String facility,int facililty_id, String password, int status){
         SQLiteDatabase database = DBHelper.getHelper(context).getWritableDatabase();
         String message = null;
         try{
             // database.beginTransaction();
             ContentValues contentValues = new ContentValues();
 
+            contentValues.put(Constants.config.USER_ID,user_id);
             contentValues.put(Constants.config.FIRST_NAME,fname);
             contentValues.put(Constants.config.LAST_NAME,lname);
             contentValues.put(Constants.config.USERNAME,username);
@@ -219,12 +221,7 @@ public class User {
         }
         return  last_id;
     }
-
-
-
-
     ///// TODO: 10/23/17
-
     public void insert(JSONArray response){
         new InsertBackground(context).execute(response);
     }
@@ -247,17 +244,17 @@ public class User {
         protected String doInBackground(JSONArray... params) {
             String message = null;
             int status = 1;
-            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
+            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDatabase();
             try{
-
-                db.beginTransaction();
-
+                db.execSQL("DELETE FROM " + Constants.config.TABLE_USERS+" WHERE "+USER_STATUS+" = '"+status+"'");
+                db.beginTransactionNonExclusive();
                 JSONArray jsonArray = params[0];
                 int total = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ContentValues contentValues = new ContentValues();
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                    contentValues.put(Constants.config.USER_ID,jsonObject.getLong(Constants.config.USER_ID));
                     contentValues.put(Constants.config.FIRST_NAME,jsonObject.getString(Constants.config.FIRST_NAME));
                     contentValues.put(Constants.config.LAST_NAME,jsonObject.getString(Constants.config.LAST_NAME));
                     contentValues.put(Constants.config.USERNAME,jsonObject.getString(Constants.config.USERNAME));
@@ -268,30 +265,11 @@ public class User {
                     contentValues.put(Constants.config.PASSWORD,jsonObject.getString(Constants.config.PASSWORD));
                     contentValues.put(HEALTH_ID,jsonObject.getLong(HEALTH_ID));
                     contentValues.put(Constants.config.USER_STATUS,1);
-
-                    db = DBHelper.getHelper(context).getReadableDB();
-                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE "+PASSWORD+" = '"+jsonObject.getString(Constants.config.PASSWORD)+"'" +
-                            " AND  " + USERNAME + " = '" + jsonObject.getString(Constants.config.USERNAME) + "' AND "+IMEI+" = '"+jsonObject.getString(Constants.config.IMEI)+"' ";
-                    db = new DBHelper(context).getReadableDatabase();
-                    Cursor cursor = db.rawQuery(selectQuery, null);
-                    if (cursor.moveToFirst()){
-                        do {
-                            int stat = cursor.getInt(cursor.getColumnIndex(Constants.config.USER_STATUS));
-                            int id = cursor.getInt(cursor.getColumnIndex(USERID));
-                            if (stat == 0){
-                                db = DBHelper.getHelper(context).getWritableDB();
-                                db.update(Constants.config.TABLE_USERS,contentValues,USERID+"="+id, null);
-                            }
-                        }while (cursor.moveToNext());
-                    }else {
-                        db = DBHelper.getHelper(context).getWritableDB();
-                        db.insert(Constants.config.TABLE_USERS, null, contentValues);
-
-                    }
+                    db.insert(Constants.config.TABLE_USERS, null, contentValues);
                     total ++;
                 }
                 db.setTransactionSuccessful();
-                message = total+" records ,User Table Updated successfully!";
+                message = total+" records ,"+Constants.config.TABLE_USERS+" Updated successfully!";
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -335,7 +313,7 @@ public class User {
     }
 
 
-    public Cursor userLogin(String username, String phone, String password) {
+    public Cursor userLogin(String username, String password) {
         Log.e("####","-------------------------------------------------------------------");
         Cursor res = null;
         Log.e("Login","username: "+username+", Password: "+password);
@@ -344,6 +322,16 @@ public class User {
             String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE " +
                     " " + USERNAME + " = '" + username + "' ORDER BY "+USERID+" DESC LIMIT 1 ";
             res  = db.rawQuery(selectQuery, null);
+            if (res.moveToFirst()){
+
+            }else {
+                if (username.length() > 2){
+                    username = username.substring(1,username.length()-1);
+                }
+                selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE " +
+                        " " + CONTACT + " LIKE '%" + username + "%' ORDER BY "+USERID+" DESC LIMIT 1 ";
+                res  = db.rawQuery(selectQuery, null);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -364,6 +352,19 @@ public class User {
             e.printStackTrace();
         }
        // Log.e("####","-------------------------------------------------------------------");
+        return res;
+    }
+    public Cursor selectAll() {
+        //Log.e("####","-------------------------------------------------------------------");
+        Cursor res = null;
+        SQLiteDatabase db = DBHelper.getHelper(context).getReadableDatabase();
+        try {
+            String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " ORDER BY "+FIRST_NAME+", "+LAST_NAME+" ";
+            res  = db.rawQuery(selectQuery, null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        // Log.e("####","-------------------------------------------------------------------");
         return res;
     }
 

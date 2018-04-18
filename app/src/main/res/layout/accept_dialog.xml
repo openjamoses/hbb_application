@@ -2,19 +2,30 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/square">
+    android:background="@drawable/b_image"
+    android:padding="@dimen/activity_horizontal_margin"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/horizonal_padding"
         android:gravity="center"
-        android:background="@drawable/b_image"
+        android:background="@drawable/square"
         android:orientation="vertical">
+        <include layout="@layout/header"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/title_text"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:text="@string/are_you"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="20sp"
             android:text="@string/are_you"/>
 
         <RadioGroup
@@ -44,6 +55,14 @@
         </RadioGroup>
 
 
+        <include layout="@layout/item_divider"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:id="@+id/continue_btn"
+            android:background="@drawable/button"
+            android:text="Continue"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

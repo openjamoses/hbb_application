@@ -80,68 +80,10 @@ public class Server_Service extends Service {
 
 
     public void uploadUsersData(){
-        try{
-            DBHelper dbHelper = new DBHelper(context);
-            Cursor cursor = dbHelper.fetchUsers();
-            if(cursor != null) {
-                if(cursor.moveToFirst()){
-                    int count = 0;
-                    do{
-                        count ++;
-                        upload_users_Datas(count,
-                                           cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.FIRST_NAME)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.LAST_NAME)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.USERNAME)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.CONTACT)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.HEALTH_FACILITY)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.GENDER)),
-                                           cursor.getString(cursor.getColumnIndex(Constants.config.PASSWORD))
-                        );
 
-                    }while (cursor.moveToNext());
-                }
-            }else {
-                Log.e("Users_Table","No users data found");
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            Log.e("Error:", e+"");
-        }
     }
     public void uploadTrainingData(){
-       try{
-           DBHelper dbHelper = new DBHelper(context);
 
-           Cursor cursor = dbHelper.fetchTrainingMode();
-           if(cursor != null) {
-               if(cursor.moveToFirst()){
-                   int count = 0;
-                   do{
-                       count ++;
-                       upload_TrainingMode_Datas( count,
-                                                cursor.getInt(cursor.getColumnIndex(Constants.config.TRAINING_ID)),
-                                                cursor.getInt(cursor.getColumnIndex(Constants.config.USER_ID)),
-                                                cursor.getString(cursor.getColumnIndex(Constants.config.TRAINING_NAME)),
-                                                cursor.getString(cursor.getColumnIndex(Constants.config.TRAINING_DATE)),
-                                                cursor.getString(cursor.getColumnIndex(Constants.config.TRAINING_TIME)),
-                                                String.valueOf(cursor.getInt(cursor.getColumnIndex(Constants.config.TRAINING_FREQUENCY))),
-                                                cursor.getString(cursor.getColumnIndex(Constants.config.TRAINING_KEY_SKILL)),
-                                                cursor.getString(cursor.getColumnIndex(Constants.config.TRAINING_KEY_SUBSKILL)),
-                                                cursor.getInt(cursor.getColumnIndex(Constants.config.TRAINING_SYNC_STATUS))
-                       );
-
-                   }while (cursor.moveToNext());
-               }
-           }else {
-               Log.e("Training_Table", "No training datas found!");
-           }
-
-       }catch (Exception e){
-           e.printStackTrace();
-           Log.e("Error:", e+"");
-       }
     }
 
     private void upload_users_Datas(final int count, final int user_id, final String first_name, final String last_name, final String email,

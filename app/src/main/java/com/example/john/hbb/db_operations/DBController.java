@@ -1,5 +1,6 @@
 package com.example.john.hbb.db_operations;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -17,6 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.john.hbb.R;
+import com.example.john.hbb.core.BaseApplication;
+import com.example.john.hbb.core.DateTime;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -36,11 +39,13 @@ import static com.example.john.hbb.core.Constants.config.IMEI;
 import static com.example.john.hbb.core.Constants.config.OPERATION_DISTRICT;
 import static com.example.john.hbb.core.Constants.config.OPERATION_HEALTH;
 import static com.example.john.hbb.core.Constants.config.OPERATION_LOG;
+import static com.example.john.hbb.core.Constants.config.OPERATION_LOGOUT;
 import static com.example.john.hbb.core.Constants.config.OPERATION_PREPARATION;
 import static com.example.john.hbb.core.Constants.config.OPERATION_TRAINING;
 import static com.example.john.hbb.core.Constants.config.OPERATION_USER;
 import static com.example.john.hbb.core.Constants.config.POST_COLUMN;
 import static com.example.john.hbb.core.Constants.config.POST_TABLE;
+import static com.example.john.hbb.core.Constants.config.SQL_QUERY;
 import static com.example.john.hbb.core.Constants.config.USERNAME;
 
 /**
@@ -93,10 +98,6 @@ public class DBController {
                             userList = new Facility(context).getAllUsers();
                             db_count = new Facility(context).dbSyncCount();
                             json_data = new Facility(context).composeJSONfromSQLite();
-                        }else if (operations.equals(OPERATION_TRAINING)) {
-                            userList = new Training_Mode(context).getAllUsers();
-                            db_count = new Training_Mode(context).dbSyncCount();
-                            json_data = new Training_Mode(context).composeJSONfromSQLite();
                         }else if (operations.equals(OPERATION_LOG)) {
                             userList = new LogDetails(context).getAllUsers();
                             db_count = new LogDetails(context).dbSyncCount();
@@ -130,8 +131,6 @@ public class DBController {
                                                         new User(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()),Integer.parseInt(obj.get("id2").toString()), Integer.parseInt(obj.get("status").toString()));
                                                     } else if (operations.equals(OPERATION_DISTRICT)) {
                                                         new District(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()), Integer.parseInt(obj.get("status").toString()));
-                                                    }else if (operations.equals(OPERATION_TRAINING)) {
-                                                        new Training_Mode(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()), Integer.parseInt(obj.get("status").toString()));
                                                     }else if (operations.equals(OPERATION_LOG)) {
                                                         new LogDetails(context).updateSyncStatus(Integer.parseInt(obj.get("id").toString()),Integer.parseInt(obj.get("id2").toString()), Integer.parseInt(obj.get("status").toString()));
                                                     }else if (operations.equals(OPERATION_PREPARATION)) {
@@ -183,56 +182,8 @@ public class DBController {
         }
     }
 
-    public static void fetchSigle(final Context context, final String table, final String column, final String imei, String url, final String operation){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e(TAG,response);
-                        try{
-                            JSONArray jsonArray = new JSONArray(response);
-                            if(operation.equals(OPERATION_USER)){
-                                new User(context).insert(jsonArray);
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        //Log.e(TAG, volleyError.getMessage());
-                        try {
-                            Toast toast = Toast.makeText(context, "Connections ERROR!", Toast.LENGTH_LONG);
-                            View view = toast.getView();
-                            view.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) view.findViewById(android.R.id.message);
-                            //toast.show();
-                            //Log.e(TAG, volleyError.getMessage());
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new Hashtable<String, String>();
-                params.put(POST_TABLE, table);
-                params.put(POST_COLUMN, column);
-                params.put(IMEI, imei);
-                //Adding parameters
-                return params;
-            }
-        };
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
-    }
-
-    public static void fetchAll(final Context context, final String table, final String column, final String imei, String url, final String operation){
+    public static void fetchJSON(final Context context, final String sql_query, String url, final String operation){
+        BaseApplication.deleteCache(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+url,
                 new Response.Listener<String>() {
                     @Override
@@ -262,8 +213,8 @@ public class DBController {
                         try {
                             Toast toast = Toast.makeText(context, "Connections ERROR!", Toast.LENGTH_LONG);
                             View view = toast.getView();
-                            view.setBackgroundResource(R.drawable.round_conor);
-                            TextView text = (TextView) view.findViewById(android.R.id.message);
+                            //view.setBackgroundResource(R.drawable.round_conor);
+                            //TextView text = (TextView) view.findViewById(android.R.id.message);
                             //toast.show();
                             //Log.e(TAG, volleyError.getMessage());
                         }catch (Exception e){
@@ -274,9 +225,7 @@ public class DBController {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new Hashtable<String, String>();
-                params.put(POST_TABLE, table);
-                params.put(POST_COLUMN, column);
-                params.put(IMEI, imei);
+                params.put(SQL_QUERY, sql_query);
                 //Adding parameters
                 return params;
             }
@@ -286,8 +235,5 @@ public class DBController {
         //Adding request to the queue
         requestQueue.add(stringRequest);
     }
-
-
-
 
 }

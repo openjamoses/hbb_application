@@ -8,11 +8,12 @@ public class CreateTable {
     public abstract class config{
         public  static  final String CREATE_TRAINING_MODE =
                 "CREATE TABLE "+ Constants.config.TABLE_TRAINING +" ("+ Constants.config.TRAININGID+" INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " "+ Constants.config.TRAINING_DATE+" TEXT,"+ Constants.config.TRAINING_TIME+" TEXT," +
-                        " "+ Constants.config.TRAINING_FREQUENCY+" TEXT,"+ Constants.config.TRAINING_KEY_SKILL+" TEXT," +
+                        " "+ Constants.config.TRAINING_DATE+" TEXT,"+ Constants.config.TRAINING_TIME+" TEXT, "+Constants.config.TRAINING_NAME+" TEXT, " +
+                        " "+ Constants.config.TRAINING_FREQUENCY+" TEXT,"+ Constants.config.TRAINING_KEY_SKILL+" INTEGER," +
                         " "+ Constants.config.TRAINING_SYNC_STATUS+" TEXT,"+ Constants.config.USER_ID+" INTEGER," +
-                        " "+ Constants.config.TRAINING_NAME+" TEXT, "+ Constants.config.TRAINING_KEY_SUBSKILL+" TEXT," +
-                        " "+Constants.config.TRAINING_ID+" INTEGER, "+Constants.config.TRAINING_IMEI+" TEXT);";
+                        " "+ Constants.config.TRAINING_KEY_SUBSKILL+" INTEGER,"+Constants.config.VIDEO_COMPLETED+" INTEGER, " +
+                        " "+Constants.config.TRAINING_ID+" INTEGER, "+Constants.config.TRAINING_IMEI+" TEXT, "+Constants.config.LOG_ID+" INTEGER," +
+                        " "+Constants.config.LOG_TYPE+" INTEGER);";
         //Table for region
         public  static  final String CREATE_USER =
                 "CREATE TABLE "+ Constants.config.TABLE_USERS +" ("+ Constants.config.USERID+" INTEGER PRIMARY KEY AUTOINCREMENT," +

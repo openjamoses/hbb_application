@@ -10,26 +10,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
 import com.example.john.hbb.activities.home.LoginActivity;
-
+import com.example.john.hbb.db_operations.LogDetails;
 import static com.example.john.hbb.core.Constants.config.CONTACT;
 import static com.example.john.hbb.core.Constants.config.FIRST_NAME;
 import static com.example.john.hbb.core.Constants.config.GENDER;
 import static com.example.john.hbb.core.Constants.config.HEALTH_FACILITY;
 import static com.example.john.hbb.core.Constants.config.HEALTH_ID;
-import static com.example.john.hbb.core.Constants.config.KEY_CONTACT_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_EMAIL_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_FACILITY_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_FNAME_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_GENDER_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_LNAME_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_PASSWORD_TEMP;
 import static com.example.john.hbb.core.Constants.config.LAST_NAME;
 import static com.example.john.hbb.core.Constants.config.LOG_ID;
 import static com.example.john.hbb.core.Constants.config.LOG_NAMES;
+import static com.example.john.hbb.core.Constants.config.LOG_TYPE;
+import static com.example.john.hbb.core.Constants.config.OPERATION_LOGOUT;
 import static com.example.john.hbb.core.Constants.config.PASSWORD;
-import static com.example.john.hbb.core.Constants.config.USERID;
+import static com.example.john.hbb.core.Constants.config.URL_QUERY;
 import static com.example.john.hbb.core.Constants.config.USERNAME;
 import static com.example.john.hbb.core.Constants.config.USER_ID;
 
@@ -46,9 +40,7 @@ public class SessionManager {
     private static final String PREF_NAME = "HBB_USER_Pref";
     // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
-
     // User name (make variable public to access from outside)
-
     // Constructor
     public SessionManager(Context context){
         this._context = context;
@@ -76,11 +68,12 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void createLog(int log_id, String log_name){
+    public void createLog(int log_id, String log_name, int type){
         // Storing login value as TRUE
          // Storing users Details  in pref
         editor.putString(LOG_ID, String.valueOf(log_id));
         editor.putString(LOG_NAMES, log_name);
+        editor.putString(LOG_TYPE, String.valueOf(type));
 
         // commit changes
         editor.commit();
@@ -125,7 +118,6 @@ public class SessionManager {
         user.put(HEALTH_ID, pref.getString(HEALTH_ID, null));
         user.put(USERNAME, pref.getString(USERNAME, null));
         user.put(HEALTH_FACILITY, pref.getString(HEALTH_FACILITY, null));
-
         // return user
         return user;
     }
@@ -135,15 +127,24 @@ public class SessionManager {
         // user name
         user.put(LOG_ID, pref.getString(LOG_ID, null));
         user.put(LOG_NAMES, pref.getString(LOG_NAMES, null));
+        user.put(LOG_TYPE, pref.getString(LOG_TYPE, null));
         // return user
         return user;
     }
-
     /**
      * Clear session details
      * */
     public void logoutUser(){
         // Clearing all data from Shared Preferences
+        try {
+            int login_id = new LogSession(_context).getID();
+            if (login_id != 0) {
+                String updateQery = "UPDATE log_tb SET logout_time = '" + DateTime.getCurrentTime() + "' WHERE log_id = '" + login_id + "'";
+                new LogDetails(_context).logout(_context, updateQery, URL_QUERY, login_id, DateTime.getCurrentTime(), OPERATION_LOGOUT);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         editor.clear();
         editor.commit();
 

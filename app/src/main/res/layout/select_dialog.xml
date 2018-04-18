@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/square">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/b_image"
+    android:padding="@dimen/activity_horizontal_margin">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/horizonal_padding"
-        android:gravity="center"
-        android:background="@drawable/b_image"
+        android:background="@drawable/square"
         android:orientation="vertical">
-        <include layout="@layout/header"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:id="@+id/header_text"
             android:textStyle="bold"
+            android:textSize="@dimen/activity_horizontal_margin"
             android:text="Select Team Member"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,7 +32,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/no_text"
                 />
-
         </LinearLayout>
 
         <TextView
@@ -39,9 +40,33 @@
             android:gravity="center"
             android:layout_marginTop="10sp"
             android:id="@+id/register_text"
-            android:background="@drawable/square"
+            android:textStyle="bold"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="20sp"
             android:text="@string/register_new"/>
+        <include layout="@layout/item_divider"/>
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20sp"
+            android:layout_height="wrap_content"
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="parent"
+                android:background="@drawable/square"
+                android:id="@+id/btn_back"
+                android:text="Back"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="parent"
+                android:background="@drawable/button"
+                android:id="@+id/next_btn"
+                android:text="Continue"/>
+        </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -19,7 +19,10 @@ import com.example.john.hbb.activities.home.LoginActivity;
 import com.example.john.hbb.R;
 import com.example.john.hbb.core.UsersSession;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.example.john.hbb.core.Server_Service;
 import com.example.john.hbb.core.SessionManager;
@@ -109,7 +112,7 @@ public class TrainingHomeActivity extends AppCompatActivity {
             }
         });
 
-        /// Routine cares
+         /// Routine cares
         drying_thouroughly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,6 +182,8 @@ public class TrainingHomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
         expandableButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,6 +231,10 @@ public class TrainingHomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
+
     }
 
     private void checkUserSessions() {

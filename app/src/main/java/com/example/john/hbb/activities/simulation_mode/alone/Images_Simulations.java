@@ -3,6 +3,7 @@ package com.example.john.hbb.activities.simulation_mode.alone;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,9 +32,12 @@ import com.example.john.hbb.R;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.example.john.hbb.activities.home.Menu_Dashboard;
+import com.example.john.hbb.activities.home.SwitchRoleActivity;
 import com.example.john.hbb.core.DateTime;
 import com.example.john.hbb.core.LogSession;
 import com.example.john.hbb.core.Phone;
@@ -264,7 +268,6 @@ public class Images_Simulations extends AppCompatActivity {
         // this is set the view from XML inside AlertDialog
         alert.setView(alertLayout);
         final RadioGroup dry_group = (RadioGroup) alertLayout.findViewById(R.id.dry_group);
-
         // disallow cancel of AlertDialog on click of back button and outside touch
         alert.setCancelable(false);
         alert.setPositiveButton(getResources().getString(R.string.submit), new DialogInterface.OnClickListener() {
@@ -423,13 +426,19 @@ public class Images_Simulations extends AppCompatActivity {
                         }else {
                             prepare_a_uterotonic = 2;
                         }
-                        new Preparation(context).send(DateTime.getCurrentDate(),DateTime.getCurrentTime(),Phone.getIMEI(context),identifies,prepares_area+"",prepares_an+"",washe_hands+"",assembles+"",test+"",prepare_a_uterotonic+""
-                        ,new LogSession(context).getID());
+
+                        new Preparation(context).send(DateTime.getCurrentDate(),DateTime.getCurrentTime(),Phone.getIMEI(context),type_id,identifies+"",prepares_area+"",prepares_an+"",washe_hands+"",assembles+"",test+"",prepare_a_uterotonic+"",new LogSession(context).getID());
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     dialog.dismiss();
                     finish();
+                    if (type_id == 1){
+                        Intent intent = new Intent(context, Menu_Dashboard.class);
+                        intent.putExtra("show_roles","show_roles");
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -574,6 +583,11 @@ public class Images_Simulations extends AppCompatActivity {
 
                     dialog.dismiss();
                     finish();
+                    if (type_id == 1){
+                        Intent intent = new Intent(context, Menu_Dashboard.class);
+                        intent.putExtra("show_roles","show_roles");
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -677,6 +691,11 @@ public class Images_Simulations extends AppCompatActivity {
 
                     dialog.dismiss();
                     finish();
+                    if (type_id == 1){
+                        Intent intent = new Intent(context, Menu_Dashboard.class);
+                        intent.putExtra("show_roles","show_roles");
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -777,6 +796,11 @@ public class Images_Simulations extends AppCompatActivity {
                     ,DateTime.getCurrentTime(),DateTime.getCurrentDate(),Phone.getIMEI(context),type_id,new LogSession(context).getID());
                     dialog.dismiss();
                     finish();
+                    if (type_id == 1){
+                        Intent intent = new Intent(context, Menu_Dashboard.class);
+                        intent.putExtra("show_roles","show_roles");
+                        startActivity(intent);
+                    }
                 }
                 else
                 {
@@ -858,6 +882,11 @@ public class Images_Simulations extends AppCompatActivity {
 
                     dialog.dismiss();
                     finish();
+                    if (type_id == 1){
+                        Intent intent = new Intent(context, Menu_Dashboard.class);
+                        intent.putExtra("show_roles","show_roles");
+                        startActivity(intent);
+                    }
                 }
                 else
                 {

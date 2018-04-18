@@ -105,12 +105,6 @@ public class RegisterActivity extends AppCompatActivity {
         _signupButton = (Button) findViewById(R.id.btn_signup);
         _loginLink = (TextView) findViewById(R.id.link_login);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-//        auth = FirebaseAuth.getInstance();
-
         _genderText = (RadioGroup)  findViewById(R.id.input_gender);
         input_female = (AppCompatRadioButton) findViewById(R.id.input_female);
         input_male = (AppCompatRadioButton) findViewById(R.id.input_male);
@@ -122,6 +116,11 @@ public class RegisterActivity extends AppCompatActivity {
                 signup();
             }
         });
+        try{
+            phoneInputView.setNumber("+256750000000");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +164,6 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
 
-
         final String fname = _fnameText.getText().toString();
         final String lname = _lnameText.getText().toString();
         String health = spinner_health.getSelectedItem().toString().trim();
@@ -176,8 +174,6 @@ public class RegisterActivity extends AppCompatActivity {
             gender = input_male.getText().toString();
         }
         String num_mob = phoneInputView.getNumber();
-        //Toast.makeText(context,num_mob,Toast.LENGTH_LONG).show();
-
         if(phoneInputView.isValid()) {
             progressDialog.show();
             String contact = num_mob;
@@ -185,8 +181,6 @@ public class RegisterActivity extends AppCompatActivity {
             final String username = _usernameText.getText().toString().trim();
             final String password = _passwordText.getText().toString();
             final String gend = gender;
-
-            //String password_encrypt = password;
             try {
                 //password_encrypt = Encrypt_Decrypt.cipher(SECRET_KEY,password);
             } catch (Exception e) {
@@ -302,27 +296,29 @@ public class RegisterActivity extends AppCompatActivity {
         }
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_USER,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         Log.e(TAG,"Results: "+response);
 
                         String[] splits = response.split("/");
-                        int status = 0, id = 0;
+                        int status = 0, id = new User(context).selectLast()+1;
 
-                        if (splits[0].equals("Already_Registered username and Phone Number")){
-                            Toast.makeText(context,splits[0],Toast.LENGTH_SHORT).show();
-                        }else {
-                            if (splits[0].equals("Success")){
+                        //if (splits[0].equals("Already_Registered username and Phone Number")){
+                        //    Toast.makeText(context,splits[0],Toast.LENGTH_SHORT).show();
+                       // }else {
+                        try {
+                            if (splits[0].equals("Success")) {
                                 status = 1;
                                 id = Integer.parseInt(splits[1]);
                             }
-
-                            String message = new User(context).save(fname,lname,username,phone,gender,health,id,password,status);
-                            if (message.equals("User Details saved!")){
+                            String message = new User(context).save(id, fname, lname, username, phone, gender, health, id, password, status);
+                            if (message.equals("User Details saved!")) {
                                 showDiag();
                             }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
+                       // }
 
                         try{
                             dialog.dismiss();

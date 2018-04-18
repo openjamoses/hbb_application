@@ -14,9 +14,9 @@ import static com.example.john.hbb.core.CreateTable.config.CREATE_HEALTH;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_LOGIN;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_PREPARATION;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_ROUTINE;
+import static com.example.john.hbb.core.CreateTable.config.CREATE_SIMULATION;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_TRAINING_MODE;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_USER;
-
 
 public class DBHelper extends SQLiteOpenHelper {
     private final Handler handler;
@@ -43,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ROUTINE);
         db.execSQL(CREATE_GMV);
         db.execSQL(CREATE_GMWV);
+        db.execSQL(CREATE_SIMULATION);
 
         Log.e("DATABASE OPERATION","Data base created / open successfully");
 
@@ -50,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_TRAINING_MODE);
+        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_TRAINING);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_HEALTH);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_LOG);
@@ -58,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_ROUTINE);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_GMV);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_GMWV);
+        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_SIMULATION);
         onCreate(db);
         Log.e("DATABASE OPERATION", "Table created / open successfully");
 
@@ -66,48 +68,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private void runOnUiThread(Runnable r) {
         handler.post(r);
     }
-
-
-
-    public String insertTraining(int userID, String name, String date, String time, int frequency, String key_skills,String key_subSkill, int sync_status){
-        SQLiteDatabase database = this.getWritableDatabase();
-        String message = null;
-        try{
-            database.beginTransaction();
-            ContentValues contentValues = new ContentValues();
-
-            contentValues.put(Constants.config.USER_ID,userID);
-            contentValues.put(Constants.config.TRAINING_NAME,name);
-            contentValues.put(Constants.config.TRAINING_DATE,date);
-            contentValues.put(Constants.config.TRAINING_TIME,time);
-            contentValues.put(Constants.config.TRAINING_FREQUENCY,frequency);
-            contentValues.put(Constants.config.TRAINING_KEY_SKILL,key_skills);
-            contentValues.put(Constants.config.TRAINING_KEY_SUBSKILL,key_subSkill);
-            contentValues.put(Constants.config.TRAINING_SYNC_STATUS,sync_status);
-
-            ///
-            database.insert(Constants.config.TABLE_TRAINING_MODE, null, contentValues);
-            database.setTransactionSuccessful();
-            message = "Training Details saved!";
-            Log.e("###","----------------------------------------");
-            Log.e("User_ID",userID+"");
-            Log.e("Training_Name",name);
-            Log.e("Training_Date",date);
-            Log.e("Training_Time",time);
-            Log.e("Training_Frequency",frequency+"");
-            Log.e("Training_keyskills",key_skills);
-            Log.e("Training_Syncstatus",sync_status+"");
-            Log.e("###","----------------------------------------");
-
-        }catch (Exception e){
-            e.printStackTrace();
-            message = "Sorry, error: "+e;
-        }finally {
-            database.endTransaction();
-        }
-
-        return message;
-    } //////
 
 
 
@@ -142,37 +102,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor fetchTrainingMode(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        int status = 0;
-        int new_status = 1;
-        Cursor cursor = null;
-        try {
-            db.beginTransaction();
-            String query = "SELECT * FROM  "+ Constants.config.TABLE_TRAINING_MODE+" WHERE " +
-                    " "+ Constants.config.TRAINING_SYNC_STATUS+" = "+status;
-            cursor = db.rawQuery(query, null);
-            ContentValues values = new ContentValues();
-            values.put(Constants.config.TRAINING_SYNC_STATUS,new_status);
-            db = this.getWritableDatabase();
-            if(cursor.moveToFirst()){
-                do{
-                    int id = cursor.getInt(cursor.getColumnIndex(Constants.config.TRAINING_ID));
-                    db.update(Constants.config.TABLE_TRAINING_MODE,values, Constants.config.TRAINING_ID+" = "+id,null);
-                    Log.e("Updated TRAINING ID: ",id+"");
-                }while (cursor.moveToNext());
-            }
-
-            db.setTransactionSuccessful();
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            db.endTransaction();
-            //cursor.close();
-        }
-        return cursor;
-    }
-
     public  SQLiteDatabase getWritableDB(){
         SQLiteDatabase database = this.getWritableDatabase();
         return database;
@@ -181,5 +110,4 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         return database;
     }
-
 }

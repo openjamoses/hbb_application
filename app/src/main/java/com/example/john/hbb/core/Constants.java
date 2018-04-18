@@ -13,16 +13,13 @@ public class Constants {
 
         public static final String URL_LOCALHOST = "http://127.0.0.1/hbb/";
         public static final String URL_PHONE = "http://192.168.43.18/hbb/";
-        public static final String URL_CAMTECH = "http://192.168.1.111/hbb/";
+        public static final String URL_CAMTECH = "http://192.168.1.104/hbb/";
         public static final String URL_STUDENT = "http://10.11.1.129/hbb/";
         public static final String URL_SERVER = "http://173.255.219.164/hbb_dashboard/";
         public static final String HOST_URL = URL_CAMTECH+"mobile_connections/";
         public static final String DATABASE_NAME = "hbb_db";
         public static final int DATABASE_VERSION = 1;
-
-        public static final String TABLE_TRAINING_MODE = "training_mode_tb";
         public static final String TABLE_USERS = "users_tb";
-
         public static final String FETCH_STATUS = "fetch_status";
         public static final String IMEI = "imei";
         public static final String USERID = "userID";
@@ -51,6 +48,7 @@ public class Constants {
         public static final String TRAINING_KEY_SKILL = "training_key_skills";
         public static final String TRAINING_KEY_SUBSKILL = "training_key_subskills";
         public static final String TRAINING_SYNC_STATUS = "sync_status";
+        public static final String VIDEO_COMPLETED = "video_completed";
         public static final String TRAINING_IMEI = "training_imei";
         public static final String DISTRICT_ID = "district_id";
         //TODO:: public static final String DISTRICTID = "districtID";
@@ -167,8 +165,20 @@ public class Constants {
         // Email address (make variable public to access from outside)
         public static final String KEY_EMAIL_TEMP = "email_temp";
         public static final String KEY_PASSWORD_TEMP = "password_temp";
+
+
+
+        //TODO:: SYNCING>>>
+        public static final String TABLE_SYNCING = "syncing_status";
+        public static final String SYNC_ID = "sync_id";
+        public static final String SYNC_IMEI = "imei";
+        public static final String SYNC_DATE = "sync_date";
+        public static final String SYNC_TIME = "last_sync_time";
+        public static final String SYNC_STATUS = "sync_status";
+
+
         //// TODO: 10/23/17  URL
-        public static final String SYNC_FOLDER = "sync_calls/";
+        public static final String SYNC_FOLDER = "syncing/";
         public static final String URL_SAVE_DISTRICT = SYNC_FOLDER+"save_district.php";
         public static final String URL_SAVE_TRAINING = SYNC_FOLDER+"save_training.php";
         public static final String URL_GET_DISTRICT = SYNC_FOLDER+"getDistrict.php";
@@ -181,6 +191,9 @@ public class Constants {
         public static final String URL_SAVE_ROUTINE = SYNCING+"save_routine.php";
         public static final String URL_SAVE_GMV = SYNCING+"save_gmv.php";
         public static final String URL_SAVE_GMWV = SYNCING+"save_gmwv.php";
+        public static final String URL_FETCH_JSON = SYNCING+"fetch_json.php";
+        public static final String URL_QUERY = SYNCING+"query.php";
+        public static final String URL_SAVE_STATUS = SYNCING+"sync_status.php";
 
 
         public static final String URL_GET_SINGLE_ENTRY = SYNCING+"get_single_entry.php";
@@ -196,12 +209,14 @@ public class Constants {
         public static final String OPERATION_HEALTH = "health";
         public static final String OPERATION_LOG = "log";
         public static final String OPERATION_PREPARATION = "preparation";
+        public static final String OPERATION_LOGOUT = "logout";
         public static final String OPERATION_ROUTINE = "routine";
         ///TODO::: SERVER CALLS....>>>>>>>
         public static final String POST_TABLE = "table";
         public static final String POST_COLUMN = "column";
         //// TODO: 10/23/17
         public static final String SECRET_KEY = "super-secret-key-0123123451";
+        public static final String SQL_QUERY = "query";
     }
 
     public static  String SQL_GET_CASES = "";

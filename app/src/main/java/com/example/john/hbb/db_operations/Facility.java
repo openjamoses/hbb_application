@@ -332,13 +332,13 @@ public class Facility {
         protected String doInBackground(JSONArray... jsonArrays) {
             String message = null;
             int status = 1;
-            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
+            SQLiteDatabase db = DBHelper.getHelper(context).getWritableDatabase();
             try{
                 db.beginTransaction();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];
-                //db.execSQL("DELETE FROM " + Constants.config.TABLE_HEALTH+" WHERE "+HEALTH_STATUS+" = '"+status+"' ");
+                db.execSQL("DELETE FROM " + Constants.config.TABLE_HEALTH+" WHERE "+HEALTH_STATUS+" = '"+status+"'");
 
                 int total = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -351,30 +351,11 @@ public class Facility {
                     contentValues.put(Constants.config.FACILITY_TYPE,jsonObject.getString(Constants.config.FACILITY_TYPE));
                     contentValues.put(Constants.config.HEALTH_CADRE,jsonObject.getString(Constants.config.HEALTH_CADRE));
                     contentValues.put(Constants.config.HEALTH_STATUS,status);
-
-                    db = DBHelper.getHelper(context).getReadableDB();
-                    String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_HEALTH+ " WHERE "+HEALTH_NAME+" = '"+jsonObject.getString(Constants.config.HEALTH_NAME)+"'" +
-                            " AND "+DISTRICT_NAME+" = '"+jsonObject.getString(Constants.config.DISTRICT_NAME)+"' AND  " + FACILITY_OWNER + " = '" + jsonObject.getString(Constants.config.FACILITY_OWNER) + "' ";
-                    db = new DBHelper(context).getReadableDatabase();
-                    Cursor cursor = db.rawQuery(selectQuery, null);
-                    if (cursor.moveToFirst()){
-                        do {
-                            int stat = cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTH_STATUS));
-                            int id = cursor.getInt(cursor.getColumnIndex(Constants.config.HEALTHID));
-                            if (stat == 0){
-                                db = DBHelper.getHelper(context).getWritableDB();
-                                db.update(Constants.config.TABLE_HEALTH,contentValues,HEALTHID+"="+id, null);
-                            }
-                        }while (cursor.moveToNext());
-                    }else {
-                        db = DBHelper.getHelper(context).getWritableDB();
-                        db.insert(Constants.config.TABLE_HEALTH, null, contentValues);
-
-                    }
+                    db.insert(Constants.config.TABLE_HEALTH, null, contentValues);
                     total ++;
                 }
                 db.setTransactionSuccessful();
-                message = total+" records , Health Table Updated successfully!";
+                message = total+" records ,"+Constants.config.TABLE_HEALTH+" Updated successfully!";
 
             }catch (Exception e){
                 e.printStackTrace();

@@ -28,6 +28,7 @@ import static com.example.john.hbb.core.Constants.config.LOG_ID;
 import static com.example.john.hbb.core.Constants.config.PREPARATIONID;
 import static com.example.john.hbb.core.Constants.config.PREPARATION_ID;
 import static com.example.john.hbb.core.Constants.config.PREP_AREA_DELIVERY;
+import static com.example.john.hbb.core.Constants.config.PREP_AREA_VENTILATION;
 import static com.example.john.hbb.core.Constants.config.PREP_ASSEMBLED;
 import static com.example.john.hbb.core.Constants.config.PREP_DATE;
 import static com.example.john.hbb.core.Constants.config.PREP_IDENTIFY_HELPER;
@@ -53,7 +54,7 @@ public class Preparation {
         this.context = context;
     }
 
-    public String save(int preperation_id, String date, String time, String imei, int type, String prep_identify_helper, String prep_area_delivery,
+    public String save(int preperation_id, String date, String time, String imei, int type, String prep_identify_helper, String prep_area_delivery,String prepare_an_area_ventilation,
                        String prep_washes_hands, String prep_assembled, String prep_test_ventilation, String prep_uterotonic, int prep_status, int log_id){
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
@@ -67,6 +68,7 @@ public class Preparation {
             contentValues.put(PREP_TYPE,type);
             contentValues.put(PREP_IDENTIFY_HELPER,prep_identify_helper);
             contentValues.put(PREP_AREA_DELIVERY,prep_area_delivery);
+            contentValues.put(PREP_AREA_VENTILATION,prepare_an_area_ventilation);
             contentValues.put(PREP_WASHES_HANDS,prep_washes_hands);
             contentValues.put(PREP_ASSEMBLED,prep_assembled);
             contentValues.put(PREP_TEST_VENTILATION,prep_test_ventilation);
@@ -87,7 +89,7 @@ public class Preparation {
         return message;
     }
 
-    public void send(final String date, final String time, final String imei, final int type, final String prep_identify_helper, final String prep_area_delivery,
+    public void send(final String date, final String time, final String imei, final int type, final String prep_identify_helper, final String prep_area_delivery, final String prepare_an_area_ventilation,
                      final String prep_washes_hands, final String prep_assembled, final String prep_test_ventilation, final String prep_uterotonic, final int log_id){
 
 
@@ -107,7 +109,7 @@ public class Preparation {
                                 id = Integer.parseInt(splits[1]);
 
                             }
-                            String message = save(id,date,time,imei,type,prep_identify_helper,prep_area_delivery,prep_washes_hands,prep_assembled,
+                            String message = save(id,date,time,imei,type,prep_identify_helper,prep_area_delivery,prepare_an_area_ventilation,prep_washes_hands,prep_assembled,
                                     prep_test_ventilation,prep_uterotonic,status,log_id);
                             //Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
 
@@ -144,6 +146,7 @@ public class Preparation {
                 params.put(LOG_ID, String.valueOf(log_id));
                 params.put(PREP_IDENTIFY_HELPER,prep_identify_helper);
                 params.put(PREP_AREA_DELIVERY,prep_area_delivery);
+                params.put(PREP_AREA_VENTILATION,prepare_an_area_ventilation);
                 params.put(PREP_WASHES_HANDS,prep_washes_hands);
                 params.put(PREP_ASSEMBLED,prep_assembled);
                 params.put(PREP_TEST_VENTILATION,prep_test_ventilation);
@@ -182,6 +185,7 @@ public class Preparation {
                 params.put(PREP_TYPE,cursor.getString(cursor.getColumnIndex(PREP_TYPE)));
                 params.put(PREP_IDENTIFY_HELPER,cursor.getString(cursor.getColumnIndex(PREP_IDENTIFY_HELPER)));
                 params.put(PREP_AREA_DELIVERY,cursor.getString(cursor.getColumnIndex(PREP_AREA_DELIVERY)));
+                params.put(PREP_AREA_VENTILATION,cursor.getString(cursor.getColumnIndex(PREP_AREA_VENTILATION)));
                 params.put(PREP_WASHES_HANDS,cursor.getString(cursor.getColumnIndex(PREP_WASHES_HANDS)));
                 params.put(PREP_ASSEMBLED,cursor.getString(cursor.getColumnIndex(PREP_ASSEMBLED)));
                 params.put(PREP_TEST_VENTILATION,cursor.getString(cursor.getColumnIndex(PREP_TEST_VENTILATION)));
@@ -214,6 +218,7 @@ public class Preparation {
                 params.put(PREP_TYPE,cursor.getString(cursor.getColumnIndex(PREP_TYPE)));
                 params.put(PREP_IDENTIFY_HELPER,cursor.getString(cursor.getColumnIndex(PREP_IDENTIFY_HELPER)));
                 params.put(PREP_AREA_DELIVERY,cursor.getString(cursor.getColumnIndex(PREP_AREA_DELIVERY)));
+                params.put(PREP_AREA_VENTILATION,cursor.getString(cursor.getColumnIndex(PREP_AREA_VENTILATION)));
                 params.put(PREP_WASHES_HANDS,cursor.getString(cursor.getColumnIndex(PREP_WASHES_HANDS)));
                 params.put(PREP_ASSEMBLED,cursor.getString(cursor.getColumnIndex(PREP_ASSEMBLED)));
                 params.put(PREP_TEST_VENTILATION,cursor.getString(cursor.getColumnIndex(PREP_TEST_VENTILATION)));
@@ -354,6 +359,7 @@ public class Preparation {
                     contentValues.put(PREP_IDENTIFY_HELPER,jsonObject.getString(Constants.config.PREP_IDENTIFY_HELPER));
                     contentValues.put(PREP_AREA_DELIVERY,jsonObject.getString(Constants.config.PREP_AREA_DELIVERY));
                     contentValues.put(PREP_WASHES_HANDS,jsonObject.getString(Constants.config.PREP_WASHES_HANDS));
+                    contentValues.put(PREP_AREA_VENTILATION,jsonObject.getString(Constants.config.PREP_AREA_VENTILATION));
                     contentValues.put(PREP_ASSEMBLED,jsonObject.getString(Constants.config.PREP_ASSEMBLED));
                     contentValues.put(PREP_TEST_VENTILATION,jsonObject.getString(Constants.config.PREP_TEST_VENTILATION));
                     contentValues.put(PREP_UTEROTONIC,jsonObject.getString(Constants.config.PREP_UTEROTONIC));

@@ -27,12 +27,19 @@ import android.widget.VideoView;
 
 import com.example.john.hbb.R;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
+import com.example.john.hbb.activities.home.Menu_Dashboard;
 import com.example.john.hbb.core.DBHelper;
 import com.example.john.hbb.core.DateTime;
+import com.example.john.hbb.core.LogSession;
+import com.example.john.hbb.core.Phone;
 import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.core.UsersSession;
+import com.example.john.hbb.db_operations.TrainingDetails;
 
 //Implement SurfaceHolder interface to Play video
 //Implement this interface to receive information about changes to the surface
@@ -49,8 +56,8 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
     private String mode,file,title,header;
     private String uriPath;
     private int count = 0;
-
-
+    int completed = 0;
+    private List<String> lists = new ArrayList<>();
     /** Called when the activity is first created. */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -85,7 +92,6 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
             getSupportActionBar().setSubtitle(title);
 
         }
-
         checkUserSessions();
 
         getWindow().setFormat(PixelFormat.UNKNOWN);
@@ -182,6 +188,8 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
         mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                completed = 1;
+                exit();
                 Toast.makeText(getApplicationContext(), "Thank You...!!!", Toast.LENGTH_LONG).show(); // display a toast when an video is completed
             }
         });
@@ -194,21 +202,86 @@ public class Training_VideoPlayer extends AppCompatActivity implements SurfaceHo
         });
     }
 
+    private void exit(){
+        try{
+            //TODO:: Preparation for birth..
+            //lists.add(getResources().getString(R.string.preperation_for_birth)+getResources().getString(R.string.preperation_for_birth));
+            //lists.add("Unknown");
+            lists.add(getResources().getString(R.string.preperation_for_birth));
+            lists.add(getResources().getString(R.string.preperation_for_birth)+getResources().getString(R.string.hand_washing));
+            lists.add(getResources().getString(R.string.preperation_for_birth)+getResources().getString(R.string.testing_equipments));
+            lists.add(getResources().getString(R.string.preperation_for_birth)+getResources().getString(R.string.combine_video));
+            //TODO:: Routine care
+            lists.add(getResources().getString(R.string.routine_care));
+            lists.add(getResources().getString(R.string.routine_care)+getResources().getString(R.string.drying_thouroughly));
+            lists.add(getResources().getString(R.string.routine_care)+getResources().getString(R.string.clamping_and_cutting_card));
+            lists.add(getResources().getString(R.string.routine_care)+getResources().getString(R.string.combine_video));
+            //TODO:: Golden minutes with ventilation
+            lists.add(getResources().getString(R.string.golden_minutes_with_ventilation));
+            lists.add(getResources().getString(R.string.golden_minutes_with_ventilation)+getResources().getString(R.string.bag_and_mask_ventilation));
+            lists.add(getResources().getString(R.string.golden_minutes_with_ventilation)+getResources().getString(R.string.improving_ventilation));
+            //TODO:: Golden minutes without ventilation
+            lists.add(getResources().getString(R.string.golden_minutes_without_ventilation));
+            lists.add(getResources().getString(R.string.golden_minutes_without_ventilation)+getResources().getString(R.string.sunctioning));
+            lists.add(getResources().getString(R.string.golden_minutes_without_ventilation)+getResources().getString(R.string.stimulation));
+            lists.add(getResources().getString(R.string.golden_minutes_without_ventilation)+getResources().getString(R.string.combine_video));
+            //TODO:: Ventilation with slow or fast heart rate
+            lists.add(getResources().getString(R.string.ventilation_with_slow_or_fast_heart_rate));
+            //TODO::: Disinfecting and testing equipment after every use
+            lists.add(getResources().getString(R.string.disinfecting_and_testing_equipment_after_every_use));
+            int log_type = 0;
+            try{
+                log_type = new LogSession(context).getLog_type();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            int skill = lists.indexOf(header);
+            int subSkill = lists.indexOf(header+title);
+            if (subSkill == -1){
+                subSkill = skill;
+            }
+            new TrainingDetails(context).send(DateTime.getCurrentDate(),new UsersSession(context).getFname()+" "+new UsersSession(context).getLname(),
+                    DateTime.getCurrentTime(),1,skill+10,subSkill+10,new LogSession(context).getID(),log_type,completed, Phone.getIMEI(context));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            if (new LogSession(context).getLog_type() == 1) {
+                Intent intent = new Intent(context, Menu_Dashboard.class);
+                intent.putExtra("show_roles", "show_roles");
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getApplicationContext(), TrainingHomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            finish();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        //finish();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // todo: goto back activity from here
-                Intent intent = new Intent(getApplicationContext(), TrainingHomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
-
+                exit();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        try {
+            exit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void checkUserSessions() {

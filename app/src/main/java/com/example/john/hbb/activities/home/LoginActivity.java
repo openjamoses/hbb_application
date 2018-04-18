@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 
 import com.example.john.hbb.R;
+import com.example.john.hbb.core.BaseApplication;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.DBHelper;
 import com.example.john.hbb.core.Phone;
@@ -60,7 +61,10 @@ import static com.example.john.hbb.core.Constants.config.CONTACT;
 import static com.example.john.hbb.core.Constants.config.FIRST_NAME;
 import static com.example.john.hbb.core.Constants.config.HEALTH_FACILITY;
 import static com.example.john.hbb.core.Constants.config.LAST_NAME;
+import static com.example.john.hbb.core.Constants.config.OPERATION_HEALTH;
+import static com.example.john.hbb.core.Constants.config.OPERATION_LOG;
 import static com.example.john.hbb.core.Constants.config.OPERATION_USER;
+import static com.example.john.hbb.core.Constants.config.URL_FETCH_JSON;
 import static com.example.john.hbb.core.Constants.config.URL_GET_SINGLE_ENTRY;
 import static com.example.john.hbb.core.Constants.config.USERNAME;
 
@@ -79,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     // Session Manager Class
     SessionManager session;
     private FirebaseAuth auth;
-    private TextView forgot_text;
+    //private TextView forgot_text;
     String email;
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
@@ -98,27 +102,33 @@ public class LoginActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        try{
+            if (new SessionManager(context).isLoggedIn() == true){
+                new SessionManager(context).logoutUser();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         // Session Manager
         session = new SessionManager(getApplicationContext());
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
         textView2.setText("Helping Babies Breath");
 
-        forgot_text = (TextView) findViewById(R.id.forgot_txt);
-        forgot_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(context, ResetPasswordActivity.class));
-            }
-        });
-
+        //forgot_text = (TextView) findViewById(R.id.forgot_txt);
 
         //// TODO: 10/23/17  Checking permsions...!! 
         checkAndRequestPermissions();
 
         if (checkAndRequestPermissions() == true){
             startService(new Intent(context, ProcessingService.class));
-            Log.e("Server", "Server started");
+            BaseApplication.deleteCache(context);
+            String user_query = "SELECT * FROM user_tb";
+            String health_query = "SELECT * FROM health_tb";
+            String log_query = "SELECT * FROM log_tb";
+            DBController.fetchJSON(context,user_query,URL_FETCH_JSON,OPERATION_USER);
+            DBController.fetchJSON(context,health_query,URL_FETCH_JSON,OPERATION_HEALTH);
+            DBController.fetchJSON(context,log_query,URL_FETCH_JSON,OPERATION_LOG);
+
         }
         h = new Handler();
         pd = new TransparentProgressDialog(this, R.drawable.dialog_image);
@@ -127,25 +137,19 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 if (pd.isShowing()) {
                     pd.dismiss();
-
                        final String username_ = _usernameText.getText().toString();
                        final String password = _passwordText.getText().toString();
                        String phone = username_;
-                       if (username_.length() >=10){
-                           phone = username_.substring(username_.length()-9,username_.length());
-                       }
-                      // if (username_.substring(0,1).equals("+") || username_.substring(0,1).equals("0") )
-
+                       //if (username_.length() >=10){
+                         //  phone = username_.substring(username_.length()-9,username_.length());
+                      // }
 
                     try {
                             int useID = 0;
                             int verified = 0;
                             String message = null,fname = null,lname = null,username = null,contact = null,facility = null, gend = null, pass = null;
-
                             int fac_id = 0;
-                            //start the profile activity
-                            //DBHelper dbHelper = new DBHelper(context);
-                            Cursor cursor = new User(context).userLogin(username_, phone, password);
+                            Cursor cursor = new User(context).userLogin(username_, password);
                         if (cursor != null) {
                             if (cursor.moveToFirst()) {
                                 do {
@@ -163,7 +167,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.e("Cursor","Cursor found");
 
                             } else {
-                                select(username_);
                                 message = "Login Failed!";
                                 useID = 0;
                                 fname = "fname";
@@ -176,7 +179,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.e("Cursor","Cursor Not null but empty");
                             }
                         }else {
-                            select(username_);
                             message = "Login Failed!";
                             useID = 0;
                             fname = "fname";
@@ -215,53 +217,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        if (session.isLoggedIn()){
-            if (pd != null){
-                pd.show();
-            }
-            //startService(new Intent(getBaseContext(), Server_Service.class));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // new CallingNumber(c).clearCalls();
-                    if ( pd != null){
-                        if (pd.isShowing()){
-                            pd.dismiss();
-                        }
-                    }
-                    checkUserSessions();
-                }},3000);
-        }
     }
-    private void checkUserSessions() {
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        // Session class instance
-        SessionManager session = new SessionManager(getApplicationContext());
-        session.checkLogin();
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-        String fname = user.get(FIRST_NAME);
-        String lname = user.get(LAST_NAME);
-        String contact = user.get(CONTACT);
-        String username = user.get(USERNAME);
-        String health = user.get(HEALTH_FACILITY);
-        //toolbar.setTitle();
-
-        if (fname != null && lname != null && contact != null && username != null && health != null){
-            Intent i = new Intent(getApplicationContext(), Menu_Dashboard.class);
-            startActivity(i);
-            finish();
-        }
-
-    }
-    public void select(String username){
-        //DBController.fetchSigle(context,"user_tb","imei", Phone.getIMEI(context),URL_GET_SINGLE_ENTRY,OPERATION_USER);
-    }
-
     @Override
     protected void onDestroy() {
         h.removeCallbacks(r);
@@ -272,33 +228,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
-        Log.d(TAG, "Login");
-        //_loginButton.setEnabled(false);
-
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.Theme_AppCompat_Dialog_Alert);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setMessage("Authenticating...");
                 //progressDialog.show();
-
         pd.show();
-        ///TODO: Start your service here..
-        //Intent intent = new Intent(getBaseContext(),Server_Service.class);
-        //intent.putExtra("progress",pd);
-        //startService(new Intent(getBaseContext(), Server_Service.class));
-
-
-        h.postDelayed(r,3000);
-
-
+        h.postDelayed(r,1000);
         // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-
-                    }
-                }, 3000);
     }
 
     private class TransparentProgressDialog extends Dialog {
@@ -349,10 +286,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // disable going back to the MainActivity
-        //moveTaskToBack(true);
+        super.onBackPressed();
+        finish();
     }
-    public void onLoginSuccess(String message, int useID, String fname, String lname, String username, String contact,String facility, String gender, String password, int fac_id) {
+
+    public void onLoginSuccess(String message, int useID, String fname, String lname, String username, String contact, String facility, String gender, String password, int fac_id) {
         //_loginButton.setEnabled(true);
         if(message.equals("Login Successfully!")) {
             session.createLoginSession(useID, fname, lname, contact, username, facility, gender,password,fac_id);
