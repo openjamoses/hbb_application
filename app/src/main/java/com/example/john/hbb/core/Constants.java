@@ -16,7 +16,7 @@ public class Constants {
         public static final String URL_CAMTECH = "http://192.168.1.104/hbb/";
         public static final String URL_STUDENT = "http://10.11.1.129/hbb/";
         public static final String URL_SERVER = "http://173.255.219.164/hbb_dashboard/";
-        public static final String HOST_URL = URL_CAMTECH+"mobile_connections/";
+        public static final String HOST_URL = URL_SERVER+"mobile_connections/";
         public static final String DATABASE_NAME = "hbb_db";
         public static final int DATABASE_VERSION = 1;
         public static final String TABLE_USERS = "users_tb";
@@ -217,6 +217,9 @@ public class Constants {
         //// TODO: 10/23/17
         public static final String SECRET_KEY = "super-secret-key-0123123451";
         public static final String SQL_QUERY = "query";
+
+        //TODO::::: QUIZZES
+        //  QUIZE 1
     }
 
     public static  String SQL_GET_CASES = "";
@@ -240,4 +243,9 @@ public class Constants {
         SQL_GET_SUBSCRIPTION_FEE = " SELECT * FROM subscriptions ORDER BY Subscription_Id DESC LIMIT 1";
         //SQL_GET_INSTALLATION = "SELECT * FROM subscription_details  WHERE "+IMEI+" = '"+Phone.getIMEI(context)+"' ";
     }
+
+
+
+
+
 }

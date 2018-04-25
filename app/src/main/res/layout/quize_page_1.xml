@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/b_image"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:layout_marginTop="20sp"
+        android:background="@drawable/b_image"
+        android:paddingRight="24dp">
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textSize="20sp"
+           android:textStyle="bold"
+           android:textColor="@color/colorPrimaryDark"
+           android:text="@string/quize_1"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/quiz_1_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/bathe_the_baby"/>
+            <RadioButton
+                android:id="@+id/quiz_1_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/deliver_the_placenta" />
+            <RadioButton
+                android:id="@+id/quiz_1_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/evaluate_the_heart_rate" />
+            <RadioButton
+                android:id="@+id/quiz_1_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/help_a_baby_if_neccesary" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/quize_2"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/quiz_2_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_2_a"/>
+            <RadioButton
+                android:id="@+id/quiz_2_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_2_b" />
+            <RadioButton
+                android:id="@+id/quiz_2_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_2_c" />
+            <RadioButton
+                android:id="@+id/quiz_2_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_2_d" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/quize_3"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/quiz_3_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_3_a"/>
+            <RadioButton
+                android:id="@+id/quiz_3_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_3_b" />
+            <RadioButton
+                android:id="@+id/quiz_3_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_3_c" />
+            <RadioButton
+                android:id="@+id/quiz_3_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_3_d" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/quize_4"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/quiz_4_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_4_a"/>
+            <RadioButton
+                android:id="@+id/quiz_4_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_4_b" />
+            <RadioButton
+                android:id="@+id/quiz_4_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_4_c" />
+            <RadioButton
+                android:id="@+id/quiz_4_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_4_d" />
+
+        </RadioGroup>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/quize_5"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/quiz_5_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_5_a"/>
+            <RadioButton
+                android:id="@+id/quiz_5_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_5_b" />
+            <RadioButton
+                android:id="@+id/quiz_5_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_5_c" />
+            <RadioButton
+                android:id="@+id/quiz_5_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_5_d" />
+
+        </RadioGroup>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/quize_6"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/quiz_6_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_6_a"/>
+            <RadioButton
+                android:id="@+id/quiz_6_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_6_b" />
+            <RadioButton
+                android:id="@+id/quiz_6_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_6_c" />
+            <RadioButton
+                android:id="@+id/quiz_6_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_6_d" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+</ScrollView>
