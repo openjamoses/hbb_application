@@ -19,7 +19,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="@string/quize_12"/>
+            android:text="@string/quize_17"/>
         <!--  Name Label -->
         <RadioGroup
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:layout_marginLeft="20sp"
             android:orientation="vertical">
             <RadioButton
-                android:id="@+id/quiz_12_a"
+                android:id="@+id/quiz_17_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -36,9 +36,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_12_a"/>
+                android:text="@string/quiz_17_a"/>
             <RadioButton
-                android:id="@+id/quiz_12_b"
+                android:id="@+id/quiz_17_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -46,9 +46,9 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_12_b" />
+                android:text="@string/quiz_17_b" />
             <RadioButton
-                android:id="@+id/quiz_12_c"
+                android:id="@+id/quiz_17_c"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -56,9 +56,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_12_c" />
+                android:text="@string/quiz_17_c" />
             <RadioButton
-                android:id="@+id/quiz_12_d"
+                android:id="@+id/quiz_17_d"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -66,7 +66,7 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_12_d" />
+                android:text="@string/quiz_17_d" />
 
         </RadioGroup>
 
@@ -76,64 +76,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="@string/quize_13"/>
-        <!--  Name Label -->
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="20sp"
-            android:orientation="vertical">
-            <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/quiz_13_a"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:button="@null"
-                android:textSize="18sp"
-                android:textColor="@color/grey"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_13_a"/>
-            <RadioButton
-                android:id="@+id/quiz_13_b"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:button="@null"
-                android:textColor="@color/grey"
-                android:textSize="18sp"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_13_b" />
-            <RadioButton
-                android:id="@+id/quiz_13_c"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:button="@null"
-                android:textSize="18sp"
-                android:textColor="@color/grey"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_13_c" />
-            <RadioButton
-                android:id="@+id/quiz_13_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:button="@null"
-                android:textSize="18sp"
-                android:textColor="@color/grey"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_13_d" />
-
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="@string/quize_14"/>
+            android:text="@string/quize_18"/>
         <!--  Name Label -->
         <RadioGroup
             android:layout_width="match_parent"
@@ -142,7 +85,7 @@
             android:layout_marginLeft="20sp"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/quiz_14_a"
+                android:id="@+id/quiz_18_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -150,9 +93,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_14_a"/>
+                android:text="@string/quiz_18_a"/>
             <RadioButton
-                android:id="@+id/quiz_14_b"
+                android:id="@+id/quiz_18_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -160,9 +103,9 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_14_b" />
+                android:text="@string/quiz_18_b" />
             <RadioButton
-                android:id="@+id/quiz_14_c"
+                android:id="@+id/quiz_18_c"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -170,9 +113,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_14_c" />
+                android:text="@string/quiz_18_c" />
             <RadioButton
-                android:id="@+id/quiz_14_d"
+                android:id="@+id/quiz_18_d"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -180,7 +123,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_14_d" />
+                android:text="@string/quiz_18_d" />
 
         </RadioGroup>
 
@@ -190,7 +133,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="@string/quize_15"/>
+            android:text="@string/quize_19"/>
         <!--  Name Label -->
         <RadioGroup
             android:layout_width="match_parent"
@@ -199,7 +142,7 @@
             android:layout_marginLeft="20sp"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/quiz_15_a"
+                android:id="@+id/quiz_19_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -207,9 +150,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_15_a"/>
+                android:text="@string/quiz_19_a"/>
             <RadioButton
-                android:id="@+id/quiz_15_b"
+                android:id="@+id/quiz_19_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -217,9 +160,9 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_15_b" />
+                android:text="@string/quiz_19_b" />
             <RadioButton
-                android:id="@+id/quiz_15_c"
+                android:id="@+id/quiz_19_c"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -227,9 +170,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_15_c" />
+                android:text="@string/quiz_19_c" />
             <RadioButton
-                android:id="@+id/quiz_15_d"
+                android:id="@+id/quiz_19_d"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -237,7 +180,64 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_15_d" />
+                android:text="@string/quiz_19_d" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="@string/quize_20"/>
+        <!--  Name Label -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="20sp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/quiz_20_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_20_a"/>
+            <RadioButton
+                android:id="@+id/quiz_20_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textColor="@color/grey"
+                android:textSize="18sp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_20_b" />
+            <RadioButton
+                android:id="@+id/quiz_20_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_20_c" />
+            <RadioButton
+                android:id="@+id/quiz_20_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:button="@null"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:text="@string/quiz_20_d" />
 
         </RadioGroup>
 
@@ -249,7 +249,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="@string/quize_16"/>
+            android:text="@string/quize_21"/>
         <!--  Name Label -->
         <RadioGroup
             android:layout_width="match_parent"
@@ -259,7 +259,7 @@
 
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/quiz_16_a"
+                android:id="@+id/quiz_21_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -267,9 +267,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_16_a"/>
+                android:text="@string/quiz_21_a"/>
             <RadioButton
-                android:id="@+id/quiz_16_b"
+                android:id="@+id/quiz_21_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -277,9 +277,9 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_16_b" />
+                android:text="@string/quiz_21_b" />
             <RadioButton
-                android:id="@+id/quiz_16_c"
+                android:id="@+id/quiz_21_c"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -287,9 +287,9 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_16_c" />
+                android:text="@string/quiz_21_c" />
             <RadioButton
-                android:id="@+id/quiz_16_d"
+                android:id="@+id/quiz_21_d"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -297,7 +297,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/quiz_16_d" />
+                android:text="@string/quiz_21_d" />
         </RadioGroup>
     </LinearLayout>
 </ScrollView>
