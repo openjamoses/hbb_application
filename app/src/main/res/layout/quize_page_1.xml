@@ -5,14 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/b_image"
     android:fitsSystemWindows="true">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="24dp"
         android:layout_marginTop="20sp"
-        android:background="@drawable/b_image"
         android:paddingRight="24dp">
        <TextView
            android:layout_width="match_parent"
@@ -313,7 +311,7 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginLeft="20sp"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
