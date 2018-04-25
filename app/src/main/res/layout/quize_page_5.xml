@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_22"
             android:orientation="vertical">
             <RadioButton
                 android:id="@+id/quiz_22_a"
@@ -83,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_23"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_23_a"
@@ -140,6 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_24"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_24_a"
@@ -197,6 +200,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_25"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_25_a"
@@ -254,7 +258,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="20sp"
-
+            android:id="@+id/quize_26"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_26_a"

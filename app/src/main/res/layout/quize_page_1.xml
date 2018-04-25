@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_1"
             android:orientation="vertical">
             <RadioButton
                 android:id="@+id/quiz_1_a"
@@ -82,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_2"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_2_a"
@@ -139,6 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_3"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_3_a"
@@ -196,6 +199,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_4"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_4_a"
@@ -255,6 +259,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_5"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_5_a"
@@ -299,7 +304,6 @@
 
         </RadioGroup>
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -313,6 +317,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="20sp"
+            android:id="@+id/quize_6"
             android:orientation="vertical">
             <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/quiz_6_a"
