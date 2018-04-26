@@ -212,6 +212,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activities.quizes.Quize1_Activity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/quize"/>
+
         <activity android:name=".activities.home.SwitchRoleActivity"/>
         <activity android:name=".activities.scoreboard.ScoreTableActivity"
             android:label="@string/scoreboard"

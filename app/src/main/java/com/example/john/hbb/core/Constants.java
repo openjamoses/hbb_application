@@ -18,7 +18,7 @@ public class Constants {
         public static final String URL_SERVER = "http://173.255.219.164/hbb_dashboard/";
         public static final String HOST_URL = URL_SERVER+"mobile_connections/";
         public static final String DATABASE_NAME = "hbb_db";
-        public static final int DATABASE_VERSION = 1;
+        public static final int DATABASE_VERSION = 2;
         public static final String TABLE_USERS = "users_tb";
         public static final String FETCH_STATUS = "fetch_status";
         public static final String IMEI = "imei";
@@ -166,6 +166,48 @@ public class Constants {
         public static final String KEY_EMAIL_TEMP = "email_temp";
         public static final String KEY_PASSWORD_TEMP = "password_temp";
 
+
+        ///// TODO: 10/20/17  User LOG..
+        public static final String TABLE_QUIZ1 = "quiz1_tb";
+        public static final String QUIZ1_ID = "quiz1_id";
+        public static final String QUIZ1ID = "quiz1id";
+        public static final String QUIZ1_DATE = "quiz1_date";
+        public static final String QUIZ1_TIME = "quiz1_time";
+        public static final String QUIZ1_USER_ID = "quiz1_user_id";
+        public static final String QUIZ1_NAMES = "quiz1_names";
+        public static final String QUIZ1_TYPE = "quiz1_type";
+        public static final String QUIZ1_IMEI = "quiz1_imei";
+        public static final String QUIZ1_STATUS = "quiz1_status";
+
+        public static final String QUIZ1_Q1 = "quiz1_q1";
+        public static final String QUIZ1_Q2 = "quiz1_q2";
+        public static final String QUIZ1_Q3 = "quiz1_q3";
+        public static final String QUIZ1_Q4 = "quiz1_q4";
+        public static final String QUIZ1_Q5 = "quiz1_q5";
+        public static final String QUIZ1_Q6 = "quiz1_q6";
+        public static final String QUIZ1_Q7 = "quiz1_q7";
+
+        public static final String QUIZ1_Q8 = "quiz1_q8";
+        public static final String QUIZ1_Q9 = "quiz1_q9";
+        public static final String QUIZ1_Q10 = "quiz1_q10";
+        public static final String QUIZ1_Q11 = "quiz1_q11";
+        public static final String QUIZ1_Q12 = "quiz1_q12";
+        public static final String QUIZ1_Q13 = "quiz1_q13";
+        public static final String QUIZ1_Q14 = "quiz1_q14";
+
+        public static final String QUIZ1_Q15 = "quiz1_q15";
+        public static final String QUIZ1_Q16 = "quiz1_q16";
+        public static final String QUIZ1_Q17 = "quiz1_q17";
+        public static final String QUIZ1_Q18 = "quiz1_q18";
+        public static final String QUIZ1_Q19 = "quiz1_q19";
+        public static final String QUIZ1_Q20 = "quiz1_q20";
+        public static final String QUIZ1_Q21 = "quiz1_q21";
+
+        public static final String QUIZ1_Q22 = "quiz1_q22";
+        public static final String QUIZ1_Q23 = "quiz1_q23";
+        public static final String QUIZ1_Q24 = "quiz1_q24";
+        public static final String QUIZ1_Q25 = "quiz1_q25";
+        public static final String QUIZ1_Q26 = "quiz1_q26";
 
 
         //TODO:: SYNCING>>>

@@ -14,6 +14,7 @@ import com.example.john.hbb.R;
 import com.example.john.hbb.core.SessionManager;
 
 
+
 /**
  * Created by john on 3/26/18.
  */
@@ -82,5 +83,27 @@ public class SwitchRoleActivity extends Activity{
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void show(){
+        /**
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("Won't be able to recover this file!")
+                .setConfirmText("Yes,delete it!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog
+                                .setTitleText("Deleted!")
+                                .setContentText("Your imaginary file has been deleted!")
+                                .setConfirmText("OK")
+                                .setConfirmClickListener(null)
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                    }
+                })
+                .show();
+
+         **/
     }
 }

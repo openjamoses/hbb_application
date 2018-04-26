@@ -19,4 +19,6 @@
     <dimen name="ic_album_overflow_margin_top">10dp</dimen>
     <dimen name="logo_w_h">100sp</dimen>
     <dimen name="horizonal_padding">20sp</dimen>
+    <dimen name="activity_margin_half">20sp</dimen>
+    <dimen name="statusbar_size">24dp</dimen>
 </resources>

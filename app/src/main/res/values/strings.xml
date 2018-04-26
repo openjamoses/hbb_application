@@ -283,4 +283,9 @@
     <string name="quiz_26_b">B. 0.5 mL</string>
     <string name="quiz_26_c">C. 1.0 mL</string>
     <string name="quiz_26_d">D. 0.35 mL</string>
+    <string name="quize">Quizes</string>
+    <string name="choose_quiz_number">Choose Quiz Number</string>
+    <string name="quiz_no_1">Quiz No. 1</string>
+    <string name="quiz_no_2">Quiz No. 2</string>
+    <string name="quiz_no_3">Quiz No. 3</string>
 </resources>

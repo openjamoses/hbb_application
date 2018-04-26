@@ -13,6 +13,7 @@ import static com.example.john.hbb.core.CreateTable.config.CREATE_GMWV;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_HEALTH;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_LOGIN;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_PREPARATION;
+import static com.example.john.hbb.core.CreateTable.config.CREATE_QUIZE1;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_ROUTINE;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_SIMULATION;
 import static com.example.john.hbb.core.CreateTable.config.CREATE_TRAINING_MODE;
@@ -44,6 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_GMV);
         db.execSQL(CREATE_GMWV);
         db.execSQL(CREATE_SIMULATION);
+        db.execSQL(CREATE_QUIZE1);
 
         Log.e("DATABASE OPERATION","Data base created / open successfully");
 
@@ -60,6 +62,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_GMV);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_GMWV);
         db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_SIMULATION);
+        db.execSQL("DROP TABLE IF EXISTS "+ Constants.config.TABLE_QUIZ1);
         onCreate(db);
         Log.e("DATABASE OPERATION", "Table created / open successfully");
 

@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.john.hbb.R;
+import com.example.john.hbb.activities.quizes.Quize1_Activity;
+import com.example.john.hbb.activities.quizes.QuizeHome;
 import com.example.john.hbb.activities.scoreboard.ScoreTableActivity;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.DateTime;
@@ -44,6 +46,7 @@ import com.example.john.hbb.db_operations.User;
 import com.example.john.hbb.services.ProcessingService;
 import com.example.john.hbb.activities.simulation_mode.Start_Simulation;
 import com.example.john.hbb.activities.training_mode.TrainingHomeActivity;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by john on 7/5/17.
@@ -51,7 +54,7 @@ import com.example.john.hbb.activities.training_mode.TrainingHomeActivity;
  */
 
 public class Menu_Dashboard extends AppCompatActivity {
-    private AppCompatButton btn_training,btn_simulation,btn_scoreboard;
+    private AppCompatButton btn_training,btn_simulation,btn_scoreboard,btn_quizzes;
     private Context context = this;
     Toolbar toolbar;
     String email;
@@ -76,7 +79,8 @@ public class Menu_Dashboard extends AppCompatActivity {
                         openSelectDialog();
                     }
                 } else {
-                    openDialog();
+                    //openDialog();
+                    dialog();
                 }
             }else {
                 showDialog();
@@ -87,6 +91,7 @@ public class Menu_Dashboard extends AppCompatActivity {
         btn_training = (AppCompatButton) findViewById(R.id.btn_training);
         btn_simulation = (AppCompatButton) findViewById(R.id.btn_simulation);
         btn_scoreboard = (AppCompatButton) findViewById(R.id.btn_scoreboard);
+        btn_quizzes = (AppCompatButton) findViewById(R.id.btn_quizzes);
 
 
         btn_training.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +115,13 @@ public class Menu_Dashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        btn_quizzes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), QuizeHome.class);
+                startActivity(intent);
+            }
+        });
         checkUserSessions();
     }
     @Override
@@ -120,6 +132,44 @@ public class Menu_Dashboard extends AppCompatActivity {
         //startActivity(intent);
         finish();
     }
+    private void dialog(){
+        new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")")
+                .setContentText("Are are Alone or in a team!")
+                .setConfirmText("We are in a Team")
+                .setCancelText("Am alone")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        //sweetAlertDialog.cancel();
+                        String imei = Phone.getIMEI(context);
+                        String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
+                        new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"",new UsersSession(context).getUserID()+"");
+
+                        sweetAlertDialog
+                                .setTitleText("Thanks!")
+                                .setContentText("You have chosen alone!")
+                                .setConfirmText("OK")
+                                .setConfirmClickListener(null)
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                    }
+                })
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        int val = 1;
+                       // if (val != -1){
+                            //sweetAlertDialog.dismiss();
+                            if (val == 1){
+                               // openSelectDialog();
+                                showDialog2();
+                            }
+                            sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
+    }
+
     private void openDialog(){
         final AlertDialog dialog;
         try{
@@ -172,6 +222,48 @@ public class Menu_Dashboard extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void showDialog2(){
+        LayoutInflater inflater = getLayoutInflater();
+        final View view = inflater.inflate(R.layout.select_dialog, null);
+        SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
+        sweetAlertDialog.setTitleText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")");
+        sweetAlertDialog .setContentText("Are are Alone or in a team!");
+        sweetAlertDialog    .setConfirmText("We are in a Team");
+        sweetAlertDialog    .setCancelText("Am alone");
+        sweetAlertDialog    .setContentView(view);
+
+        sweetAlertDialog .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                //sweetAlertDialog.cancel();
+                String imei = Phone.getIMEI(context);
+                String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
+                new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"",new UsersSession(context).getUserID()+"");
+
+                sweetAlertDialog
+                        .setTitleText("Thanks!")
+                        .setContentText("You have chosen alone!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(null)
+                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+            }
+        });
+        sweetAlertDialog  .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        int val = 1;
+                        // if (val != -1){
+                        //sweetAlertDialog.dismiss();
+                        if (val == 1){
+                            openSelectDialog();
+                        }
+                        sDialog.dismissWithAnimation();
+                    }
+                });
+        sweetAlertDialog.show();
+
+    }
     private void openSelectDialog(){
         final AlertDialog dialog;
         try{
@@ -201,7 +293,8 @@ public class Menu_Dashboard extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    openDialog();
+                    //openDialog();
+                    dialog();
                 }
             });
             next_btn.setOnClickListener(new View.OnClickListener() {
