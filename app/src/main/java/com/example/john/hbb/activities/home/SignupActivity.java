@@ -44,8 +44,6 @@ import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.db_operations.District;
 import com.example.john.hbb.db_operations.Facility;
 import com.example.john.hbb.db_operations.User;
-import com.google.firebase.FirebaseApp;
-
 import net.rimoto.intlphoneinput.IntlPhoneInput;
 
 import java.util.ArrayList;

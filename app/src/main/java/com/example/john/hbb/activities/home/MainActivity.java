@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.john.hbb.Album;
 import com.example.john.hbb.AlbumsAdapter;
 import com.example.john.hbb.R;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;

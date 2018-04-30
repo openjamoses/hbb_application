@@ -44,10 +44,7 @@ import com.example.john.hbb.core.Server_Service;
 import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.db_operations.DBController;
 import com.example.john.hbb.db_operations.User;
-import com.example.john.hbb.firebase.ResetPasswordActivity;
 import com.example.john.hbb.services.ProcessingService;
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
     private Runnable r;
     // Session Manager Class
     SessionManager session;
-    private FirebaseAuth auth;
     //private TextView forgot_text;
     String email;
 
@@ -411,7 +407,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
     private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(this)
                 .setMessage(message)
@@ -438,7 +433,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
         dialog.setCancelable(false);
         dialog.show();
-
     }
     
 }

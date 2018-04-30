@@ -24,22 +24,10 @@ import com.example.john.hbb.R;
 import com.example.john.hbb.core.Constants;
 import com.example.john.hbb.core.SessionManager;
 import com.example.john.hbb.db_operations.District;
-import com.example.john.hbb.db_operations.User;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-
-import static com.example.john.hbb.core.Constants.config.KEY_CONTACT_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_EMAIL_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_FACILITY_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_FNAME_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_GENDER_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_LNAME_TEMP;
-import static com.example.john.hbb.core.Constants.config.KEY_PASSWORD_TEMP;
 
 /**
  * Created by john on 10/20/17.
@@ -56,7 +44,6 @@ public class Signup_Next extends AppCompatActivity {
     private List<Integer> list_id;
     private AppCompatButton signup_btn;
     private RadioGroup group_type,group_ownership,group_cadre;
-    private FirebaseAuth auth;
     /**private RadioButton radio_hospital,radio_centeriv,radio_centeriii,radio_dispensary,
             radio_government,radio_pnfp,radio_pfp,radio_other_type,
             nurse,clinical_officer,
@@ -70,13 +57,6 @@ public class Signup_Next extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.district_spinner);
         input_district = (EditText) findViewById(R.id.input_district);
 
-        try{
-            FirebaseApp.initializeApp(this);
-            auth = FirebaseAuth.getInstance();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        auth = FirebaseAuth.getInstance();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

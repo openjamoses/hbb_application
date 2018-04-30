@@ -53,14 +53,14 @@ public class District {
         String message = null;
         try{
             int status = 0;
-            //database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(DISTRICT_NAME,name);
             //contentValues.put(DISTRICT_DATE_TIME,date_time);
             contentValues.put(FETCH_STATUS,fetch_status);
             database.insert(Constants.config.TABLE_DISTRICT, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "District cases saved!";
 
         }catch (Exception e){
@@ -68,7 +68,7 @@ public class District {
             message = "Sorry, error: "+e;
         }finally {
             //database.close();
-            // database.endTransaction();
+            database.endTransaction();
         }
         return message;
     }
@@ -78,7 +78,7 @@ public class District {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT *  FROM" +
                     " "+ Constants.config.TABLE_HEALTH+"  ORDER BY "+Constants.config.DISTRICT_NAME+" ASC ";
             cursor = db.rawQuery(query,null);
@@ -96,7 +96,7 @@ public class District {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.DISTRICT_ID+" FROM" +
                     " "+ Constants.config.TABLE_DISTRICT+"  ORDER BY "+Constants.config.DISTRICT_ID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -119,7 +119,7 @@ public class District {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.DISTRICT_ID+" FROM" +
                     " "+ Constants.config.TABLE_DISTRICT+" WHERE "+Constants.config.DISTRICT_NAME+" = '"+name+"'  ORDER BY "+Constants.config.DISTRICT_ID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -273,7 +273,7 @@ public class District {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -296,7 +296,7 @@ public class District {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+              //  database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -331,7 +331,7 @@ public class District {
             SQLiteDatabase db = new DBHelper(context).getWritableDB();
             try{
 
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

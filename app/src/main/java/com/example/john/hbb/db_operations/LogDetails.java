@@ -73,7 +73,7 @@ public class LogDetails {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(USER_ID,user_id);
             contentValues.put(LOG_ID,id);
@@ -87,13 +87,13 @@ public class LogDetails {
             contentValues.put(Constants.config.LOG_STATUS,status);
 
             database.insert(Constants.config.TABLE_LOG, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "Log Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+            database.endTransaction();
         }
 
         return message;
@@ -114,7 +114,7 @@ public class LogDetails {
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+            //database.close();
         }
 
         return message;
@@ -192,7 +192,7 @@ public class LogDetails {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.LOG_ID+" FROM" +
                     " "+ Constants.config.TABLE_LOG+"  ORDER BY "+Constants.config.LOGID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -299,7 +299,7 @@ public class LogDetails {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                //database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -322,7 +322,7 @@ public class LogDetails {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                //database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -352,7 +352,7 @@ public class LogDetails {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDatabase();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

@@ -69,7 +69,7 @@ public class GMV {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(GMV_ID,gmv_id);
             contentValues.put(GMV_DRIES_THOROUGHY,gmv_dries_thoroughy);
@@ -92,13 +92,13 @@ public class GMV {
             contentValues.put(LOG_ID,log_id);
 
             database.insert(Constants.config.TABLE_GMV, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+           database.endTransaction();
         }
 
         return message;
@@ -184,7 +184,7 @@ public class GMV {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.GMV_ID+" FROM" +
                     " "+ Constants.config.TABLE_GMV+"  ORDER BY "+Constants.config.GMVID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -314,7 +314,7 @@ public class GMV {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+              //  database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -337,7 +337,7 @@ public class GMV {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -367,7 +367,7 @@ public class GMV {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

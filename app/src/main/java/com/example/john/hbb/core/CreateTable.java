@@ -85,7 +85,7 @@ public class CreateTable {
                         " "+ Constants.config.QUIZ1_STATUS+" INTEGER,"+ Constants.config.QUIZ1_IMEI+" TEXT,"+ Constants.config.QUIZ1_Q1+" INTEGER," +
                         ""+ Constants.config.QUIZ1_Q2+" INTEGER,"+ Constants.config.QUIZ1_Q3+" INTEGER, "+Constants.config.QUIZ1_Q4+" INTEGER," +
                         " "+Constants.config.QUIZ1_Q5+" INTEGER,"+Constants.config.QUIZ1_Q6+" INTEGER, "+Constants.config.QUIZ1_Q7+" INTEGER, " +
-                        " "+ Constants.config.QUIZ1_Q8+" INTEGER,"+Constants.config.QUIZ1_Q8+" INTEGER,"+Constants.config.QUIZ1_Q9+" INTEGER ,"+ Constants.config.QUIZ1_Q10+" INTEGER," +
+                        " "+ Constants.config.QUIZ1_Q8+" INTEGER,"+Constants.config.QUIZ1_Q9+" INTEGER ,"+ Constants.config.QUIZ1_Q10+" INTEGER," +
                         " "+ Constants.config.QUIZ1_Q11+" INTEGER,"+ Constants.config.QUIZ1_Q12+" INTEGER,"+ Constants.config.QUIZ1_Q13+" INTEGER," +
                         ""+ Constants.config.QUIZ1_Q14+" INTEGER,"+ Constants.config.QUIZ1_Q15+" INTEGER, "+Constants.config.QUIZ1_Q16+" INTEGER," +
                         " "+Constants.config.QUIZ1_Q17+" INTEGER,"+Constants.config.QUIZ1_Q18+" INTEGER, "+Constants.config.QUIZ1_Q19+" INTEGER, " +

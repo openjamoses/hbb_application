@@ -66,7 +66,7 @@ public class Facility {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(Constants.config.HEALTH_NAME,name);
             contentValues.put(Constants.config.DISTRICT_NAME,district);
@@ -89,12 +89,13 @@ public class Facility {
                 message = "Health Details saved!";
             }
 
+            database.setTransactionSuccessful();
 
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+            database.endTransaction();
         }
 
         return message;
@@ -257,7 +258,7 @@ public class Facility {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -280,7 +281,7 @@ public class Facility {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                //database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -292,7 +293,7 @@ public class Facility {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.HEALTH_ID+" FROM" +
                     " "+ Constants.config.TABLE_HEALTH+"  ORDER BY "+Constants.config.HEALTHID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -334,7 +335,7 @@ public class Facility {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDatabase();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

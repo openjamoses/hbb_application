@@ -153,10 +153,10 @@
     <string name="preparation_for_birth_simulation">1). Preparation for Birth.</string>
     <string name="golden_minutes_with_ventilation_simulation">3). Golden minutes with ventilation.</string>
     <string name="routine_care_simulation">2). Routine care.</string>
-    <string name="bathe_the_baby">A. Bathe the baby</string>
-    <string name="deliver_the_placenta">B. Deliver the placenta</string>
-    <string name="evaluate_the_heart_rate">C. Evaluate the heart rate</string>
-    <string name="help_a_baby_if_neccesary">D. Help a baby breathe if necessary</string>
+    <string name="quiz_1_a">A. Bathe the baby</string>
+    <string name="quiz_1_b">B. Deliver the placenta</string>
+    <string name="quiz_1_c">C. Evaluate the heart rate</string>
+    <string name="quiz_1_d">D. Help a baby breathe if necessary</string>
     <string name="quize_1">1. What should you do in The Golden Minute?</string>
     <string name="quize_2">2. To prepare the area for delivery</string>
     <string name="quiz_2_a">A. Open all the doors and windows to get fresh air</string>

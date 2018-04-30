@@ -276,7 +276,7 @@ public class GMWV {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -299,7 +299,7 @@ public class GMWV {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                //database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -312,7 +312,7 @@ public class GMWV {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.GMWV_ID+" FROM" +
                     " "+ Constants.config.TABLE_GMWV+"  ORDER BY "+Constants.config.GMWVID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -354,11 +354,11 @@ public class GMWV {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];
-                //db.execSQL("DELETE FROM " + Constants.config.TABLE_HEALTH+" WHERE "+HEALTH_STATUS+" = '"+status+"' ");
+                db.execSQL("DELETE FROM " + Constants.config.TABLE_GMWV+" WHERE "+GMWV_STATUS+" = '"+status+"' ");
 
                 int total = 0;
                 for (int i = 0; i < jsonArray.length(); i++) {

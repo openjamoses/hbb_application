@@ -136,8 +136,8 @@ public class Menu_Dashboard extends AppCompatActivity {
         new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
                 .setTitleText("Welcome ("+new UsersSession(context).fname+" "+new UsersSession(context).lname+")")
                 .setContentText("Are are Alone or in a team!")
-                .setConfirmText("We are in a Team")
-                .setCancelText("Am alone")
+                .setConfirmText("TEAM")
+                .setCancelText("ALONE")
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -145,26 +145,15 @@ public class Menu_Dashboard extends AppCompatActivity {
                         String imei = Phone.getIMEI(context);
                         String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
                         new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"",new UsersSession(context).getUserID()+"");
-
-                        sweetAlertDialog
-                                .setTitleText("Thanks!")
-                                .setContentText("You have chosen alone!")
-                                .setConfirmText("OK")
-                                .setConfirmClickListener(null)
-                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        sweetAlertDialog.dismiss();
                     }
                 })
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         int val = 1;
-                       // if (val != -1){
-                            //sweetAlertDialog.dismiss();
-                            if (val == 1){
-                               // openSelectDialog();
-                                showDialog2();
-                            }
-                            sDialog.dismissWithAnimation();
+                        openSelectDialog();
+                        sDialog.dismiss();
                     }
                 })
                 .show();
@@ -240,24 +229,13 @@ public class Menu_Dashboard extends AppCompatActivity {
                 String imei = Phone.getIMEI(context);
                 String names = new UsersSession(context).fname+" "+new UsersSession(context).lname;
                 new LogDetails(context).send(new UsersSession(context).getUserID(), DateTime.getCurrentDate(),DateTime.getCurrentTime(),imei,0,names,"",new UsersSession(context).getUserID()+"");
-
-                sweetAlertDialog
-                        .setTitleText("Thanks!")
-                        .setContentText("You have chosen alone!")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(null)
-                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                sweetAlertDialog.dismissWithAnimation();
             }
         });
         sweetAlertDialog  .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
-                        int val = 1;
-                        // if (val != -1){
-                        //sweetAlertDialog.dismiss();
-                        if (val == 1){
-                            openSelectDialog();
-                        }
+                        openSelectDialog();
                         sDialog.dismissWithAnimation();
                     }
                 });
@@ -391,7 +369,6 @@ public class Menu_Dashboard extends AppCompatActivity {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-
                     }
                 });
             }
@@ -399,25 +376,20 @@ public class Menu_Dashboard extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     private void checkUserSessions() {
         TextView textView = (TextView) findViewById(R.id.toolbar_title);
         TextView textView2 = (TextView) findViewById(R.id.toolbar_subtitle);
         textView.setText( new UsersSession(context).getHealth() );
         textView2.setText("Welcome ("+new UsersSession(context).fname + " " + new UsersSession(context).lname+")");
     }
-
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case android.R.id.home:
                 finish();
@@ -440,12 +412,10 @@ public class Menu_Dashboard extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
     private void showDialog(){
         final AlertDialog dialog;
         try{
-
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             LayoutInflater inflater = getLayoutInflater();
             final View alertLayout = inflater.inflate(R.layout.switch_dialog, null);

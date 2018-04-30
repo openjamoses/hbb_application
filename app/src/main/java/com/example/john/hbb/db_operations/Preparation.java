@@ -59,7 +59,7 @@ public class Preparation {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(PREPARATION_ID,preperation_id);
             contentValues.put(PREP_DATE,date);
@@ -77,13 +77,13 @@ public class Preparation {
             contentValues.put(LOG_ID,log_id);
 
             database.insert(Constants.config.TABLE_PREPARATION, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+            database.endTransaction();
         }
 
         return message;
@@ -263,7 +263,7 @@ public class Preparation {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -286,7 +286,7 @@ public class Preparation {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+              //  database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -298,7 +298,7 @@ public class Preparation {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.PREPARATION_ID+" FROM" +
                     " "+ Constants.config.TABLE_PREPARATION+"  ORDER BY "+Constants.config.PREPARATIONID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -340,7 +340,7 @@ public class Preparation {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

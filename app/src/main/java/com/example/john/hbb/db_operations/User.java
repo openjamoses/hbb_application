@@ -47,7 +47,7 @@ public class User {
         SQLiteDatabase database = DBHelper.getHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(Constants.config.USER_ID,user_id);
@@ -64,14 +64,14 @@ public class User {
             contentValues.put(Constants.config.USER_STATUS,status);
             database.insert(Constants.config.TABLE_USERS, null, contentValues);
 
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "User Details saved!";
 
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+           database.endTransaction();
         }
 
         return message;
@@ -161,13 +161,15 @@ public class User {
             int status = 0;
             String selectQuery = "SELECT  * FROM " + Constants.config.TABLE_USERS+ " WHERE " + USER_STATUS + " = '" + status + "' ";
             database = new DBHelper(context).getReadableDatabase();
+            database.beginTransactionNonExclusive();
             Cursor cursor = database.rawQuery(selectQuery, null);
             count = cursor.getCount();
+            database.setTransactionSuccessful();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                database.endTransaction();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -182,7 +184,8 @@ public class User {
     public void updateSyncStatus(int id, int user_id, int status){
         SQLiteDatabase database = null;
         try {
-            database = DBHelper.getHelper(context).getWritableDatabase();
+            //database = DBHelper.getHelper(context).getWritableDatabase();
+            database.beginTransactionNonExclusive();
             String updateQuery = "UPDATE " + Constants.config.TABLE_USERS + " SET " + USER_STATUS + " = '" + status + "', "+USER_ID+" = '"+user_id+"' where " + USERID + "='" + id + "'  ";
             Log.d("query", updateQuery);
             database.execSQL(updateQuery);
@@ -190,7 +193,7 @@ public class User {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                //database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -204,7 +207,7 @@ public class User {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.USER_ID+" FROM" +
                     " "+ Constants.config.TABLE_USERS+"  ORDER BY "+Constants.config.USERID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);

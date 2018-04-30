@@ -13,12 +13,13 @@ public class Constants {
 
         public static final String URL_LOCALHOST = "http://127.0.0.1/hbb/";
         public static final String URL_PHONE = "http://192.168.43.18/hbb/";
-        public static final String URL_CAMTECH = "http://192.168.1.104/hbb/";
+        public static final String URL_MODERM = "http://10.127.92.155/hbb/";
+        public static final String URL_CAMTECH = "http://192.168.1.116/hbb/";
         public static final String URL_STUDENT = "http://10.11.1.129/hbb/";
         public static final String URL_SERVER = "http://173.255.219.164/hbb_dashboard/";
-        public static final String HOST_URL = URL_SERVER+"mobile_connections/";
+        public static final String HOST_URL = URL_CAMTECH+"mobile_connections/";
         public static final String DATABASE_NAME = "hbb_db";
-        public static final int DATABASE_VERSION = 2;
+        public static final int DATABASE_VERSION = 1;
         public static final String TABLE_USERS = "users_tb";
         public static final String FETCH_STATUS = "fetch_status";
         public static final String IMEI = "imei";
@@ -230,6 +231,8 @@ public class Constants {
         public static final String URL_USER = SYNCING+"save_users.php";
         public static final String URL_SAVE_LOG = SYNCING+"save_log.php";
         public static final String URL_SAVE_PREPARATION = SYNCING+"save_preparation.php";
+        public static final String URL_SAVE_QUIZ1 = SYNCING+"save_quiz1.php";
+
         public static final String URL_SAVE_ROUTINE = SYNCING+"save_routine.php";
         public static final String URL_SAVE_GMV = SYNCING+"save_gmv.php";
         public static final String URL_SAVE_GMWV = SYNCING+"save_gmwv.php";

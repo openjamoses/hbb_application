@@ -73,7 +73,7 @@ public class TrainingDetails {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(TRAINING_ID,training_id);
             contentValues.put(TRAINING_DATE,training_date);
@@ -89,13 +89,13 @@ public class TrainingDetails {
             contentValues.put(TRAINING_SYNC_STATUS,sync_status);
 
             database.insert(Constants.config.TABLE_TRAINING, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+            database.endTransaction();
         }
         return message;
     }
@@ -104,7 +104,6 @@ public class TrainingDetails {
                      final int log_id, final int log_type, final int video_completed, final String training_imei){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_TRAINING,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -250,7 +249,7 @@ public class TrainingDetails {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -273,7 +272,7 @@ public class TrainingDetails {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -285,7 +284,7 @@ public class TrainingDetails {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.TRAINING_ID+" FROM" +
                     " "+ Constants.config.TABLE_TRAINING+"  ORDER BY "+Constants.config.TRAINING_ID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -324,7 +323,7 @@ public class TrainingDetails {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDatabase();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

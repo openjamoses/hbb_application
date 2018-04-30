@@ -29,20 +29,6 @@ import java.util.Map;
 
 import static com.example.john.hbb.core.Constants.config.HOST_URL;
 import static com.example.john.hbb.core.Constants.config.LOG_ID;
-import static com.example.john.hbb.core.Constants.config.PREPARATIONID;
-import static com.example.john.hbb.core.Constants.config.PREPARATION_ID;
-import static com.example.john.hbb.core.Constants.config.PREP_AREA_DELIVERY;
-import static com.example.john.hbb.core.Constants.config.PREP_AREA_VENTILATION;
-import static com.example.john.hbb.core.Constants.config.PREP_ASSEMBLED;
-import static com.example.john.hbb.core.Constants.config.PREP_DATE;
-import static com.example.john.hbb.core.Constants.config.PREP_IDENTIFY_HELPER;
-import static com.example.john.hbb.core.Constants.config.PREP_IMEI;
-import static com.example.john.hbb.core.Constants.config.PREP_STATUS;
-import static com.example.john.hbb.core.Constants.config.PREP_TEST_VENTILATION;
-import static com.example.john.hbb.core.Constants.config.PREP_TIME;
-import static com.example.john.hbb.core.Constants.config.PREP_TYPE;
-import static com.example.john.hbb.core.Constants.config.PREP_UTEROTONIC;
-import static com.example.john.hbb.core.Constants.config.PREP_WASHES_HANDS;
 import static com.example.john.hbb.core.Constants.config.QUIZ1ID;
 import static com.example.john.hbb.core.Constants.config.QUIZ1_DATE;
 import static com.example.john.hbb.core.Constants.config.QUIZ1_ID;
@@ -79,6 +65,7 @@ import static com.example.john.hbb.core.Constants.config.QUIZ1_TIME;
 import static com.example.john.hbb.core.Constants.config.QUIZ1_TYPE;
 import static com.example.john.hbb.core.Constants.config.QUIZ1_USER_ID;
 import static com.example.john.hbb.core.Constants.config.URL_SAVE_PREPARATION;
+import static com.example.john.hbb.core.Constants.config.URL_SAVE_QUIZ1;
 
 /**
  * Created by john on 4/26/18.
@@ -98,7 +85,7 @@ public class Quizes {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(QUIZ1_ID,quiz1_id);
             contentValues.put(QUIZ1_DATE,quiz1_date);
@@ -135,26 +122,24 @@ public class Quizes {
             contentValues.put(QUIZ1_Q25,quiz1_q25);
             contentValues.put(QUIZ1_Q26,quiz1_q26);
             contentValues.put(LOG_ID,log_id);
-
             database.insert(Constants.config.TABLE_QUIZ1, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+            database.endTransaction();
         }
-
         return message;
     }
 
-    public void send(final String quiz1_date, final String quiz1_time, final int quiz1_user_id, final String quiz1_names, final String quiz1_imei, final int quiz1_status,
+    public void send(final String quiz1_date, final String quiz1_time, final int quiz1_user_id, final String quiz1_names, final String quiz1_imei, final int quiz1_type,
                      final int quiz1_q1, final int quiz1_q2, final int quiz1_q3, final int quiz1_q4, final int quiz1_q5, final int quiz1_q6, final int quiz1_q7, final int quiz1_q8, final int quiz1_q9,
                      final int quiz1_q10, final int quiz1_q11, final int quiz1_q12, final int quiz1_q13, final int quiz1_q14, final int quiz1_q15, final int quiz1_q16, final int quiz1_q17, final int quiz1_q18,
                      final int quiz1_q19, final int quiz1_q20, final int quiz1_q21, final int quiz1_q22, final int quiz1_q23, final int quiz1_q24, final int quiz1_q25, final int quiz1_q26, final int log_id){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_PREPARATION,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, HOST_URL+URL_SAVE_QUIZ1,
                 new Response.Listener<String>() {
 
                     @Override
@@ -172,7 +157,7 @@ public class Quizes {
                             }
                             String message = save(id,quiz1_date,quiz1_time,quiz1_user_id,quiz1_names,quiz1_imei,status,quiz1_q1,quiz1_q2,quiz1_q3,quiz1_q4,quiz1_q5,quiz1_q6,
                                     quiz1_q7,quiz1_q8,quiz1_q9,quiz1_q10,quiz1_q11,quiz1_q12,quiz1_q13,quiz1_q14,quiz1_q15,quiz1_q16,quiz1_q17,quiz1_q18,quiz1_q19,quiz1_q20,
-                                    quiz1_q21,quiz1_q22,quiz1_q23,quiz1_q24,quiz1_q25,quiz1_q26,log_id,quiz1_status);
+                                    quiz1_q21,quiz1_q22,quiz1_q23,quiz1_q24,quiz1_q25,quiz1_q26,log_id,quiz1_type);
 
 
                         }catch (Exception e){
@@ -201,6 +186,7 @@ public class Quizes {
                 params.put(QUIZ1_USER_ID, String.valueOf(quiz1_user_id));
                 params.put(QUIZ1_NAMES,quiz1_names);
                 params.put(QUIZ1_IMEI,quiz1_imei);
+                params.put(QUIZ1_TYPE, String.valueOf(quiz1_type));
                 params.put(QUIZ1_Q1, String.valueOf(quiz1_q1));
                 params.put(QUIZ1_Q2, String.valueOf(quiz1_q2));
                 params.put(QUIZ1_Q3, String.valueOf(quiz1_q3));
@@ -247,7 +233,9 @@ public class Quizes {
 
         int status = 1;
         SQLiteDatabase database = DBHelper.getHelper(context).getReadableDatabase();
+
         Cursor cursor = database.rawQuery(selectQuery, null);
+
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> params = new HashMap<String, String>();
@@ -258,6 +246,7 @@ public class Quizes {
                 params.put(QUIZ1_USER_ID,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_USER_ID))));
                 params.put(QUIZ1_NAMES,cursor.getString(cursor.getColumnIndex(QUIZ1_NAMES)));
                 params.put(QUIZ1_IMEI,cursor.getString(cursor.getColumnIndex(QUIZ1_IMEI)));
+                params.put(QUIZ1_TYPE, String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_TYPE))));
                 params.put(QUIZ1_Q1,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_Q1))));
                 params.put(QUIZ1_Q2,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_Q2))));
                 params.put(QUIZ1_Q3,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_Q3))));
@@ -310,6 +299,7 @@ public class Quizes {
                 params.put(QUIZ1_USER_ID,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_USER_ID))));
                 params.put(QUIZ1_NAMES,cursor.getString(cursor.getColumnIndex(QUIZ1_NAMES)));
                 params.put(QUIZ1_IMEI,cursor.getString(cursor.getColumnIndex(QUIZ1_IMEI)));
+                params.put(QUIZ1_TYPE, String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_TYPE))));
                 params.put(QUIZ1_Q1,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_Q1))));
                 params.put(QUIZ1_Q2,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_Q2))));
                 params.put(QUIZ1_Q3,String.valueOf(cursor.getInt(cursor.getColumnIndex(QUIZ1_Q3))));
@@ -375,7 +365,7 @@ public class Quizes {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+                //database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -398,7 +388,7 @@ public class Quizes {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+              //  database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -410,7 +400,7 @@ public class Quizes {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.QUIZ1_ID+" FROM" +
                     " "+ Constants.config.TABLE_QUIZ1+"  ORDER BY "+Constants.config.QUIZ1_ID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -452,7 +442,7 @@ public class Quizes {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];
@@ -516,7 +506,6 @@ public class Quizes {
                     }else {
                         db = DBHelper.getHelper(context).getWritableDB();
                         db.insert(Constants.config.TABLE_QUIZ1, null, contentValues);
-
                     }
                     total ++;
                 }

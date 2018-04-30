@@ -36,7 +36,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/bathe_the_baby"/>
+                android:text="@string/quiz_1_a"/>
             <RadioButton
                 android:id="@+id/quiz_1_b"
                 android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/deliver_the_placenta" />
+                android:text="@string/quiz_1_b" />
             <RadioButton
                 android:id="@+id/quiz_1_c"
                 android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/evaluate_the_heart_rate" />
+                android:text="@string/quiz_1_c" />
             <RadioButton
                 android:id="@+id/quiz_1_d"
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:drawableRight="@android:drawable/btn_radio"
-                android:text="@string/help_a_baby_if_neccesary" />
+                android:text="@string/quiz_1_d" />
 
         </RadioGroup>
 
@@ -85,7 +85,7 @@
             android:layout_marginLeft="20sp"
             android:id="@+id/quize_2"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatRadioButton
+            <RadioButton
                 android:id="@+id/quiz_2_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
             android:layout_marginLeft="20sp"
             android:id="@+id/quize_3"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatRadioButton
+            <RadioButton
                 android:id="@+id/quiz_3_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
             android:layout_marginLeft="20sp"
             android:id="@+id/quize_4"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatRadioButton
+            <RadioButton
                 android:id="@+id/quiz_4_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
             android:layout_marginLeft="20sp"
             android:id="@+id/quize_5"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatRadioButton
+            <RadioButton
                 android:id="@+id/quiz_5_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -319,7 +319,7 @@
             android:layout_marginLeft="20sp"
             android:id="@+id/quize_6"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatRadioButton
+            <RadioButton
                 android:id="@+id/quiz_6_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -359,7 +359,6 @@
                 android:textColor="@color/grey"
                 android:drawableRight="@android:drawable/btn_radio"
                 android:text="@string/quiz_6_d" />
-
         </RadioGroup>
 
     </LinearLayout>

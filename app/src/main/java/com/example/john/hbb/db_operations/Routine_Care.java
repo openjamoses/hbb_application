@@ -73,7 +73,7 @@ public class Routine_Care {
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
         String message = null;
         try{
-            // database.beginTransaction();
+            database.beginTransactionNonExclusive();
             ContentValues contentValues = new ContentValues();
             contentValues.put(ROUTINE_ID,routine_id);
             contentValues.put(ROUTINE_DRIES_THOROUGHY,routine_dries_thoroughy);
@@ -90,13 +90,13 @@ public class Routine_Care {
             contentValues.put(LOG_ID,log_id);
 
             database.insert(Constants.config.TABLE_ROUTINE, null, contentValues);
-            //database.setTransactionSuccessful();
+            database.setTransactionSuccessful();
             message = "Details saved!";
         }catch (Exception e){
             e.printStackTrace();
             message = "Sorry, error: "+e;
         }finally {
-            database.close();
+           database.endTransaction();
         }
         return message;
     }
@@ -252,7 +252,7 @@ public class Routine_Care {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -275,7 +275,7 @@ public class Routine_Care {
             e.printStackTrace();
         }finally {
             try{
-                database.close();
+               // database.close();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -287,7 +287,7 @@ public class Routine_Care {
         SQLiteDatabase db = new DBHelper(context).getReadableDB();
         Cursor cursor = null;
         try{
-            db.beginTransaction();
+            db.beginTransactionNonExclusive();
             String query = "SELECT "+Constants.config.ROUTINE_ID+" FROM" +
                     " "+ Constants.config.TABLE_ROUTINE+"  ORDER BY "+Constants.config.ROUTINEID+" DESC LIMIT 1 ";
             cursor = db.rawQuery(query,null);
@@ -326,7 +326,7 @@ public class Routine_Care {
             int status = 1;
             SQLiteDatabase db = DBHelper.getHelper(context).getWritableDB();
             try{
-                db.beginTransaction();
+                db.beginTransactionNonExclusive();
                 //String get_json = get
                 //JSONArray jsonArray = new JSONArray(results);
                 JSONArray jsonArray = jsonArrays[0];

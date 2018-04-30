@@ -104,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
         _passwordText = (EditText) findViewById(R.id.input_password);
         _signupButton = (Button) findViewById(R.id.btn_signup);
         _loginLink = (TextView) findViewById(R.id.link_login);
+        _loginLink.setVisibility(View.INVISIBLE);
 
         _genderText = (RadioGroup)  findViewById(R.id.input_gender);
         input_female = (AppCompatRadioButton) findViewById(R.id.input_female);
